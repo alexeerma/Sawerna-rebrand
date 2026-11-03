@@ -1,0 +1,2612 @@
+/**
+ * Single product page styles
+ */
+body.sawerna-selector-drawer-open {
+  overflow: hidden;
+  width: 100%;
+  overscroll-behavior: none;
+}
+
+.sawernau-single-product-shell {
+  background: #fff;
+}
+
+.sawernau-single-product-shell,
+.sawerna-single-product,
+.sawerna-single-product__hero,
+.sawerna-single-product__gallery,
+.sawerna-single-product__main-media,
+.sawerna-single-product__summary,
+.sawerna-single-product__price-grid,
+.sawerna-single-product__badges,
+.sawerna-single-product__tabs,
+.sawerna-single-product__related,
+.sawerna-single-product__related-track-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.single-product,
+body.single-product #page,
+body.single-product .site,
+body.single-product .site-main {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.sawerna-single-product__container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 24px 16px 72px;
+}
+
+.sawerna-single-product__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 600px) minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.sawerna-single-product__gallery {
+  min-width: 0;
+  width: min(100%, 600px);
+  max-width: 100%;
+}
+
+.sawerna-single-product__main-media {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sawerna-single-product__main-image {
+  width: 600px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f4f4f4;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.sawerna-single-product__main-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.28s ease;
+}
+
+.sawerna-single-product__main-image img.is-changing {
+  opacity: 0.38;
+}
+
+.sawerna-single-product__main-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.76);
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sawerna-single-product__main-arrow:hover,
+.sawerna-single-product__main-arrow:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-50%) scale(1.04);
+}
+
+.sawerna-single-product__main-arrow--prev {
+  left: 18px;
+}
+
+.sawerna-single-product__main-arrow--next {
+  right: 18px;
+}
+
+.sawerna-single-product__main-arrow--next img {
+  transform: rotate(180deg);
+}
+
+.sawerna-single-product__main-arrow img {
+  width: 8px;
+  height: auto;
+}
+
+.sawerna-single-product__gallery-count {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 3;
+  min-width: 64px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
+.sawerna-single-product__gallery-progress {
+  display: none;
+}
+
+.sawerna-single-product__gallery-progress-bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #111;
+  transition: width 0.24s ease;
+}
+
+.sawerna-single-product__labels {
+  top: 16px;
+  left: 16px;
+  right: auto;
+}
+
+.sawerna-single-product__wishlist {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+}
+
+.sawerna-single-product__wishlist .sawerna-wishlist-button--icon {
+  width: 46px;
+  height: 46px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.sawerna-single-product__wishlist .sawerna-wishlist-button--icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sawerna-single-product__thumbs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.sawerna-single-product__thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.sawerna-single-product__thumb {
+  position: relative;
+  flex: 0 0 calc((100% - 48px) / 5);
+  width: calc((100% - 48px) / 5);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid transparent;
+  background: #f5f5f5;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.sawerna-single-product__thumb:after {
+  content: "✓";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+  color: #111;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+
+.sawerna-single-product__thumb:hover,
+.sawerna-single-product__thumb.is-active {
+  border-color: #111;
+}
+
+.sawerna-single-product__thumb.is-active:after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sawerna-single-product__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-single-product__summary {
+  min-width: 0;
+}
+
+.sawerna-single-product__sku {
+  margin-bottom: 12px;
+  color: #7c7c7c;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.sawerna-single-product__title {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 33px);
+  line-height: 1.08;
+  font-weight: 700;
+  color: #171717;
+}
+
+.sawerna-single-product__price-grid {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(220px, 1fr);
+  column-gap: 20px;
+  row-gap: 18px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.sawerna-single-product__price-col--price {
+  justify-self: start;
+  min-width: 0;
+}
+
+.sawerna-single-product__price-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sawerna-single-product__price {
+  color: #111;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.1;
+  white-space: normal;
+}
+
+.sawerna-single-product__price ins {
+  background: transparent;
+  text-decoration: none;
+}
+
+.sawerna-single-product__price del {
+  display: block;
+  margin-top: 10px;
+  color: #9a9a9a;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.sawerna-single-product__price .woocommerce-Price-amount,
+.sawerna-single-product__price .woocommerce-Price-amount bdi {
+  white-space: nowrap;
+}
+
+.sawerna-single-product__sale-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #d62e2e;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sawerna-single-product__payment-option {
+  color: #8a8a8a;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.sawerna-single-product__payment-title {
+  color: #8a8a8a;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.sawerna-single-product__payment-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #8a8a8a;
+}
+
+.sawerna-single-product__payment-info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b7b7b7;
+  cursor: pointer;
+}
+
+.sawerna-single-product__payment-info-button:hover,
+.sawerna-single-product__payment-info-button:focus-visible {
+  color: #969696;
+}
+
+.sawerna-single-product__feature-row--selector .sawerna-single-product__info-icon,
+.sawerna-single-product__payment-info-button .sawerna-single-product__info-icon {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.sawerna-single-product__feature-row--selector:hover .sawerna-single-product__info-icon,
+.sawerna-single-product__feature-row--selector:focus-visible .sawerna-single-product__info-icon,
+.sawerna-single-product__payment-info-button:hover .sawerna-single-product__info-icon,
+.sawerna-single-product__payment-info-button:focus-visible .sawerna-single-product__info-icon {
+  color: #111;
+}
+
+.sawerna-single-product__badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.sawerna-single-product__badges[hidden],
+.sawerna-single-product__location-badges[hidden],
+.sawerna-single-product__badge[hidden] {
+  display: none !important;
+}
+
+.sawerna-single-product__location-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sawerna-single-product__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 999px;
+  color: #8a8a8a;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.sawerna-single-product__badge-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-single-product__badge-icon {
+  width: 18px;
+  height: 18px;
+  color: #b1b1b1;
+}
+
+.sawerna-single-product__badge-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-single-product__features {
+  margin-top: 4px;
+}
+
+.sawerna-single-product__feature-row {
+  padding: 20px 0;
+  border-bottom: 1px solid #e7e7e7;
+  border-radius: 0;
+}
+
+.sawerna-single-product__feature-row--selector {
+  width: 100%;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-bottom-color: #e7e7e7;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sawerna-single-product__feature-row--selector:hover,
+.sawerna-single-product__feature-row--selector:focus-visible,
+.sawerna-single-product__feature-row--selector.is-active {
+  border-bottom-color: #e7e7e7;
+}
+
+.sawerna-single-product__feature-row--selector.is-active .sawerna-single-product__feature-arrow,
+.sawerna-single-product__feature-row--selector:hover .sawerna-single-product__feature-arrow,
+.sawerna-single-product__feature-row--selector:focus-visible .sawerna-single-product__feature-arrow {
+  background: #111;
+  transform: translateX(2px);
+}
+
+.sawerna-single-product__feature-row--selector.is-active .sawerna-single-product__feature-arrow img,
+.sawerna-single-product__feature-row--selector:hover .sawerna-single-product__feature-arrow img,
+.sawerna-single-product__feature-row--selector:focus-visible .sawerna-single-product__feature-arrow img {
+  filter: brightness(0) invert(1);
+}
+
+.sawerna-single-product__feature-header,
+.sawerna-single-product__feature-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sawerna-single-product__feature-title-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sawerna-single-product__feature-title {
+  min-width: 0;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.sawerna-single-product__info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #b7b7b7;
+}
+
+.sawerna-single-product__info-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-single-product__info-icon svg * {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.sawerna-single-product__feature-arrow {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sawerna-single-product__feature-arrow img {
+  display: block;
+  width: 16px;
+  height: auto;
+  transition: filter 0.2s ease;
+}
+
+.sawerna-single-product__feature-body {
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.sawerna-single-product__feature-icon {
+  width: 74px;
+  height: 70px;
+  color: #111;
+}
+
+.sawerna-single-product__selector-preview img,
+.sawerna-single-product__selector-current-preview img,
+.sawerna-single-product__selector-option-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-single-product__selector-preview-color {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 50%;
+}
+
+.sawerna-single-product__feature-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-single-product__feature-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 100%;
+}
+
+.sawerna-single-product__selector-preview:empty,
+.sawerna-single-product__feature-value:empty,
+.sawerna-single-product__feature-detail:empty {
+  display: none;
+}
+
+.sawerna-single-product__feature-row--selector.is-empty .sawerna-single-product__feature-body {
+  margin-top: 0;
+  min-height: 0;
+}
+
+.sawerna-single-product__feature-value {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #111;
+}
+
+.sawerna-single-product__feature-detail {
+  font-size: 15px;
+  line-height: 1.3;
+  color: #1d1d1d;
+}
+
+.sawerna-single-product__selector-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.sawerna-single-product__selector-drawer[hidden] {
+  display: none;
+}
+
+.sawerna-single-product__selector-drawer.is-mounted {
+  display: block;
+}
+
+.sawerna-single-product__selector-drawer.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sawerna-single-product__selector-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.36);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.sawerna-single-product__selector-drawer.is-open .sawerna-single-product__selector-backdrop {
+  opacity: 1;
+}
+
+.sawerna-single-product__selector-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: 100vw;
+  width: min(100%, 520px);
+  height: 100%;
+  background: #fff;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.12);
+  overflow-x: hidden;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sawerna-single-product__selector-drawer.is-open .sawerna-single-product__selector-panel {
+  transform: translateX(0);
+}
+
+.sawerna-single-product__selector-fabric-banner {
+  padding: 12px 28px;
+  background: #f9f6f2;
+  border-bottom: 1px solid #ecddd0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5a4a3a;
+}
+
+.sawerna-single-product__selector-fabric-banner-text {
+  margin: 0;
+}
+
+.sawerna-single-product__selector-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  gap: 18px;
+  box-sizing: border-box;
+  padding: 28px 28px 22px;
+  border-bottom: 1px solid #ececec;
+}
+
+.sawerna-single-product__selector-panel-title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.sawerna-single-product__selector-panel-close {
+  border: 0;
+  background: transparent;
+  color: #111;
+  font-size: 38px;
+  line-height: 1;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.sawerna-single-product__selector-panels {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px 28px 28px;
+}
+
+.sawerna-single-product__selector-panel-foot {
+  display: none;
+}
+
+.sawerna-single-product__selector-group,
+.sawerna-single-product__selector-current,
+.sawerna-single-product__selector-options,
+.sawerna-single-product__selector-option,
+.sawerna-single-product__selector-option-copy,
+.sawerna-single-product__selector-option-media {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.sawerna-single-product__selector-current {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 22px;
+  padding: 16px;
+  background: #f3f3f3;
+}
+
+.sawerna-single-product__selector-current-preview {
+  width: 82px;
+  height: 82px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+}
+
+.sawerna-single-product__selector-current-copy {
+  min-width: 0;
+  color: #282828;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.sawerna-single-product__selector-current-label {
+  color: #555;
+}
+
+.sawerna-single-product__selector-current-label strong {
+  color: #111;
+}
+
+.sawerna-single-product__selector-current-detail {
+  margin-top: 4px;
+  color: #727272;
+}
+
+.sawerna-single-product__selector-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sawerna-single-product__selector-option {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  border-radius: 14px;
+}
+
+.sawerna-single-product__selector-option:hover,
+.sawerna-single-product__selector-option:focus-visible,
+.sawerna-single-product__selector-option.is-selected {
+  border-color: #111;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.sawerna-single-product__selector-option.is-disabled,
+.sawerna-single-product__selector-option:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sawerna-single-product__selector-option-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.sawerna-single-product__selector-option-color {
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-single-product__selector-option-icon {
+  width: 58px;
+  height: 58px;
+  color: #111;
+}
+
+.sawerna-single-product__selector-option-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-single-product__selector-option-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  padding: 0 2px 2px;
+}
+
+.sawerna-single-product__selector-option-label {
+  color: #161616;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sawerna-single-product__selector-option-detail {
+  color: #5f5f5f;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.sawerna-single-product__payment-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.sawerna-single-product__payment-drawer[hidden] {
+  display: none;
+}
+
+.sawerna-single-product__payment-drawer.is-mounted {
+  display: block;
+}
+
+.sawerna-single-product__payment-drawer.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sawerna-single-product__payment-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.36);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.sawerna-single-product__payment-drawer.is-open .sawerna-single-product__payment-backdrop {
+  opacity: 1;
+}
+
+.sawerna-single-product__payment-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(100%, 520px);
+  max-width: 100vw;
+  height: 100%;
+  background: #fff;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.12);
+  overflow-x: hidden;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sawerna-single-product__payment-drawer.is-open .sawerna-single-product__payment-panel {
+  transform: translateX(0);
+}
+
+.sawerna-single-product__payment-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px 28px 22px;
+  border-bottom: 1px solid #ececec;
+}
+
+.sawerna-single-product__payment-panel-title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.sawerna-single-product__payment-panel-close {
+  border: 0;
+  background: transparent;
+  color: #111;
+  font-size: 38px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sawerna-single-product__payment-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px 28px;
+}
+
+.sawerna-single-product__payment-panel-copy {
+  margin: 0 0 18px;
+  color: #6c6c6c;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.sawerna-single-product__payment-plan-list {
+  display: grid;
+  gap: 12px;
+}
+
+.sawerna-single-product__payment-plan {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sawerna-single-product__payment-plan:hover,
+.sawerna-single-product__payment-plan:focus-visible,
+.sawerna-single-product__payment-plan.is-selected {
+  border-color: #111;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.sawerna-single-product__payment-plan-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.sawerna-single-product__payment-plan-title {
+  color: #171717;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sawerna-single-product__payment-plan-detail {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.sawerna-single-product__payment-plan-amount {
+  color: #111;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Järelmaksu kalkulaator ─────────────────────────────── */
+
+.sawerna-payment-calc {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sawerna-payment-calc__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sawerna-payment-calc__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sawerna-payment-calc__select,
+.sawerna-payment-calc__input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 15px;
+  color: #171717;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.sawerna-payment-calc__select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.sawerna-payment-calc__select:focus,
+.sawerna-payment-calc__input:focus {
+  border-color: #111;
+}
+
+.sawerna-payment-calc__result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  background: #f6f4f0;
+  border-radius: 14px;
+  margin-top: 4px;
+}
+
+.sawerna-payment-calc__result-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.sawerna-payment-calc__result-amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: #171717;
+  white-space: nowrap;
+}
+
+.sawerna-payment-calc__disclaimer {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────── */
+
+.sawerna-single-product__purchase {
+  margin-top: 34px;
+}
+
+.sawerna-single-product__purchase form.cart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 20px;
+  margin: 0;
+}
+
+.sawerna-single-product__purchase .quantity {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 0;
+}
+
+.sawerna-single-product__purchase .quantity input.qty {
+  width: 55px;
+  height: 55px;
+  border: 1px solid #e6e6e6;
+  border-left: 0;
+  border-right: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 18px;
+}
+
+.sawerna-single-product__purchase .quantity .minus,
+.sawerna-single-product__purchase .quantity .plus {
+  width: 35px;
+  height: 55px;
+  border: 1px solid #e6e6e6;
+  background: #f6f6f6;
+  color: #8f8f8f;
+  font-size: 20px;
+  line-height: 55px;
+  padding: 0;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sawerna-single-product__purchase .quantity .minus:hover,
+.sawerna-single-product__purchase .quantity .plus:hover,
+.sawerna-single-product__purchase .quantity .minus:focus-visible,
+.sawerna-single-product__purchase .quantity .plus:focus-visible {
+  background: #e3e3e3;
+}
+
+.sawerna-single-product__purchase button.single_add_to_cart_button {
+  min-width: 236px;
+  min-height: 55px;
+  padding: 14px 30px;
+  border: 0;
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.sawerna-single-product__purchase button.single_add_to_cart_button:hover,
+.sawerna-single-product__purchase button.single_add_to_cart_button:focus-visible {
+  background: rgb(149, 149, 95);
+}
+
+.sawerna-single-product__purchase .variations {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sawerna-single-product__purchase .variations th,
+.sawerna-single-product__purchase .variations td {
+  padding: 0 0 12px;
+  border: 0;
+}
+
+.sawerna-single-product__purchase .reset_variations {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+.sawerna-single-product__purchase .variations label {
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sawerna-single-product__purchase .single_variation_wrap {
+  display: block;
+}
+
+.sawerna-single-product__purchase .single_variation {
+  display: none !important;
+}
+
+.sawerna-single-product__purchase .single_variation .woocommerce-variation-price,
+.sawerna-single-product__purchase .single_variation .woocommerce-variation-availability,
+.sawerna-single-product__purchase .single_variation .woocommerce-variation-description {
+  display: none;
+}
+
+.sawerna-single-product__purchase .woocommerce-variation-add-to-cart {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.sawerna-single-product__purchase .added_to_cart.wc-forward {
+  display: none !important;
+}
+
+.sawerna-single-product__cart-feedback {
+  margin: 14px 0 0;
+  color: #2f7a47;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sawerna-single-product__cart-feedback.is-error {
+  color: #c94c43;
+}
+
+.sawerna-single-product__pdf {
+  margin-top: 16px;
+}
+
+.sawerna-single-product__pdf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1d1d1d;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.sawerna-single-product__pdf-link:hover,
+.sawerna-single-product__pdf-link:focus-visible {
+  color: rgb(149, 149, 95);
+}
+
+.sawerna-single-product__pdf-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.sawerna-single-product__meta {
+  margin-top: 30px;
+}
+
+.sawerna-single-product__meta-row {
+  margin-top: 8px;
+  color: #8b8b8b;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sawerna-single-product__meta-label {
+  margin-right: 5px;
+}
+
+.sawerna-single-product__meta-value a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.sawerna-single-product__meta-value a:hover,
+.sawerna-single-product__meta-value a:focus-visible {
+  color: #111;
+  text-decoration: underline;
+}
+
+.sawerna-single-product__tabs {
+  margin-top: 78px;
+}
+
+.sawerna-single-product__tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  border-bottom: 1px solid #ececec;
+}
+
+.sawerna-single-product__tab-button {
+  position: relative;
+  min-height: 62px;
+  padding: 16px 28px;
+  border: 0;
+  background: transparent;
+  color: #2d2d2d;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sawerna-single-product__tab-button.is-active {
+  background: #000;
+  color: #fff;
+}
+
+.sawerna-single-product__tab-button:not(.is-active):after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: -1px;
+  height: 2px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.sawerna-single-product__tab-button:hover:after {
+  background: #111;
+}
+
+.sawerna-single-product__tab-panels {
+  padding-top: 42px;
+}
+
+.sawerna-single-product__tab-panel {
+  color: #232323;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.sawerna-single-product__tab-panel h2,
+.sawerna-single-product__tab-panel h3 {
+  margin-top: 0;
+  color: #111;
+}
+
+.sawerna-single-product__related {
+  margin-top: 78px;
+}
+
+.sawerna-single-product__related-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.sawerna-single-product__related-title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.sawerna-single-product__related-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sawerna-single-product__related-arrow {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e5e5e5;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sawerna-single-product__related-arrow:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.sawerna-single-product__related-arrow img {
+  width: 7px;
+  height: auto;
+}
+
+.sawerna-single-product__related-track-wrap {
+  overflow: hidden;
+}
+
+.sawerna-single-product__related-track {
+  display: flex;
+  gap: 20px;
+}
+
+.sawerna-single-product__related.is-slider-enabled .sawerna-single-product__related-track {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.sawerna-single-product__related.is-slider-enabled .sawerna-single-product__related-track::-webkit-scrollbar {
+  display: none;
+}
+
+.sawerna-single-product__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 72px;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.84);
+}
+
+.sawerna-single-product__lightbox[hidden] {
+  display: none;
+}
+
+.sawerna-single-product__lightbox-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  gap: 18px;
+}
+
+.sawerna-single-product__lightbox-image-wrap {
+  max-width: min(90vw, 1180px);
+  max-height: 86vh;
+}
+
+.sawerna-single-product__lightbox-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 86vh;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.sawerna-single-product__lightbox-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: min(90vw, 920px);
+}
+
+.sawerna-single-product__lightbox-thumb {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.sawerna-single-product__lightbox-thumb.is-active {
+  border-color: #fff;
+}
+
+.sawerna-single-product__lightbox-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-single-product__lightbox-close,
+.sawerna-single-product__lightbox-arrow {
+  border: 0;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.sawerna-single-product__lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.sawerna-single-product__lightbox-arrow {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sawerna-single-product__lightbox-arrow:hover,
+.sawerna-single-product__lightbox-arrow:focus-visible {
+  background: #f1f1f1;
+  transform: scale(1.04);
+}
+
+.sawerna-single-product__lightbox-close:hover,
+.sawerna-single-product__lightbox-close:focus-visible {
+  background: transparent;
+  color: #fff;
+}
+
+.sawerna-single-product__lightbox-arrow img {
+  width: 8px;
+  height: auto;
+}
+
+.sawerna-single-product__related-item {
+  flex: 0 0 calc((100% - 60px) / 4);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.sawerna-single-product__related:not(.is-slider-enabled) .sawerna-single-product__related-track {
+  flex-wrap: wrap;
+}
+
+.sawerna-single-product__related:not(.is-slider-enabled) .sawerna-single-product__related-item {
+  max-width: calc((100% - 60px) / 4);
+}
+
+.sawerna-single-product__related-item .sawerna-product-card__media {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.sawerna-single-product__related-item .sawerna-product-card__body {
+  width: 100%;
+}
+
+.sawerna-single-product__tabs--mobile {
+  display: none;
+}
+
+.sawerna-single-product__accordion-list {
+  border-top: 1px solid #ececec;
+}
+
+.sawerna-single-product__accordion-item {
+  border-bottom: 1px solid #ececec;
+}
+
+.sawerna-single-product__accordion-button {
+  width: 100%;
+  padding: 18px 10px 18px 18px;
+  border: 0;
+  background: transparent;
+  color: #2d2d2d;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.sawerna-single-product__accordion-icon {
+  width: 12px;
+  height: 7px;
+  flex: 0 0 12px;
+  background: url('../SVG/Asset 6.svg') no-repeat center / contain;
+  transition: transform 0.2s ease;
+}
+
+.sawerna-single-product__accordion-item.is-open .sawerna-single-product__accordion-icon {
+  transform: rotate(180deg);
+}
+
+.sawerna-single-product__accordion-panel {
+  padding: 0 18px 18px;
+  color: #232323;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.sawerna-single-product__accordion-panel h2,
+.sawerna-single-product__accordion-panel h3 {
+  margin-top: 0;
+  color: #111;
+}
+
+@media (max-width: 1220px) {
+  .sawernau-single-product-shell {
+    overflow-x: clip;
+  }
+
+  .sawerna-single-product__hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .sawerna-single-product__main-image {
+    width: 100%;
+  }
+
+  .sawerna-single-product__main-arrow {
+    width: 39px;
+    height: 35px;
+  }
+
+  .sawerna-single-product__price-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .sawerna-shop__breadcrumb-container,
+  .sawerna-single-product__container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .sawerna-single-product__container {
+    padding-top: 18px;
+    padding-bottom: 52px;
+    overflow-x: clip;
+  }
+
+  .sawerna-single-product__thumbs {
+    gap: 8px;
+    margin-top: 25px;
+    overflow-x: clip;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+
+  .sawerna-single-product__thumb {
+    width: calc((100% - 32px) / 5);
+    flex-basis: calc((100% - 32px) / 5);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    scroll-snap-align: none;
+  }
+
+  .sawerna-single-product__thumb:hover,
+  .sawerna-single-product__thumb:focus-visible,
+  .sawerna-single-product__thumb.is-active {
+    border-color: transparent;
+  }
+
+  .sawerna-single-product__thumb:after {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: -14px;
+    width: 28px;
+    height: 28px;
+    font-size: 17px;
+    line-height: 28px;
+    transform: translateX(-50%) scale(0.88);
+  }
+
+  .sawerna-single-product__thumb.is-active:after {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .sawerna-single-product__main-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sawerna-single-product__main-arrow--prev {
+    left: 12px;
+  }
+
+  .sawerna-single-product__main-arrow--next {
+    right: 12px;
+  }
+
+  .sawerna-single-product__gallery-count {
+    left: 10px;
+    right: 10px;
+    bottom: -22px;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+  }
+
+  .sawerna-single-product__gallery-progress {
+    display: block;
+    flex: 1 1 auto;
+    height: 4px;
+    border-radius: 999px;
+    background: #d9d9d9;
+    overflow: hidden;
+  }
+
+  .sawerna-single-product__gallery-count-text {
+    flex: 0 0 auto;
+    color: #8a8a8a;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .sawerna-single-product__main-arrow img {
+    width: 9px;
+  }
+
+  .sawerna-single-product__wishlist {
+    top: auto;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .sawerna-single-product__wishlist .sawerna-wishlist-button--icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .sawerna-single-product__wishlist .sawerna-wishlist-button--icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sawerna-single-product__labels {
+    top: 10px;
+    left: auto;
+    right: 10px;
+    align-items: flex-end;
+  }
+
+  .sawerna-single-product__title {
+    font-size: 28px;
+  }
+
+  .sawerna-single-product__price-grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 12px;
+    align-items: start;
+  }
+
+  .sawerna-single-product__price-col--price {
+    min-width: 0;
+    justify-self: start;
+  }
+
+  .sawerna-single-product__price-main {
+    align-items: center;
+  }
+
+  .sawerna-single-product__price-col--payments {
+    grid-column: 1 / -1;
+  }
+
+  .sawerna-single-product__badges {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sawerna-single-product__payment-panel {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .sawerna-single-product__payment-panel-head,
+  .sawerna-single-product__payment-panel-body {
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+  }
+
+  .sawerna-single-product__payment-panel-title {
+    min-width: 0;
+    font-size: 22px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-single-product__payment-plan {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .sawerna-single-product__payment-plan-amount {
+    font-size: 15px;
+  }
+
+  .sawerna-single-product__selector-panel {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .sawerna-single-product__selector-panel {
+    padding-bottom: 94px;
+  }
+
+  .sawerna-single-product__selector-panel-head,
+  .sawerna-single-product__selector-panels {
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+  }
+
+  .sawerna-single-product__selector-panels {
+    padding: 0 0 18px;
+  }
+
+  .sawerna-single-product__selector-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    padding: 0 28px;
+    margin-top: 16px;
+  }
+
+  .sawerna-single-product__selector-current {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 28px;
+    margin: 0;
+    background: #f3f3f3;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .sawerna-single-product__selector-current-preview {
+    width: 64px;
+    height: 64px;
+  }
+
+  .sawerna-single-product__selector-panel-title {
+    min-width: 0;
+    font-size: 22px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-single-product__selector-option {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+  }
+
+  .sawerna-single-product__selector-option-media {
+    width: min(200px, 100%);
+    max-width: 200px;
+    aspect-ratio: 10 / 9;
+    height: 180px;
+    max-height: 180px;
+    margin: 0 auto;
+  }
+
+  .sawerna-single-product__selector-option:hover,
+  .sawerna-single-product__selector-option:focus-visible,
+  .sawerna-single-product__selector-option.is-selected {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .sawerna-single-product__selector-option.is-selected .sawerna-single-product__selector-option-label {
+    color: #111;
+    font-weight: 700;
+  }
+
+  .sawerna-single-product__selector-option-copy {
+    justify-content: center;
+    text-align: center;
+    padding: 0;
+  }
+
+  .sawerna-single-product__selector-option-label {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .sawerna-single-product__selector-option-detail {
+    width: 100%;
+  }
+
+  .sawerna-single-product__selector-panel-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    padding: 12px 10px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+    border-top: 1px solid #ececec;
+    box-sizing: border-box;
+  }
+
+  .sawerna-single-product__selector-apply {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .sawerna-single-product__selector-apply:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .sawerna-single-product__selector-option-label,
+  .sawerna-single-product__selector-option-detail,
+  .sawerna-single-product__selector-current-copy,
+  .sawerna-single-product__selector-current-detail {
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-single-product__feature-header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sawerna-single-product__feature-body {
+    gap: 12px;
+  }
+
+  .sawerna-single-product__feature-arrow {
+    margin-left: auto;
+  }
+
+  .sawerna-single-product__feature-icon {
+    width: 58px;
+    height: 46px;
+    flex: 0 0 58px;
+  }
+
+  .sawerna-single-product__feature-content {
+    min-width: 0;
+  }
+
+  .sawerna-single-product__feature-value,
+  .sawerna-single-product__feature-detail {
+    word-break: break-word;
+  }
+
+  .sawerna-single-product__purchase form.cart,
+  .sawerna-single-product__purchase .woocommerce-variation-add-to-cart {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .sawerna-single-product__purchase .single_variation_wrap {
+    width: 100%;
+  }
+
+  .sawerna-single-product__purchase .quantity {
+    flex: 0 0 auto;
+  }
+
+  .sawerna-single-product__purchase .quantity input.qty {
+    width: 48px;
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .sawerna-single-product__purchase .quantity .minus,
+  .sawerna-single-product__purchase .quantity .plus {
+    width: 32px;
+    height: 52px;
+    font-size: 18px;
+    line-height: 52px;
+  }
+
+  .sawerna-single-product__purchase button.single_add_to_cart_button {
+    min-width: 0;
+    min-height: 52px;
+    flex: 1 1 auto;
+    padding: 12px 16px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  .sawerna-single-product__tabs--desktop {
+    display: none;
+  }
+
+  .sawerna-single-product__tabs--mobile {
+    display: block;
+    width: calc(100% + 20px);
+    max-width: none;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  .sawerna-single-product__tab-list {
+    gap: 10px;
+  }
+
+  .sawerna-single-product__tab-button {
+    min-height: 52px;
+    padding: 12px 18px;
+    font-size: 16px;
+  }
+
+  .sawerna-single-product__related-item,
+  .sawerna-single-product__related:not(.is-slider-enabled) .sawerna-single-product__related-item {
+    flex-basis: calc((100% - 20px) / 2);
+    max-width: calc((100% - 20px) / 2);
+  }
+
+  .sawerna-single-product__related-track {
+    gap: 12px;
+  }
+
+  .sawerna-single-product__related-item,
+  .sawerna-single-product__related:not(.is-slider-enabled) .sawerna-single-product__related-item {
+    flex-basis: calc((100% - 12px) / 2);
+    max-width: calc((100% - 12px) / 2);
+  }
+
+  .sawerna-single-product__lightbox {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 60px 16px 16px;
+  }
+
+  .sawerna-single-product__lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .sawerna-single-product__lightbox-arrow--prev {
+    left: 12px;
+  }
+
+  .sawerna-single-product__lightbox-arrow--next {
+    right: 12px;
+  }
+
+  .sawerna-single-product__lightbox-thumb {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 349px) {
+  .sawerna-single-product__title {
+    font-size: 26px;
+  }
+
+  .sawerna-single-product__price {
+    font-size: 20px;
+  }
+
+  .sawerna-single-product__feature-title,
+  .sawerna-single-product__feature-value {
+    font-size: 16px;
+  }
+
+  .sawerna-single-product__purchase .quantity input.qty {
+    width: 44px;
+  }
+
+  .sawerna-single-product__purchase .quantity .minus,
+  .sawerna-single-product__purchase .quantity .plus {
+    width: 30px;
+  }
+
+  .sawerna-single-product__purchase button.single_add_to_cart_button {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 350px) and (max-width: 374px) {
+  .sawerna-single-product__title {
+    font-size: 27px;
+  }
+
+  .sawerna-single-product__price {
+    font-size: 21px;
+  }
+
+  .sawerna-single-product__gallery-count {
+    gap: 10px;
+  }
+
+  .sawerna-single-product__purchase .quantity input.qty {
+    width: 44px;
+  }
+
+  .sawerna-single-product__purchase button.single_add_to_cart_button {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 375px) and (max-width: 399px) {
+  .sawerna-single-product__title {
+    font-size: 28px;
+  }
+
+  .sawerna-single-product__price {
+    font-size: 22px;
+  }
+
+  .sawerna-single-product__feature-icon {
+    width: 60px;
+    height: 48px;
+    flex-basis: 60px;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 424px) {
+  .sawerna-single-product__thumbs {
+    gap: 8px;
+  }
+
+  .sawerna-single-product__thumb {
+    width: calc((100% - 32px) / 5);
+    flex-basis: calc((100% - 32px) / 5);
+  }
+
+  .sawerna-single-product__purchase form.cart,
+  .sawerna-single-product__purchase .woocommerce-variation-add-to-cart {
+    gap: 12px;
+  }
+
+  .sawerna-single-product__related-track {
+    gap: 10px;
+  }
+
+  .sawerna-single-product__related-item,
+  .sawerna-single-product__related:not(.is-slider-enabled) .sawerna-single-product__related-item {
+    flex-basis: calc((100% - 10px) / 2);
+    max-width: calc((100% - 10px) / 2);
+  }
+}
+
+@media (min-width: 425px) and (max-width: 450px) {
+  .sawerna-single-product__container {
+    padding-bottom: 56px;
+  }
+
+  .sawerna-single-product__price {
+    font-size: 23px;
+  }
+
+  .sawerna-single-product__gallery-count {
+    bottom: -24px;
+  }
+
+  .sawerna-single-product__payment-panel-head,
+  .sawerna-single-product__payment-panel-body,
+  .sawerna-single-product__selector-panel-head,
+  .sawerna-single-product__selector-panels {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* ThemeHigh EPO image options in selector panel */
+.sawerna-single-product__selector-options--image .sawerna-single-product__selector-option {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.sawerna-single-product__selector-option-media {
+  display: block;
+  flex-shrink: 0;
+}
+
+.sawerna-single-product__selector-option-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* -------------------------------------------------------------------------
+ * Product reviews tab
+ * Scoped under .sawerna-reviews so it applies in both the desktop tab panel
+ * and the mobile accordion panel.
+ * ---------------------------------------------------------------------- */
+.sawerna-reviews {
+  max-width: 760px;
+  color: #232323;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.sawerna-reviews__title {
+  margin: 0 0 28px;
+  color: #111;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.sawerna-reviews__title span {
+  font-weight: 600;
+}
+
+/* No-reviews / notice states (replaces the raw WooCommerce blue block) */
+.sawerna-reviews__empty,
+.sawerna-reviews__notice,
+.sawerna-reviews__must-login {
+  margin: 0 0 30px;
+  padding: 16px 20px;
+  background: #f6f4f0;
+  border-left: 3px solid rgb(149, 149, 95);
+  color: #555;
+  font-size: 16px;
+}
+
+.sawerna-reviews__must-login a,
+.sawerna-reviews__notice a {
+  color: #111;
+  font-weight: 600;
+}
+
+/* Existing review list */
+.sawerna-reviews__items {
+  margin: 0 0 44px;
+  padding: 0;
+  list-style: none;
+}
+
+.sawerna-reviews__items li {
+  padding: 24px 0;
+  border-bottom: 1px solid #ececec;
+  list-style: none;
+}
+
+.sawerna-reviews__items li:first-child {
+  padding-top: 0;
+}
+
+.sawerna-reviews .comment_container {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.sawerna-reviews .comment_container img.avatar {
+  width: 52px;
+  height: 52px;
+  margin: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.sawerna-reviews .comment-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sawerna-reviews .meta {
+  margin: 0 0 8px;
+  color: #8b8b8b;
+  font-size: 14px;
+}
+
+.sawerna-reviews .meta .woocommerce-review__author {
+  color: #111;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sawerna-reviews .meta .woocommerce-review__dash {
+  margin: 0 6px;
+}
+
+.sawerna-reviews .description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Display stars for existing reviews (self-contained unicode, no WC font needed) */
+.sawerna-reviews .star-rating {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.sawerna-reviews .star-rating::before {
+  content: "\2605\2605\2605\2605\2605";
+  color: #d8d5cd;
+}
+
+.sawerna-reviews .star-rating span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sawerna-reviews .star-rating span::before {
+  content: "\2605\2605\2605\2605\2605";
+  color: rgb(149, 149, 95);
+}
+
+/* Review form */
+.sawerna-reviews__form-wrap {
+  padding-top: 4px;
+}
+
+.sawerna-reviews__form-title {
+  display: block;
+  margin: 0 0 22px;
+  color: #111;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.sawerna-reviews .comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sawerna-reviews .comment-notes {
+  margin: 0;
+  color: #8b8b8b;
+  font-size: 14px;
+}
+
+.sawerna-reviews__field {
+  margin: 0;
+}
+
+.sawerna-reviews__field label,
+.sawerna-reviews__rating-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sawerna-reviews .required {
+  color: #c94c43;
+}
+
+.sawerna-reviews input[type="text"],
+.sawerna-reviews input[type="email"],
+.sawerna-reviews textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.sawerna-reviews textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.sawerna-reviews input[type="text"]:focus,
+.sawerna-reviews input[type="email"]:focus,
+.sawerna-reviews textarea:focus {
+  outline: none;
+  border-color: #111;
+}
+
+/* Star rating input — CSS-only radio widget (no WooCommerce JS dependency) */
+.sawerna-reviews__rating {
+  margin: 0;
+}
+
+.sawerna-reviews__stars {
+  /* row-reverse: DOM order is 5..1, displayed left-to-right as 1..5 */
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.sawerna-reviews__star {
+  margin: 0;
+  color: #d8d5cd;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.sawerna-reviews__star::before {
+  content: "\2605";
+}
+
+.sawerna-reviews__star input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Checked star + all following (lower value = to its left) fill. */
+.sawerna-reviews__stars .sawerna-reviews__star:has(input:checked),
+.sawerna-reviews__stars .sawerna-reviews__star:has(input:checked) ~ .sawerna-reviews__star {
+  color: rgb(149, 149, 95);
+}
+
+/* Hover preview overrides the checked state. */
+.sawerna-reviews__stars:hover .sawerna-reviews__star {
+  color: #d8d5cd;
+}
+
+.sawerna-reviews__stars .sawerna-reviews__star:hover,
+.sawerna-reviews__stars .sawerna-reviews__star:hover ~ .sawerna-reviews__star {
+  color: rgb(149, 149, 95);
+}
+
+.sawerna-reviews__star:has(input:focus-visible) {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.sawerna-reviews .screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Submit button — matches the add-to-cart button styling.
+ * High specificity (two IDs) to beat WooCommerce core's #respond input#submit. */
+.sawerna-reviews #respond input#submit,
+.sawerna-reviews #respond input#submit.sawerna-reviews__submit {
+  align-self: flex-start;
+  width: auto;
+  min-height: 52px;
+  margin: 0;
+  padding: 14px 34px;
+  border: 0;
+  border-radius: 0;
+  background: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sawerna-reviews #respond input#submit:hover,
+.sawerna-reviews #respond input#submit:focus-visible {
+  background: rgb(149, 149, 95);
+}
+
+.sawerna-reviews__pagination ul {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sawerna-reviews__pagination a,
+.sawerna-reviews__pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #ececec;
+  color: #111;
+  text-decoration: none;
+}
+
+.sawerna-reviews__pagination .current {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+@media (max-width: 600px) {
+  .sawerna-reviews__star {
+    font-size: 34px;
+  }
+
+  .sawerna-reviews .comment_container {
+    gap: 14px;
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * ThemeHigh EPO — leftover (non-swatch) fields shown below the variation
+ * selectors. Swatch-able fields (image group, colour palette, label swatch,
+ * radio) are converted by single-product.js; everything else (select, text,
+ * textarea, multiselect, …) stays in this table and renders normally.
+ * Starting-point styling — adjust as needed.
+ * ---------------------------------------------------------------------- */
+.sawerna-single-product__thwepo-extra {
+  display: block;
+  width: 100%;
+  margin: 24px 0 0;
+  border: 0;
+  border-collapse: collapse;
+}
+
+.sawerna-single-product__thwepo-extra tbody,
+.sawerna-single-product__thwepo-extra tr,
+.sawerna-single-product__thwepo-extra td {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+}
+
+.sawerna-single-product__thwepo-extra tr[data-type] {
+  margin-bottom: 20px;
+}
+
+.sawerna-single-product__thwepo-extra .label-tag {
+  display: block;
+  margin-bottom: 8px;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sawerna-single-product__thwepo-extra .sublabel-tag {
+  display: block;
+  margin: -4px 0 8px;
+  color: #8b8b8b;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.sawerna-single-product__thwepo-extra select,
+.sawerna-single-product__thwepo-extra input[type="text"],
+.sawerna-single-product__thwepo-extra input[type="email"],
+.sawerna-single-product__thwepo-extra input[type="number"],
+.sawerna-single-product__thwepo-extra textarea {
+  width: 100%;
+  max-width: 420px;
+  padding: 13px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.sawerna-single-product__thwepo-extra textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.sawerna-single-product__thwepo-extra select:focus,
+.sawerna-single-product__thwepo-extra input:focus,
+.sawerna-single-product__thwepo-extra textarea:focus {
+  outline: none;
+  border-color: #111;
+}

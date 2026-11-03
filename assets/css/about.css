@@ -1,0 +1,465 @@
+/**
+ * About page template styles
+ */
+
+.sawerna-about {
+  background: #fff;
+  color: #111;
+  overflow-x: hidden;
+}
+
+.sawerna-about__container {
+  width: min(100% - 48px, 1220px);
+  margin: 0 auto;
+}
+
+.sawerna-about-hero {
+  position: relative;
+  min-height: 590px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #514a3e;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.sawerna-about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.38) 42%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+.sawerna-about-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  padding: 92px 0 150px;
+  color: #fff;
+}
+
+.sawerna-about-hero__eyebrow {
+  margin: 0 0 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.sawerna-about-hero__title {
+  margin: 0;
+  max-width: 15ch;
+  color: inherit;
+  font-size: 43px;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.sawerna-about-hero__text {
+  margin: 24px 0 0;
+  max-width: 54ch;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.sawerna-about-hero__accent {
+  margin-top: 34px;
+  max-width: 360px;
+}
+
+.sawerna-about-hero__accent-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.sawerna-about-story {
+  position: relative;
+  padding: 0 0 88px;
+}
+
+.sawerna-about-story__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 650px) minmax(320px, 420px);
+  gap: 72px;
+  align-items: start;
+}
+
+.sawerna-about-story__main {
+  min-width: 0;
+  padding-top: 72px;
+}
+
+.sawerna-about-story__content {
+  color: #383838;
+  font-size: 15px;
+  line-height: 1.68;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-about-story__content > :first-child {
+  margin-top: 0;
+}
+
+.sawerna-about-story__content > :last-child {
+  margin-bottom: 0;
+}
+
+.sawerna-about-story__content h1,
+.sawerna-about-story__content h2,
+.sawerna-about-story__content h3 {
+  color: #111;
+  font-weight: 500;
+  line-height: 1.18;
+}
+
+.sawerna-about-story__content h2 {
+  margin: 0 0 34px;
+  max-width: 650px;
+  font-size: 30px;
+}
+
+.sawerna-about-story__content p {
+  margin: 0 0 22px;
+}
+
+.sawerna-about-story__content strong {
+  color: #111;
+  font-weight: 700;
+}
+
+.sawerna-about-quote {
+  margin: 48px 0 0 44px;
+  padding: 4px 0 4px 34px;
+  border-left: 2px solid #9aa56a;
+  color: #2f2f2f;
+}
+
+.sawerna-about-quote p {
+  margin: 0;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.sawerna-about-quote cite {
+  display: block;
+  margin-top: 18px;
+  color: #111;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.sawerna-about-owner {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  margin-top: -110px;
+  padding-bottom: 300px;
+}
+
+.sawerna-about-owner__card {
+  position: relative;
+  background: #f1f1f1;
+  padding: 78px 64px 125px;
+}
+
+.sawerna-about-owner__mark {
+  position: absolute;
+  top: -45px;
+  right: 24px;
+  z-index: 2;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250px;
+  font-weight: 900;
+  letter-spacing: -0.14em;
+  line-height: 0.72;
+  pointer-events: none;
+  text-shadow: none;
+}
+
+.sawerna-about-owner__text {
+  margin: 0;
+  color: #232323;
+  font-size: 18px;
+  line-height: 1.48;
+}
+
+.sawerna-about-owner__person {
+  position: relative;
+  margin-top: 40px;
+  padding-left: 26px;
+}
+
+.sawerna-about-owner__person::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: 1px;
+  background: #9aa56a;
+}
+
+.sawerna-about-owner__person strong,
+.sawerna-about-owner__person span {
+  display: block;
+}
+
+.sawerna-about-owner__person strong {
+  color: #111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.sawerna-about-owner__person span {
+  margin-top: 4px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.sawerna-about-owner__media {
+  position: absolute;
+  z-index: 1;
+  top: calc(100% + -100px);
+  right: 54px;
+  width: min(360px, calc(100% - 72px));
+  margin: 0;
+}
+
+.sawerna-about-owner__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .sawerna-about__container {
+    width: min(100% - 40px, 1220px);
+  }
+
+  .sawerna-about-hero {
+    min-height: 520px;
+  }
+
+  .sawerna-about-hero__content {
+    padding: 76px 0 122px;
+  }
+
+  .sawerna-about-hero__title {
+    font-size: 38px;
+  }
+
+  .sawerna-about-story__grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 42px;
+  }
+
+  .sawerna-about-owner__card {
+    padding: 68px 38px 56px;
+  }
+
+  .sawerna-about-owner__mark {
+    right: 18px;
+  }
+
+  .sawerna-about-owner__media {
+    right: 24px;
+    width: min(300px, calc(100% - 48px));
+  }
+}
+
+@media (max-width: 900px) {
+  .sawerna-about__container {
+    width: min(100% - 32px, 1220px);
+  }
+
+  .sawerna-about-hero {
+    min-height: 480px;
+  }
+
+  .sawerna-about-hero__content {
+    padding: 68px 0 104px;
+  }
+
+  .sawerna-about-hero__title {
+    max-width: 16ch;
+    font-size: 34px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-hero__text {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-story {
+    padding-bottom: 64px;
+  }
+
+  .sawerna-about-story__grid {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 42px;
+  }
+
+  .sawerna-about-story__main {
+    padding-top: 0;
+  }
+
+  .sawerna-about-owner {
+    width: 100%;
+    max-width: 560px;
+    margin: -68px auto 0;
+    padding-bottom: 0;
+  }
+
+  .sawerna-about-owner__card {
+    padding: 60px 42px 34px;
+  }
+
+  .sawerna-about-owner__mark {
+    top: -58px;
+    right: 18px;
+    font-size: 150px;
+  }
+
+  .sawerna-about-owner__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: 360px;
+    margin: 34px auto 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .sawerna-about__container {
+    width: min(100% - 24px, 1220px);
+  }
+
+  .sawerna-about-hero {
+    min-height: 410px;
+    align-items: flex-end;
+    background-position: center;
+  }
+
+  .sawerna-about-hero__content {
+    width: 100%;
+    padding: 52px 0 64px;
+  }
+
+  .sawerna-about-hero__title {
+    max-width: 15ch;
+    font-size: 30px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-hero__text {
+    max-width: 100%;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-hero__accent {
+    max-width: min(240px, 72vw);
+  }
+
+  .sawerna-about-story {
+    padding: 0 0 56px;
+  }
+
+  .sawerna-about-story__grid {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 34px;
+  }
+
+  .sawerna-about-story__main {
+    padding-top: 0;
+  }
+
+  .sawerna-about-story__content h2 {
+    margin-bottom: 24px;
+    font-size: 25px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-quote {
+    margin: 34px 0 0;
+    padding-left: 20px;
+  }
+
+  .sawerna-about-quote p {
+    font-size: 17px;
+  }
+
+  .sawerna-about-owner {
+    width: 100%;
+    margin-top: -36px;
+    padding-bottom: 0;
+  }
+
+  .sawerna-about-owner__card {
+    padding: 52px 24px 24px;
+  }
+
+  .sawerna-about-owner__mark {
+    top: -46px;
+    right: 12px;
+    font-size: 126px;
+  }
+
+  .sawerna-about-owner__text {
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-about-owner__person {
+    margin-top: 28px;
+    padding-left: 18px;
+  }
+
+  .sawerna-about-owner__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: 360px;
+    margin: 30px auto 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .sawerna-about__container {
+    width: min(100% - 20px, 1220px);
+  }
+
+  .sawerna-about-hero {
+    min-height: 380px;
+  }
+
+  .sawerna-about-hero__content {
+    padding: 44px 0 54px;
+  }
+
+  .sawerna-about-hero__title {
+    max-width: none;
+    font-size: 28px;
+  }
+
+  .sawerna-about-owner__card {
+    padding: 46px 20px 22px;
+  }
+}

@@ -1,0 +1,635 @@
+/**
+ * WooCommerce My Account
+ */
+body.woocommerce-account .sawerna-page {
+  padding: 0;
+}
+
+body.woocommerce-account .sawerna-page__content {
+  margin: 0;
+}
+
+body.woocommerce-account .rm-footer__newsletter,
+body.woocommerce-account .rm-footer__logoRow {
+  display: none;
+}
+
+.sawerna-account {
+  padding: 58px 0 88px;
+  color: #202020;
+  background: #fff;
+}
+
+.sawerna-account__layout {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.sawerna-account__content {
+  float: none;
+  width: auto;
+  min-width: 0;
+}
+
+.sawerna-account-nav {
+  float: none;
+  width: auto;
+  border: 1px solid #eeeeee;
+  background: #fff;
+}
+
+.sawerna-account-nav__title {
+  min-height: 52px;
+  padding: 18px 22px;
+  background: #f4f4f4;
+  color: #777;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.sawerna-account-nav__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sawerna-account-nav__item {
+  margin: 0;
+  border-top: 1px solid #eeeeee;
+}
+
+.sawerna-account-nav__item:first-child {
+  border-top: 0;
+}
+
+.sawerna-account-nav__link {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 22px;
+  color: #929292;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sawerna-account-nav__link:hover,
+.sawerna-account-nav__link:focus-visible {
+  background: #f7f7f7;
+  color: #111;
+  outline: none;
+}
+
+.sawerna-account-nav__item.is-active .sawerna-account-nav__link {
+  background: #000;
+  color: #fff;
+}
+
+.sawerna-account-nav__icon,
+.sawerna-account-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.sawerna-account-nav__icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.sawerna-account-card__icon svg {
+  width: 58px;
+  height: 58px;
+  display: block;
+}
+
+.sawerna-account-nav__icon svg,
+.sawerna-account-card__icon svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sawerna-account-dashboard__header {
+  margin-bottom: 34px;
+}
+
+.sawerna-account-dashboard__title {
+  margin: 0;
+  color: #202020;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.18;
+}
+
+.sawerna-account-dashboard__title strong {
+  font-weight: 800;
+}
+
+.sawerna-account-dashboard__intro {
+  max-width: 900px;
+  margin: 24px 0 0;
+  color: #777;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.sawerna-account-dashboard__intro a {
+  color: #202020;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.sawerna-account-dashboard__intro a:hover,
+.sawerna-account-dashboard__intro a:focus-visible {
+  color: #000;
+}
+
+.sawerna-account-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.sawerna-account-card {
+  display: flex;
+  min-height: 172px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 16px;
+  border: 1px solid #eeeeee;
+  background: #fff;
+  color: #b9b9b9;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.sawerna-account-card:hover,
+.sawerna-account-card:focus-visible {
+  border-color: #dddddd;
+  background: #fafafa;
+  color: #8a8a8a;
+  outline: none;
+}
+
+.sawerna-account-card__label {
+  color: #202020;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.sawerna-account .woocommerce-notices-wrapper {
+  margin-bottom: 22px;
+}
+
+.sawerna-account .woocommerce-message,
+.sawerna-account .woocommerce-info,
+.sawerna-account .woocommerce-error {
+  border-top-color: #000;
+  background: transparent;
+  color: #202020;
+}
+
+.sawerna-account .woocommerce-MyAccount-content > h2,
+.sawerna-account .woocommerce-MyAccount-content > h3,
+.sawerna-account .woocommerce-order-details__title,
+.sawerna-account .woocommerce-column__title {
+  margin: 0 0 22px;
+  color: #202020;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.sawerna-account .woocommerce-MyAccount-content p {
+  color: #5f5f5f;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+.sawerna-account table.shop_table {
+  width: 100%;
+  border: 1px solid #eeeeee;
+  border-collapse: collapse;
+  border-radius: 0;
+  background: #fff;
+}
+
+.sawerna-account table.shop_table th,
+.sawerna-account table.shop_table td {
+  padding: 16px;
+  border: 0;
+  border-bottom: 1px solid #eeeeee;
+  color: #202020;
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.sawerna-account table.shop_table th {
+  color: #777;
+  font-weight: 600;
+}
+
+.sawerna-account table.shop_table tr:last-child td {
+  border-bottom: 0;
+}
+
+.sawerna-account .woocommerce-button,
+.sawerna-account .button,
+.sawerna-account button.button,
+.sawerna-account input.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid #111;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.sawerna-account .woocommerce-button:hover,
+.sawerna-account .button:hover,
+.sawerna-account button.button:hover,
+.sawerna-account input.button:hover,
+.sawerna-account .woocommerce-button:focus-visible,
+.sawerna-account .button:focus-visible,
+.sawerna-account button.button:focus-visible,
+.sawerna-account input.button:focus-visible {
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+
+.sawerna-account form .form-row {
+  margin: 0 0 18px;
+}
+
+.sawerna-account form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #202020;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.sawerna-account .input-text,
+.sawerna-account input[type="text"],
+.sawerna-account input[type="email"],
+.sawerna-account input[type="password"],
+.sawerna-account input[type="tel"],
+.sawerna-account select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 0;
+  background: #fff;
+  color: #202020;
+  font-size: 14px;
+}
+
+.sawerna-account textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 0;
+  background: #fff;
+  color: #202020;
+  font-size: 14px;
+}
+
+.sawerna-account .input-text:focus,
+.sawerna-account input[type="text"]:focus,
+.sawerna-account input[type="email"]:focus,
+.sawerna-account input[type="password"]:focus,
+.sawerna-account input[type="tel"]:focus,
+.sawerna-account select:focus,
+.sawerna-account textarea:focus {
+  border-color: #111;
+  outline: none;
+}
+
+.sawerna-account .woocommerce-Addresses {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.sawerna-account .woocommerce-Address {
+  width: auto;
+  float: none;
+  padding: 22px;
+  border: 1px solid #eeeeee;
+}
+
+/* ----------------------------------------
+   Login / Register form (logged-out state)
+   ---------------------------------------- */
+
+body.woocommerce-account:not(.logged-in) .sawerna-account__layout {
+  grid-template-columns: 1fr;
+}
+
+body.woocommerce-account:not(.logged-in) .sawerna-account__content {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Login page banner */
+.sawerna-login-banner {
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 40px;
+}
+
+.sawerna-login-banner__image {
+  width: 100%;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.sawerna-login-banner__text {
+  max-width: 480px;
+  margin: 24px auto 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #444;
+  text-align: center;
+}
+
+.sawerna-login {
+  max-width: 480px;
+  margin: 60px auto;
+}
+
+.sawerna-login--with-register {
+  max-width: 900px;
+}
+
+.sawerna-login__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 56px;
+  align-items: start;
+}
+
+.sawerna-login__col--register {
+  border-left: 1px solid #eeeeee;
+  padding-left: 56px;
+}
+
+.sawerna-login__heading {
+  margin: 0 0 24px;
+  color: #202020;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.sawerna-login__field {
+  margin-bottom: 18px;
+}
+
+.sawerna-login__label {
+  display: block;
+  margin-bottom: 7px;
+  color: #202020;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.sawerna-login__required {
+  color: #c0392b;
+  margin-left: 2px;
+}
+
+.sawerna-login .sawerna-login__input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 0;
+  background: #fff;
+  color: #202020;
+  font-size: 14px;
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  transition: border-color 0.15s;
+}
+
+.sawerna-login .sawerna-login__input:focus {
+  border-color: #111;
+  box-shadow: none;
+  outline: none;
+}
+
+.sawerna-login__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.sawerna-login__actions--register {
+  justify-content: flex-end;
+}
+
+.sawerna-login__remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #5f5f5f;
+  cursor: pointer;
+}
+
+.sawerna-login__checkbox {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: #111;
+  cursor: pointer;
+}
+
+.sawerna-login__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid #111;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.sawerna-login__btn:hover,
+.sawerna-login__btn:focus-visible {
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+
+.sawerna-login__lost-password {
+  margin: 14px 0 0;
+  font-size: 13px;
+}
+
+.sawerna-login__lost-password a {
+  color: #5f5f5f;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.sawerna-login__lost-password a:hover {
+  color: #111;
+}
+
+.sawerna-login__hint {
+  margin: 0 0 18px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 680px) {
+  .sawerna-login__columns {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-login__col--register {
+    border-left: 0;
+    border-top: 1px solid #eeeeee;
+    padding-left: 0;
+    padding-top: 40px;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .sawerna-account__layout {
+    grid-template-columns: 248px minmax(0, 1fr);
+    gap: 38px;
+  }
+
+  .sawerna-account-dashboard__grid {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .sawerna-account {
+    padding: 34px 0 58px;
+  }
+
+  .sawerna-account__layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .sawerna-account-nav__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sawerna-account-nav__item:nth-child(2) {
+    border-top: 0;
+  }
+
+  .sawerna-account-nav__link {
+    min-height: 50px;
+  }
+
+  .sawerna-account-dashboard__title {
+    font-size: 28px;
+  }
+
+  .sawerna-account-dashboard__grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+
+  .sawerna-account .woocommerce-Addresses {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  body.woocommerce-account .sawerna-page__container {
+    width: min(100% - 24px, 1220px);
+  }
+
+  .sawerna-account-nav__list {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-account-nav__item:nth-child(2) {
+    border-top: 1px solid #eeeeee;
+  }
+
+  .sawerna-account-dashboard__intro {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  .sawerna-account-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-account-card {
+    min-height: 150px;
+  }
+}

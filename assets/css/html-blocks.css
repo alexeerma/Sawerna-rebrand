@@ -1,0 +1,369 @@
+/**
+ * HTML Blocks - Elementor Content Styles
+ * Additional styles for Elementor content inside HTML block dropdowns
+ */
+
+/* Ensure Elementor content displays properly in dropdowns */
+.sawerna-html-block-dropdown .elementor,
+.sawerna-html-block-dropdown .elementor-section.elementor-section-boxed > .elementor-container {
+  max-width: 100%;
+  width: 100%;
+}
+
+.sawerna-html-block-dropdown .elementor-section {
+  margin: 0 !important;
+}
+
+.sawerna-html-block-dropdown .elementor-section.elementor-section-full_width > .elementor-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.sawerna-html-block-dropdown .elementor-widget-wrap {
+  padding: 10px;
+}
+
+/* Remove default Elementor container padding for full control */
+.sawerna-html-block-dropdown .elementor-top-section {
+  margin: 0 !important;
+}
+
+.sawerna-html-block-dropdown .elementor-container {
+  max-width: 100% !important;
+}
+
+/* Reset any unwanted spacing from Elementor */
+.sawerna-html-block-dropdown .elementor-column-gap-default > .elementor-column > .elementor-element-populated {
+  padding: 10px;
+}
+
+/* Ensure links work properly inside dropdown */
+.sawerna-html-block-dropdown a {
+  pointer-events: auto;
+}
+
+/* Ensure images display properly */
+.sawerna-html-block-dropdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure buttons from Elementor look good */
+.sawerna-html-block-dropdown .elementor-button {
+  display: inline-block;
+}
+
+/* Typography adjustments for dropdown content */
+.sawerna-html-block-dropdown h1,
+.sawerna-html-block-dropdown h2,
+.sawerna-html-block-dropdown h3,
+.sawerna-html-block-dropdown h4,
+.sawerna-html-block-dropdown h5,
+.sawerna-html-block-dropdown h6 {
+  margin-top: 0;
+}
+
+.sawerna-html-block-dropdown p:last-child {
+  margin-bottom: 0;
+}
+
+/* Grid layout support for Elementor columns */
+.sawerna-html-block-dropdown .elementor-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sawerna-html-block-dropdown .elementor-column {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Smooth animations for Elementor widgets */
+.sawerna-html-block-dropdown .elementor-invisible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure proper z-index for nested elements */
+.sawerna-html-block-dropdown .elementor-element {
+  position: relative;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sawerna-html-block-dropdown-inner {
+    padding: 20px;
+  }
+  
+  .sawerna-html-block-dropdown .elementor-column {
+    width: 100% !important;
+    flex: 0 0 100%;
+  }
+}
+
+/* Contact dropdown shortcode */
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact) {
+  left: 50% !important;
+  right: auto !important;
+  width: 1200px !important;
+  max-width: calc(100vw - 36px) !important;
+  padding: 0 !important;
+  row-gap: 0 !important;
+  justify-items: stretch !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  transform: translateX(-50%) translateY(-10px) !important;
+}
+
+.sawerna-top-menu > li:hover > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+.sawerna-top-menu > li:focus-within > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown):hover,
+.sawerna-top-menu > li:hover > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact),
+.sawerna-top-menu > li:focus-within > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact),
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact):hover {
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only > li.menu-item-has-html-block:has(.sawerna-contact-dropdown),
+.sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only > li.menu-item-has-html-block:has(.sawerna-html-block-dropdown--contact) {
+  width: 100% !important;
+  max-width: none !important;
+  justify-self: stretch !important;
+}
+
+.sawerna-top-menu > li > .sub-menu .sawerna-html-block-dropdown--contact,
+.sawerna-top-menu > li > .sub-menu .sawerna-html-block-dropdown:has(.sawerna-contact-dropdown) {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  background: #fff !important;
+}
+
+.sawerna-top-menu > li > .sub-menu .sawerna-html-block-dropdown--contact > .sawerna-html-block-dropdown-inner,
+.sawerna-top-menu > li > .sub-menu .sawerna-html-block-dropdown:has(.sawerna-contact-dropdown) > .sawerna-html-block-dropdown-inner {
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.sawerna-top-menu > li.menu-item-has-html-block > .sawerna-html-block-dropdown:has(.sawerna-contact-dropdown) {
+  width: 1200px !important;
+  max-width: calc(100vw - 36px) !important;
+}
+
+.sawerna-top-menu > li.menu-item-has-html-block > .sawerna-html-block-dropdown:has(.sawerna-contact-dropdown) > .sawerna-html-block-dropdown-inner {
+  padding: 0 !important;
+}
+
+.sawerna-html-block-dropdown .elementor:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-section:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-container:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-column:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-widget:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-widget-wrap:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-widget-container:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-shortcode:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .e-con:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .e-con-inner:has(.sawerna-contact-dropdown) {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  flex: 0 0 100% !important;
+}
+
+.sawerna-html-block-dropdown .elementor-widget-wrap:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-element-populated:has(.sawerna-contact-dropdown),
+.sawerna-html-block-dropdown .elementor-column-gap-default > .elementor-column > .elementor-element-populated:has(.sawerna-contact-dropdown) {
+  padding: 0 !important;
+}
+
+.sawerna-contact-dropdown,
+.sawerna-contact-dropdown * {
+  box-sizing: border-box;
+}
+
+.sawerna-contact-dropdown {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  color: #202020 !important;
+  background: #fff !important;
+  font-family: inherit !important;
+}
+
+.sawerna-contact-dropdown__grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  min-height: 285px;
+  border-bottom: 1px solid #ededed;
+}
+
+.sawerna-contact-dropdown__card {
+  min-width: 0;
+  padding: 38px clamp(26px, 3vw, 42px) 34px !important;
+  border-right: 1px solid #ededed;
+}
+
+.sawerna-contact-dropdown__card:last-child {
+  border-right: 0;
+}
+
+.sawerna-contact-dropdown__card h3 {
+  margin: 0 0 22px !important;
+  color: #111 !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: 0 !important;
+}
+
+.sawerna-contact-dropdown__card h3 em {
+  font-style: italic;
+}
+
+.sawerna-contact-dropdown__card dl {
+  display: grid !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.sawerna-contact-dropdown__card dl > div {
+  display: grid !important;
+  grid-template-columns: 132px minmax(0, 1fr) !important;
+  gap: 18px !important;
+  align-items: start !important;
+}
+
+.sawerna-contact-dropdown__card dt,
+.sawerna-contact-dropdown__card dd {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+}
+
+.sawerna-contact-dropdown__card dt {
+  color: #202020 !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+.sawerna-contact-dropdown__card dd {
+  color: #333 !important;
+  font-weight: 400 !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.sawerna-contact-dropdown__card dd span {
+  display: block;
+}
+
+.sawerna-contact-dropdown__card dd a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sawerna-contact-dropdown__card dd a:hover {
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.sawerna-contact-dropdown__footer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 32px;
+  min-height: 96px;
+  padding: 22px 54px;
+}
+
+.sawerna-contact-dropdown__note {
+  display: block;
+  width: min(280px, 100%);
+  height: auto;
+  margin: 0;
+}
+
+.sawerna-contact-dropdown__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  color: #202020;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  white-space: nowrap;
+}
+
+.sawerna-contact-dropdown__more:hover {
+  color: #000;
+}
+
+.sawerna-contact-dropdown__more span:last-child {
+  font-size: 26px;
+  line-height: 1;
+}
+
+@media (max-width: 1236px) {
+  .sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+  .sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact) {
+    left: 18px !important;
+    width: calc(100vw - 36px) !important;
+    max-width: none !important;
+    transform: translateX(0) translateY(-10px) !important;
+  }
+
+  .sawerna-top-menu > li:hover > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+  .sawerna-top-menu > li:focus-within > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown),
+  .sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-contact-dropdown):hover,
+  .sawerna-top-menu > li:hover > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact),
+  .sawerna-top-menu > li:focus-within > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact),
+  .sawerna-top-menu > li > .sub-menu.sawerna-top-menu__sub-menu--html-block-only:has(.sawerna-html-block-dropdown--contact):hover {
+    transform: translateX(0) translateY(0) !important;
+  }
+
+  .sawerna-top-menu > li.menu-item-has-html-block > .sawerna-html-block-dropdown:has(.sawerna-contact-dropdown) {
+    width: calc(100vw - 36px) !important;
+  }
+
+  .sawerna-contact-dropdown__card {
+    padding-right: 28px !important;
+    padding-left: 28px !important;
+  }
+
+  .sawerna-contact-dropdown__card dl > div {
+    grid-template-columns: 128px minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .sawerna-contact-dropdown__grid {
+    grid-template-columns: 1fr !important;
+    min-height: 0;
+  }
+
+  .sawerna-contact-dropdown__card {
+    padding: 28px 24px !important;
+    border-right: 0;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .sawerna-contact-dropdown__card:last-child {
+    border-bottom: 0;
+  }
+
+  .sawerna-contact-dropdown__footer {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+}

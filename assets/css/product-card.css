@@ -1,0 +1,363 @@
+/**
+ * Product card styles
+ */
+.sawerna-product-card-grid,
+.woocommerce ul.products {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.woocommerce ul.products li.product {
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+.sawerna-product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  height: 100%;
+}
+
+.sawerna-product-card__media {
+  position: relative;
+  width: 275px;
+  height: 275px;
+  max-width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.sawerna-product-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-product-card__image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.sawerna-product-card__labels {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  z-index: 2;
+}
+
+.sawerna-product-card__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.sawerna-product-card__label--sale {
+  background: #c94c43;
+}
+
+.sawerna-product-card__label--new {
+  background: #7d8c6a;
+}
+
+.sawerna-product-card__label--design {
+  background: #8c7a5f;
+}
+
+.sawerna-product-card__label--custom {
+  background: #333;
+}
+
+.sawerna-product-card__wishlist {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+}
+
+.sawerna-wishlist-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.sawerna-wishlist-button:hover {
+  border-color: #111;
+  color: #111;
+}
+
+.sawerna-wishlist-button.is-active:not(.sawerna-wishlist-button--icon) {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.sawerna-wishlist-button.is-loading {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.sawerna-wishlist-button__icon svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.sawerna-wishlist-button--icon {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: rgb(238, 238, 238);
+  color: #333;
+  justify-content: center;
+}
+
+.sawerna-wishlist-button--icon svg path {
+  stroke: currentColor;
+  fill: none;
+}
+
+.sawerna-wishlist-button--icon:hover,
+.sawerna-wishlist-button--icon:focus-visible {
+  color: rgb(149, 149, 95);
+}
+
+.sawerna-wishlist-button--icon:hover svg path,
+.sawerna-wishlist-button--icon:focus-visible svg path {
+  fill: currentColor;
+}
+
+.sawerna-wishlist .sawerna-wishlist-button--icon:hover,
+.sawerna-wishlist .sawerna-wishlist-button--icon:focus-visible {
+  color: #000;
+}
+
+.sawerna-wishlist-button--icon.is-active {
+  background: rgb(238, 238, 238);
+  border: 0;
+  color: rgb(149, 149, 95);
+}
+
+.sawerna-wishlist-button--icon.is-active svg path {
+  fill: currentColor;
+}
+
+.sawerna-wishlist-button--icon .sawerna-wishlist-button__text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sawerna-product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.sawerna-product-card__title {
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 500;
+  margin: 0;
+}
+
+.sawerna-product-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sawerna-product-card__price {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.sawerna-product-card__price del {
+  color: #888;
+  font-weight: 400;
+  margin-right: 6px;
+}
+
+.sawerna-product-card__price ins {
+  text-decoration: none;
+}
+
+.sawerna-product-card__delivery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #666;
+}
+
+.sawerna-product-card__delivery-icon svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
+.sawerna-product-card__rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 14px;
+}
+
+.sawerna-product-card__rating .star-rating {
+  font-size: 11px;
+  margin: 0;
+}
+
+.sawerna-product-card__rating-count {
+  font-size: 11px;
+  color: #777;
+}
+
+.sawerna-product-card__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.sawerna-product-card__swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #d0d0d0;
+  background: #f2f2f2;
+  overflow: hidden;
+}
+
+.sawerna-product-card__swatch--color {
+  background: #f2f2f2;
+}
+
+.sawerna-product-card__swatch--image {
+  background: #fff;
+}
+
+.sawerna-product-card__swatch--color,
+.sawerna-product-card__swatch--image {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.sawerna-product-card__swatch-more-count {
+  display: inline-flex;
+  align-items: center;
+  color: #8a8a8a;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.sawerna-product-card__swatch--image img {
+  display: block;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.sawerna-product-card__swatch--label {
+  width: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  color: #444;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sawerna-product-card__swatches-text {
+  font-size: 11px;
+  color: #666;
+}
+
+.sawerna-product-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.sawerna-product-card__actions .button {
+  margin: 0;
+  min-height: 34px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+}
+
+@media (max-width: 1024px) {
+  .sawerna-product-card-grid,
+  .woocommerce ul.products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .sawerna-product-card-grid,
+  .woocommerce ul.products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sawerna-product-card__media {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}

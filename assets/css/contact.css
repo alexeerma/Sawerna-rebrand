@@ -1,0 +1,505 @@
+/**
+ * Contact page template styles
+ */
+
+.sawerna-contact {
+  background: #fff;
+  color: #111;
+}
+
+.sawerna-contact__container,
+.sawerna-contact__locations-inner,
+.sawerna-contact__people-inner {
+  width: min(100% - 48px, 1220px);
+  margin: 0 auto;
+}
+
+.sawerna-contact-hero {
+  position: relative;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #817f72;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.sawerna-contact-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0.56) 0%, rgba(17, 17, 17, 0.32) 45%, rgba(17, 17, 17, 0.12) 100%);
+}
+
+.sawerna-contact-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  width: 100%;
+  padding: 72px 0;
+}
+
+.sawerna-contact-hero__content {
+  max-width: 520px;
+  color: #fff;
+}
+
+.sawerna-contact-hero__eyebrow {
+  margin: 0 0 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sawerna-contact-hero__title {
+  margin: 0;
+  max-width: 14ch;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.sawerna-contact-hero__text {
+  margin: 18px 0 0;
+  max-width: 52ch;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.sawerna-contact-hero__side {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(28vw, 260px);
+}
+
+.sawerna-contact-hero__side-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 240px;
+  object-fit: contain;
+}
+
+.sawerna-contact__intro {
+  padding: 48px 0 0;
+}
+
+.sawerna-contact__content {
+  width: min(100% - 48px, 1220px);
+  margin: 0 auto;
+  padding-bottom: 42px;
+  border-bottom: 1px solid #ece6dc;
+  color: #2b2b2b;
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.sawerna-contact__content > :first-child {
+  margin-top: 0;
+}
+
+.sawerna-contact__content > :last-child {
+  margin-bottom: 0;
+}
+
+.sawerna-contact__locations {
+  padding: 44px 0 72px;
+}
+
+.sawerna-contact__locations-inner {
+  max-width: 1220px;
+}
+
+.sawerna-contact-location {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 190px;
+  gap: 36px;
+  align-items: center;
+  min-width: 0;
+  padding: 28px 0;
+  border-bottom: 1px solid #ece6dc;
+}
+
+.sawerna-contact-location:first-child {
+  padding-top: 0;
+}
+
+.sawerna-contact-location__media {
+  min-height: 168px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f3f2ee;
+}
+
+.sawerna-contact-location__image {
+  display: block;
+  width: 100%;
+  height: 168px;
+  object-fit: cover;
+}
+
+.sawerna-contact-location__title {
+  margin: 0 0 14px;
+  color: #111;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-location__group,
+.sawerna-contact-location__note {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-location__group p,
+.sawerna-contact-location__note p {
+  margin: 0;
+}
+
+.sawerna-contact-location__group p + p,
+.sawerna-contact-location__note p + p {
+  margin-top: 4px;
+}
+
+.sawerna-contact-location__group a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sawerna-contact-location__group a:hover,
+.sawerna-contact-location__group a:focus-visible {
+  text-decoration: underline;
+}
+
+.sawerna-contact-location__group strong,
+.sawerna-contact-location__note strong {
+  font-weight: 600;
+}
+
+.sawerna-contact-location__details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 16px;
+}
+
+.sawerna-contact-location__note {
+  margin-top: 16px;
+  color: #777;
+}
+
+.sawerna-contact-location__directions {
+  justify-self: end;
+  width: 100%;
+}
+
+.sawerna-contact-location__directions-title {
+  margin: 0 0 14px;
+  color: #555;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.sawerna-contact-location__buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.sawerna-contact-location__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #f0f0ed;
+  color: #4d4d4d;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.sawerna-contact-location__button span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-location__button:hover,
+.sawerna-contact-location__button:focus-visible {
+  background: #fff;
+  border-color: #deded8;
+  color: #4d4d4d;
+  transform: translateY(-1px);
+}
+
+.sawerna-contact-location__button svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.sawerna-contact-location__button .sawerna-contact-icon {
+  color: currentColor;
+}
+
+.sawerna-contact-location__button .sawerna-contact-icon * {
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.sawerna-contact-location__button:hover .sawerna-contact-icon__google-g,
+.sawerna-contact-location__button:focus-visible .sawerna-contact-icon__google-g {
+  fill: #4285f4;
+}
+
+.sawerna-contact-location__button:hover .sawerna-contact-icon__waze-body,
+.sawerna-contact-location__button:focus-visible .sawerna-contact-icon__waze-body {
+  fill: #33ccff;
+  stroke: #111;
+}
+
+.sawerna-contact-location__button:hover .sawerna-contact-icon__waze-wheel,
+.sawerna-contact-location__button:hover .sawerna-contact-icon__waze-detail,
+.sawerna-contact-location__button:focus-visible .sawerna-contact-icon__waze-wheel,
+.sawerna-contact-location__button:focus-visible .sawerna-contact-icon__waze-detail {
+  fill: #111;
+  stroke: #111;
+}
+
+.sawerna-contact__people {
+  padding: 0 0 86px;
+}
+
+.sawerna-contact__people-inner {
+  padding-top: 58px;
+}
+
+.sawerna-contact-people__title {
+  max-width: 760px;
+  margin: 0 auto 44px;
+  color: #111;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.sawerna-contact-people__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.sawerna-contact-person {
+  min-width: 0;
+}
+
+.sawerna-contact-person__media {
+  aspect-ratio: 39 / 50;
+  overflow: hidden;
+  border: 1px solid #e5e4de;
+  border-radius: 8px;
+  background: #f1f2f0;
+}
+
+.sawerna-contact-person__image,
+.sawerna-contact-person__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sawerna-contact-person__image {
+  object-fit: cover;
+  object-position: center top;
+}
+
+.sawerna-contact-person__placeholder {
+  background: linear-gradient(180deg, #f4f5f3 0%, #e9ebe8 100%);
+}
+
+.sawerna-contact-person__name {
+  margin: 16px 0 4px;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-person__role {
+  margin: 0;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-person__contact {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.sawerna-contact-person__contact a,
+.sawerna-contact-person__contact span {
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-contact-person__contact a:hover,
+.sawerna-contact-person__contact a:focus-visible {
+  color: #111;
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .sawerna-contact__container,
+  .sawerna-contact__locations-inner,
+  .sawerna-contact__people-inner {
+    width: min(100% - 40px, 1220px);
+  }
+
+  .sawerna-contact-people__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sawerna-contact-location {
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .sawerna-contact-location__directions {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sawerna-contact__container,
+  .sawerna-contact__locations-inner,
+  .sawerna-contact__people-inner,
+  .sawerna-contact__content {
+    width: min(100% - 24px, 1220px);
+  }
+
+  .sawerna-contact-hero {
+    min-height: 300px;
+    background-position: center;
+  }
+
+  .sawerna-contact-hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    padding: 48px 0;
+  }
+
+  .sawerna-contact-hero__side {
+    width: min(46vw, 160px);
+  }
+
+  .sawerna-contact-hero__side-image {
+    max-height: 160px;
+  }
+
+  .sawerna-contact-hero__title {
+    max-width: 13ch;
+    font-size: 30px;
+    overflow-wrap: anywhere;
+  }
+
+  .sawerna-contact-hero__text {
+    font-size: 14px;
+  }
+
+  .sawerna-contact__intro {
+    padding-top: 32px;
+  }
+
+  .sawerna-contact__content {
+    padding-bottom: 30px;
+    text-align: left;
+  }
+
+  .sawerna-contact__locations {
+    padding: 30px 0 42px;
+  }
+
+  .sawerna-contact-location {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 0;
+  }
+
+  .sawerna-contact-location__media,
+  .sawerna-contact-location__image {
+    min-height: 180px;
+    height: 180px;
+  }
+
+  .sawerna-contact-location__details {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sawerna-contact-location__directions {
+    grid-column: auto;
+    justify-self: stretch;
+    max-width: none;
+  }
+
+  .sawerna-contact-location__buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sawerna-contact__people {
+    padding-bottom: 56px;
+  }
+
+  .sawerna-contact__people-inner {
+    padding-top: 34px;
+  }
+
+  .sawerna-contact-people__title {
+    margin-bottom: 28px;
+    font-size: 21px;
+    text-align: left;
+  }
+
+  .sawerna-contact-people__grid {
+    grid-template-columns: 1fr;
+    gap: 28px 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sawerna-contact-location__buttons {
+    grid-template-columns: 1fr;
+  }
+}

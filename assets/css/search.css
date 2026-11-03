@@ -1,0 +1,335 @@
+/**
+ * Search results page
+ */
+.sawerna-search-page {
+  background: #fff;
+  color: #1d1d1d;
+}
+
+.sawerna-search-page__container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sawerna-search-page__hero {
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+  padding: 42px 0 36px;
+  background: #faf9f6;
+}
+
+.sawerna-search-page__eyebrow {
+  margin: 0 0 10px;
+  color: #8b845f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.sawerna-search-page__title {
+  max-width: 720px;
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+.sawerna-search-page__form {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  max-width: 680px;
+  margin-top: 24px;
+}
+
+.sawerna-search-page__input {
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: 1px solid #dedbd3;
+  border-radius: 0;
+  background: #fff;
+  color: #1d1d1d;
+  font-size: 14px;
+  line-height: 46px;
+}
+
+.sawerna-search-page__input:focus {
+  border-color: #1d1d1d;
+  outline: none;
+}
+
+.sawerna-search-page__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 106px;
+  height: 46px;
+  padding: 0 20px;
+  border: 1px solid #1d1d1d;
+  border-radius: 0;
+  background: #1d1d1d;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sawerna-search-page__submit:hover,
+.sawerna-search-page__submit:focus-visible {
+  background: #fff;
+  color: #1d1d1d;
+  outline: none;
+}
+
+.sawerna-search-page__form .sawerna-ajax-search {
+  top: calc(100% + 8px);
+  grid-column: 1 / -1;
+}
+
+.sawerna-search-page__results {
+  padding: 34px 0 70px;
+}
+
+.sawerna-search-page__summary {
+  margin-bottom: 18px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sawerna-search-page__grid {
+  display: grid;
+  gap: 14px;
+}
+
+.sawerna-search-card {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  min-height: 132px;
+  padding: 12px;
+  border: 1px solid #ece8df;
+  border-radius: 0;
+  background: #fff;
+}
+
+.sawerna-search-card__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 0;
+  background: #f2f2f2;
+}
+
+.sawerna-search-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-search-card__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sawerna-search-card__meta {
+  color: #8b845f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.sawerna-search-card__title {
+  margin: 0;
+  color: #1d1d1d;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.sawerna-search-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sawerna-search-card__title a:hover,
+.sawerna-search-card__title a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sawerna-search-card__price {
+  color: #1d1d1d;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.sawerna-search-card__price del {
+  margin-right: 6px;
+  color: #999;
+  font-weight: 400;
+}
+
+.sawerna-search-card__price ins {
+  text-decoration: none;
+}
+
+.sawerna-search-card__excerpt {
+  max-width: 620px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.sawerna-search-card__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid #1d1d1d;
+  border-radius: 0;
+  background: #1d1d1d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.sawerna-search-card__link:hover,
+.sawerna-search-card__link:focus-visible {
+  border-color: #1d1d1d;
+  background: #fff;
+  color: #1d1d1d;
+  outline: none;
+}
+
+.sawerna-search-page__empty {
+  max-width: 560px;
+  padding: 34px 0;
+}
+
+.sawerna-search-page__empty h2 {
+  margin: 0 0 8px;
+  color: #1d1d1d;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.sawerna-search-page__empty p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.sawerna-search-page .navigation.pagination {
+  margin-top: 28px;
+}
+
+.sawerna-search-page .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.sawerna-search-page .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #dedbd3;
+  border-radius: 0;
+  color: #1d1d1d;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sawerna-search-page .page-numbers.current {
+  border-color: #1d1d1d;
+  background: #1d1d1d;
+  color: #fff;
+}
+
+.sawerna-search-page a.page-numbers:hover,
+.sawerna-search-page a.page-numbers:focus-visible {
+  border-color: #1d1d1d;
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .sawerna-search-page__container {
+    padding: 0 16px;
+  }
+
+  .sawerna-search-page__hero {
+    padding: 30px 0;
+  }
+
+  .sawerna-search-page__title {
+    font-size: 25px;
+  }
+
+  .sawerna-search-page__form {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-search-page__submit {
+    width: 100%;
+  }
+
+  .sawerna-search-page__form .sawerna-ajax-search__list {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-search-card {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    min-height: 0;
+  }
+
+  .sawerna-search-card__link {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .sawerna-search-card__title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sawerna-search-card {
+    grid-template-columns: 78px minmax(0, 1fr);
+    padding: 10px;
+  }
+
+  .sawerna-search-card__excerpt {
+    display: none;
+  }
+}

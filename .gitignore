@@ -1,0 +1,27 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Dependencies
+node_modules/
+vendor/
+composer.lock
+package-lock.json
+yarn.lock
+
+# Build / temp
+*.zip
+*.map
+assets/tmp/
+
+# Logs and local env
+*.log
+.env
+.env.*
+
+# Local AI tooling
+.claude/
+CLAUDE.md

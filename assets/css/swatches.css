@@ -1,0 +1,213 @@
+/**
+ * Attribute swatches — admin + frontend styles
+ *
+ * @package Sawerna
+ */
+
+/* =========================================================================
+   ADMIN — color picker field
+   ========================================================================= */
+
+.sawerna-color-picker + .wp-picker-container {
+  margin-top: 4px;
+}
+
+.sawerna-swatch-term-fields select,
+.sawerna-attribute-swatch-type-row select {
+  min-width: 220px;
+}
+
+.sawerna-swatch-field,
+.sawerna-swatch-field-note {
+  display: none;
+  margin-top: 14px;
+}
+
+.sawerna-swatch-field.is-active,
+.sawerna-swatch-field-note.is-active {
+  display: block;
+}
+
+.sawerna-swatch-term-fields {
+  padding: 18px 20px;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  background: #fbfbfb;
+}
+
+.sawerna-attribute-swatch-type-row td {
+  padding-bottom: 18px;
+}
+
+.sawerna-swatch-image-uploader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sawerna-swatch-image-preview {
+  width: 72px;
+  height: 72px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.sawerna-swatch-image-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-swatch-image-preview:empty {
+  display: none;
+}
+
+/* =========================================================================
+   FRONTEND — product page swatch row
+   ========================================================================= */
+
+.sawerna-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ----- Base button reset ----- */
+.sawerna-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: none;
+  transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+  line-height: 1;
+  outline: none;
+}
+
+.sawerna-swatch:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* ----- Out-of-stock / disabled ----- */
+.sawerna-swatch.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.sawerna-swatch.is-disabled::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 1px),
+    #888 50%,
+    transparent calc(50% + 1px)
+  );
+  border-radius: inherit;
+}
+
+/* ----- Color swatch ----- */
+.sawerna-swatch--color {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border-color: #e0e0e0;
+}
+
+.sawerna-swatch--color:hover {
+  border-color: #999;
+}
+
+.sawerna-swatch--color.is-selected {
+  border-color: #111;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+
+/* ----- Image swatch ----- */
+.sawerna-swatch--image {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  border-color: #e0e0e0;
+  overflow: hidden;
+}
+
+.sawerna-swatch--image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sawerna-swatch--image:hover {
+  border-color: #999;
+}
+
+.sawerna-swatch--image.is-selected {
+  border-color: #111;
+}
+
+/* ----- Label swatch ----- */
+.sawerna-swatch--label {
+  min-width: 40px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border-color: #d0d0d0;
+  background: #f7f7f7;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sawerna-swatch--label:hover {
+  border-color: #999;
+  background: #fff;
+}
+
+.sawerna-swatch--label.is-selected {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+/* =========================================================================
+   FRONTEND — product card swatch dots (also used in product-card.css context)
+   ========================================================================= */
+
+.sawerna-product-card__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.sawerna-product-card__swatch {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #e0e0e0;
+  cursor: default;
+  overflow: hidden;
+}
+
+.sawerna-product-card__swatches-text {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+}

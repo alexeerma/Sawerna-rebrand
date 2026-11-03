@@ -1,0 +1,71 @@
+/**
+ * Page template styles
+ */
+
+.sawerna-page {
+  padding: 48px 0 80px;
+}
+
+.sawerna-page__container {
+  width: min(100% - 48px, 1220px);
+  margin: 0 auto;
+}
+
+.sawerna-page__article {
+  margin: 0;
+}
+
+.sawerna-page__header {
+  margin-bottom: 28px;
+}
+
+.sawerna-page__title {
+  margin: 0;
+  color: #111;
+  font-size: 42px;
+  line-height: 1.1;
+}
+
+.sawerna-page__content {
+  margin-top: 0;
+}
+
+.sawerna-page__content > :first-child {
+  margin-top: 0;
+}
+
+.sawerna-page__content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .sawerna-page {
+    padding: 40px 0 64px;
+  }
+
+  .sawerna-page__container {
+    width: min(100% - 40px, 1220px);
+  }
+
+  .sawerna-page__title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sawerna-page {
+    padding: 28px 0 48px;
+  }
+
+  .sawerna-page__container {
+    width: min(100% - 24px, 1220px);
+  }
+
+  .sawerna-page__header {
+    margin-bottom: 20px;
+  }
+
+  .sawerna-page__title {
+    font-size: 30px;
+  }
+}

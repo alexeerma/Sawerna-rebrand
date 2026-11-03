@@ -1,0 +1,789 @@
+.sawerna-checkout-page {
+  background: #fff;
+}
+
+.thwepo-image-item img {
+  display: none;
+}
+
+/* Override WC's table.shop_table margin/border that bleeds outside the panel */
+table.sawerna-checkout-review__totals {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Remove image placeholder spacing from THWEPO imagegroup in order review */
+.sawerna-checkout-review__item-meta .thwepo-image-item {
+  margin: 0 !important;
+}
+
+.sawerna-checkout-page .sawerna-shop__breadcrumb-row {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.sawerna-checkout-page .woocommerce-notices-wrapper {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 18px 16px 0;
+}
+
+.sawerna-checkout {
+  padding: 24px 0 72px;
+}
+
+.sawerna-checkout__container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.sawerna-checkout__header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.sawerna-checkout__heading {
+  min-width: 0;
+}
+
+.sawerna-checkout__title {
+  margin: 0;
+  color: #1b1b1b;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.sawerna-checkout__steps {
+  justify-self: end;
+  min-width: 0;
+}
+
+.sawerna-checkout-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sawerna-checkout-steps__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #aeaeae;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.sawerna-checkout-steps__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sawerna-checkout-steps__item.is-current,
+.sawerna-checkout-steps__item.is-complete {
+  color: #1b1b1b;
+}
+
+.sawerna-checkout-steps__separator {
+  color: #c4c4c4;
+}
+
+.sawerna-checkout__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  gap: 34px;
+  align-items: start;
+}
+
+.sawerna-checkout__main,
+.sawerna-checkout__sidebar {
+  min-width: 0;
+}
+
+.sawerna-checkout-login {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 28px;
+  padding: 18px 20px;
+  border: 1px solid #ece8e2;
+  background: #fff;
+}
+
+.sawerna-checkout-login__title {
+  margin: 0;
+  color: #2b2b2b;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.sawerna-checkout-login__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 130px;
+  min-height: 42px;
+  padding: 10px 18px;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sawerna-checkout-login__button:hover,
+.sawerna-checkout-login__button:focus-visible {
+  background: #000;
+  color: #fff;
+}
+
+.sawerna-checkout__section {
+  margin-bottom: 30px;
+}
+
+.sawerna-checkout__section:last-child {
+  margin-bottom: 0;
+}
+
+.sawerna-checkout-fields__title {
+  margin: 0 0 18px;
+  color: #1f1f1f;
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.sawerna-checkout-fields__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.sawerna-checkout-fields__grid .form-row-first,
+.sawerna-checkout-fields__grid .form-row-last,
+.sawerna-checkout-fields__grid .form-row-wide,
+.sawerna-checkout-fields__grid .form-row {
+  width: auto;
+  float: none;
+  margin: 0;
+}
+
+.sawerna-checkout-fields__grid .form-row-wide,
+.sawerna-checkout-fields__grid .form-row:not(.form-row-first):not(.form-row-last) {
+  grid-column: 1 / -1;
+}
+
+.sawerna-checkout-page .form-row label {
+  display: block;
+  margin-bottom: 7px;
+  color: #1f1f1f;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.sawerna-checkout-page .form-row .optional {
+  color: #8e8e8e;
+  font-weight: 400;
+}
+
+.sawerna-checkout-page .input-text,
+.sawerna-checkout-page select,
+.sawerna-checkout-page textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 0;
+  background: rgb(248, 248, 248);
+  box-shadow: none;
+  color: #232323;
+  font-size: 14px;
+}
+
+.sawerna-checkout-page textarea {
+  min-height: 220px !important; 
+  resize: vertical;
+}
+
+.sawerna-checkout-page .select2-container .select2-selection--single {
+  height: 44px;
+  border: 1px solid #e5e5e5;
+  border-radius: 0;
+  background: rgb(248, 248, 248);
+}
+
+.sawerna-checkout-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 42px;
+  padding-left: 14px;
+  padding-right: 32px;
+}
+
+.sawerna-checkout-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 42px;
+}
+
+.sawerna-checkout-page .woocommerce-invalid .input-text,
+.sawerna-checkout-page .woocommerce-invalid select,
+.sawerna-checkout-page .woocommerce-invalid .select2-selection {
+  border-color: #d63638;
+}
+
+.sawerna-checkout-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #1f1f1f;
+  font-size: 13px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.sawerna-checkout-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  accent-color: #111;
+}
+
+.sawerna-checkout-page .form-row label.checkbox,
+.sawerna-checkout-page .form-row .woocommerce-form__label-for-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 0;
+  color: #1f1f1f;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.sawerna-checkout-page .form-row label.checkbox input[type="checkbox"],
+.sawerna-checkout-page .form-row .woocommerce-form__label-for-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  accent-color: #111;
+  flex: 0 0 auto;
+}
+
+.sawerna-checkout-fields__account-optin,
+.sawerna-checkout-fields__shipping-toggle {
+  margin-top: 18px;
+}
+
+/* MailPoet newsletter opt-in — styled to match .sawerna-checkout-checkbox */
+.sawerna-checkout-fields__account-optin label.woocommerce-form__label-for-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 0;
+  color: #1f1f1f;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.sawerna-checkout-fields__account-optin label.woocommerce-form__label-for-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  accent-color: #111;
+  flex: 0 0 auto;
+}
+
+.shipping_address {
+  margin-top: 18px;
+}
+
+.sawerna-checkout-fields__notes .form-row {
+  margin: 0;
+}
+
+.sawerna-checkout-fields__notes .form-row label {
+  display: block;
+  padding-top: 14px;
+}
+
+.sawerna-checkout-review {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sawerna-checkout-review__summary,
+.sawerna-checkout-payment__inner {
+  padding: 24px 24px 26px;
+  background: rgb(245, 245, 245);
+}
+
+.sawerna-checkout-review__title,
+.sawerna-checkout-payment__title {
+  margin: 0 0 16px;
+  color: #1f1f1f;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.sawerna-checkout-review__panel {
+  background: #fff;
+  border: 1px solid #ece7de;
+}
+
+.sawerna-checkout-review__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee6db;
+}
+
+.sawerna-checkout-review__header-label {
+  color: #8b8b8b;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.sawerna-checkout-review__header-label--subtotal {
+  text-align: right;
+}
+
+.sawerna-checkout-review__items {
+  margin-bottom: 0;
+  padding: 20px 14px;
+}
+
+.sawerna-checkout-review__item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee6db;
+}
+
+.sawerna-checkout-review__item:first-child {
+  padding-top: 0;
+}
+
+.sawerna-checkout-review__item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.sawerna-checkout-review__item-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sawerna-checkout-review__item-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sawerna-checkout-review__item-title {
+  color: #222;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sawerna-checkout-review__item-quantity {
+  color: #8a8a8a;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sawerna-checkout-review__item-subtotal,
+.sawerna-checkout-review__totals td {
+  color: #1f1f1f;
+  white-space: nowrap;
+}
+
+.sawerna-checkout-review__item-subtotal,
+.sawerna-checkout-review__item-subtotal .woocommerce-Price-amount {
+  font-size: 13px;
+}
+
+.sawerna-checkout-review__totals .shipping td {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-checkout-review__item-meta,
+.sawerna-checkout-review__item-meta dl,
+.sawerna-checkout-review__item-meta p {
+  margin: 0;
+}
+
+.sawerna-checkout-review__item-meta {
+  color: #7b7b7b;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.sawerna-checkout-review__item-meta dl.variation {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 6px;
+  row-gap: 2px;
+}
+
+.sawerna-checkout-review__item-meta dl.variation dt,
+.sawerna-checkout-review__item-meta dl.variation dd,
+.sawerna-checkout-review__item-meta dl.variation dd p {
+  margin: 0;
+}
+
+.sawerna-checkout-review__totals {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.sawerna-checkout-review__totals th,
+.sawerna-checkout-review__totals td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee6db;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.sawerna-checkout-review__totals th {
+  width: 34%;
+  color: #222;
+  font-weight: 400;
+  text-align: left;
+}
+
+.sawerna-checkout-review__totals td {
+  text-align: right;
+}
+
+.sawerna-checkout-review__totals .shipping td {
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.sawerna-checkout-review__totals .shipping ul,
+.sawerna-checkout-review__totals .shipping li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sawerna-checkout-review__totals .shipping li + li {
+  margin-top: 8px;
+}
+
+.sawerna-checkout-review__totals .shipping label {
+  display: inline;
+  color: #222;
+  font-size: 13px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-checkout-review__totals .shipping input[type="radio"] {
+  accent-color: #111;
+  margin-right: 3px;
+}
+
+.sawerna-checkout-review__coupon-row th {
+  padding-top: 16px;
+}
+
+.sawerna-checkout-review__coupon-row td {
+  padding-top: 8px;
+}
+
+.sawerna-checkout-coupon__row {
+  display: flex;
+  align-items: stretch;
+}
+
+.sawerna-checkout-coupon__input {
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 44px;
+  min-height: 44px;
+  padding-left: 14px;
+  border: 1px solid #ddd5ca;
+  border-right: 0;
+  box-sizing: border-box;
+  font-size: 13px;
+  outline: none;
+}
+
+.sawerna-checkout-coupon__input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.sawerna-checkout-coupon__button {
+  min-width: 74px;
+  height: 44px;
+  min-height: 44px;
+  border: 0;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.sawerna-checkout-coupon__button:hover,
+.sawerna-checkout-coupon__button:focus-visible {
+  background: #8e8c5c;
+}
+
+.sawerna-checkout-review__totals .order-total th,
+.sawerna-checkout-review__totals .order-total td {
+  padding-top: 18px;
+  border-bottom: 0;
+  color: #111;
+  font-size: 18px;
+  font-weight: 500;
+  
+}
+
+.sawerna-checkout-review__totals .order-total td strong,
+.sawerna-checkout-review__totals .order-total td .woocommerce-Price-amount {
+  font-weight: 500;
+}
+
+.sawerna-checkout-review__order-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.sawerna-checkout-review__tax-note {
+  color: #9a9a9a;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.sawerna-checkout-payment__methods {
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.sawerna-checkout-payment__method {
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.sawerna-checkout-payment__method:last-child {
+  margin-bottom: 0;
+}
+
+.sawerna-checkout-payment__method > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sawerna-checkout-payment__method-label {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid #e3ddd4;
+  background: #fff;
+  cursor: pointer;
+}
+
+.sawerna-checkout-payment__method-control {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #b8b8b8;
+  border-radius: 50%;
+  position: relative;
+}
+
+.sawerna-checkout-payment__method > input:checked + .sawerna-checkout-payment__method-label .sawerna-checkout-payment__method-control::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #111;
+}
+
+.sawerna-checkout-payment__method-text {
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sawerna-checkout-payment__method-icons {
+  grid-column: 2;
+}
+
+.sawerna-checkout-payment__method-icons img {
+  max-height: 24px;
+  width: auto;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.sawerna-checkout-payment .payment_box {
+  margin: 10px 0 0 30px;
+  padding: 12px 14px;
+  border: 1px solid #e3ddd4;
+  border-top: 0;
+  background: #fff;
+  color: #4d4d4d;
+  font-size: 13px;
+}
+
+.sawerna-checkout-payment .payment_box p:last-child {
+  margin-bottom: 0;
+}
+
+.sawerna-checkout-payment__place-order {
+  margin-top: 18px;
+}
+
+.sawerna-checkout-page .woocommerce-terms-and-conditions-wrapper,
+.sawerna-checkout-page .woocommerce-privacy-policy-text {
+  color: #6e6e6e;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sawerna-checkout-payment__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 14px 16px;
+  border: 0;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sawerna-checkout-payment__button:hover,
+.sawerna-checkout-payment__button:focus-visible {
+  background: #8e8c5c;
+  color: #fff;
+}
+
+@media (max-width: 1100px) {
+  .sawerna-checkout__header,
+  .sawerna-checkout__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sawerna-checkout__steps {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 767px) {
+  .sawerna-checkout {
+    padding: 18px 0 56px;
+  }
+
+  .sawerna-checkout__header {
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .sawerna-checkout__title {
+    font-size: 24px;
+  }
+
+  .sawerna-checkout-steps {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sawerna-checkout-steps__item {
+    font-size: 13px;
+  }
+
+  .sawerna-checkout-login {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .sawerna-checkout-login__button {
+    width: 100%;
+  }
+
+  .sawerna-checkout-fields__title,
+  .sawerna-checkout-review__title,
+  .sawerna-checkout-payment__title {
+    font-size: 20px;
+  }
+
+  .sawerna-checkout-fields__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .sawerna-checkout-review__summary,
+  .sawerna-checkout-payment__inner {
+    padding: 18px 16px 20px;
+  }
+
+  .sawerna-checkout-review__item {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .sawerna-checkout-review__item-title-row {
+    display: block;
+  }
+
+  .sawerna-checkout-review__item-subtotal {
+    margin-top: 4px;
+  }
+
+  .sawerna-checkout-coupon__row {
+    flex-direction: row;
+  }
+
+  .sawerna-checkout-coupon__input {
+    font-size: 12px;
+  }
+
+  .sawerna-checkout-payment__method-label {
+    padding: 10px 12px;
+  }
+
+  .rm-footer__newsletter,
+  .rm-footer__logoRow {
+    display: none;
+  }
+}
