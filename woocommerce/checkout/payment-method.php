@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 
 	<?php if ( $gateway->has_fields() || $gateway->get_description() ) : ?>
-		<div class="payment_box payment_method_<?php echo esc_attr( $gateway->id ); ?>" <?php if ( ! $gateway->chosen ) : ?>style="display:none;"<?php endif; ?>>
+		<div class="payment_box payment_method_<?php echo esc_attr( $gateway->id ); ?>" <?php echo $gateway->chosen ? '' : 'style="display:none;"'; ?>>
 			<?php $gateway->payment_fields(); ?>
 		</div>
 	<?php endif; ?>

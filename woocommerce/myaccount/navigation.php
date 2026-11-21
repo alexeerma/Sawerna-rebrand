@@ -19,7 +19,7 @@ do_action( 'woocommerce_before_account_navigation' );
 	<ul class="sawerna-account-nav__list">
 		<?php foreach ( $items as $key => $item ) : ?>
 			<?php
-			$endpoint = isset( $item['endpoint'] ) ? (string) $item['endpoint'] : (string) $key;
+			$endpoint   = isset( $item['endpoint'] ) ? (string) $item['endpoint'] : (string) $key;
 			$is_current = function_exists( 'wc_is_current_account_menu_item' ) && wc_is_current_account_menu_item( $endpoint );
 
 			if ( 'dashboard' === $endpoint ) {

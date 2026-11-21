@@ -9,7 +9,7 @@
 
 if ( ! defined( '_S_VERSION' ) ) {
 	// Replace the version number of the theme on each release.
-	define( '_S_VERSION', '1.0.0' );
+	define( '_S_VERSION', '1.2.0' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- _s starter constant used across theme; renaming would break references.
 }
 
 /**
@@ -174,39 +174,46 @@ add_action( 'widgets_init', 'sawerna_widgets_init' );
 function sawerna_scripts() {
 	// Get file modification time for cache busting in development
 	$theme_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( get_template_directory() . '/style.css' ) : _S_VERSION;
-	
+
 	// Fonts CSS (load first for better performance)
 	$fonts_css_path = get_template_directory() . '/assets/css/fonts.css';
 	if ( file_exists( $fonts_css_path ) ) {
 		$fonts_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $fonts_css_path ) : $theme_version;
 		wp_enqueue_style( 'sawerna-fonts', get_template_directory_uri() . '/assets/css/fonts.css', array(), $fonts_version );
 	}
-	
+
 	// Main stylesheet
 	wp_enqueue_style( 'sawerna-style', get_stylesheet_uri(), array( 'sawerna-fonts' ), $theme_version );
 	wp_style_add_data( 'sawerna-style', 'rtl', 'replace' );
-	
+
 	// Header styles (desktop)
 	$header_desktop_css_path = get_template_directory() . '/assets/css/header-desktop.css';
 	if ( file_exists( $header_desktop_css_path ) ) {
 		$header_desktop_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $header_desktop_css_path ) : $theme_version;
 		wp_enqueue_style( 'sawerna-header-desktop', get_template_directory_uri() . '/assets/css/header-desktop.css', array( 'sawerna-style' ), $header_desktop_version );
 	}
-	
+
+	// Content components (menu products, banner, image grid, image with text, blog cards), used in the mega menu on every page.
+	$components_css_path = get_template_directory() . '/assets/css/sawerna-components.css';
+	if ( file_exists( $components_css_path ) ) {
+		$components_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $components_css_path ) : $theme_version;
+		wp_enqueue_style( 'sawerna-components', get_template_directory_uri() . '/assets/css/sawerna-components.css', array( 'sawerna-style' ), $components_version );
+	}
+
 	// Legacy header styles (for backward compatibility)
 	$header_css_path = get_template_directory() . '/assets/css/header.css';
 	if ( file_exists( $header_css_path ) ) {
 		$header_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $header_css_path ) : $theme_version;
 		wp_enqueue_style( 'sawerna-header', get_template_directory_uri() . '/assets/css/header.css', array( 'sawerna-style' ), $header_version );
 	}
-	
+
 	// Footer styles
 	$footer_css_path = get_template_directory() . '/assets/css/footer.css';
 	if ( file_exists( $footer_css_path ) ) {
 		$footer_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $footer_css_path ) : $theme_version;
 		wp_enqueue_style( 'sawerna-footer', get_template_directory_uri() . '/assets/css/footer.css', array( 'sawerna-style' ), $footer_version );
 	}
-	
+
 	// HTML Blocks styles
 	$html_blocks_css_path = get_template_directory() . '/assets/css/html-blocks.css';
 	if ( file_exists( $html_blocks_css_path ) ) {
@@ -249,7 +256,7 @@ function sawerna_scripts() {
 		wp_enqueue_script( 'sawerna-navigation', get_template_directory_uri() . '/js/navigation.js', array(), $nav_version, true );
 		wp_script_add_data( 'sawerna-navigation', 'defer', true );
 	}
-	
+
 	// Header desktop script - defer for better performance
 	$header_desktop_js_path = get_template_directory() . '/js/header-desktop.js';
 	if ( file_exists( $header_desktop_js_path ) ) {
@@ -281,7 +288,7 @@ function sawerna_scripts() {
 		wp_enqueue_script( 'sawerna-footer-slider', get_template_directory_uri() . '/js/footer-slider.js', array(), $footer_slider_js_version, true );
 		wp_script_add_data( 'sawerna-footer-slider', 'defer', true );
 	}
-	
+
 	// Legacy header script (for backward compatibility)
 	$header_js_path = get_template_directory() . '/js/header.js';
 	if ( file_exists( $header_js_path ) ) {
@@ -481,55 +488,165 @@ function sawerna_save_blog_archive_metabox( $post_id ) {
 add_action( 'save_post_page', 'sawerna_save_blog_archive_metabox' );
 
 /**
- * Preload Inter font files for better performance.
+ * Find the upright Inter face registered through theme.json / global styles (wp-fonts-local).
+ *
+ * WooCommerce installs a variable Inter (300-900) into global styles. It is printed after
+ * assets/css/fonts.css with the same family name, so it wins for every upright weight and is
+ * the font actually rendered; the theme's static upright faces are never used while it exists.
+ *
+ * @return string Font file URL, or '' when no such face is registered.
+ */
+function sawerna_get_global_styles_inter_url() {
+	if ( ! class_exists( 'WP_Font_Face_Resolver' ) ) {
+		return '';
+	}
+
+	foreach ( (array) WP_Font_Face_Resolver::get_fonts_from_theme_json() as $faces ) {
+		foreach ( (array) $faces as $face ) {
+			$family = isset( $face['font-family'] ) ? trim( (string) $face['font-family'], "\"' " ) : '';
+			$style  = isset( $face['font-style'] ) ? (string) $face['font-style'] : 'normal';
+			if ( 'Inter' !== $family || 'normal' !== $style || empty( $face['src'] ) ) {
+				continue;
+			}
+
+			$src = is_array( $face['src'] ) ? reset( $face['src'] ) : $face['src'];
+			if ( is_string( $src ) && '' !== $src ) {
+				return $src;
+			}
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Preload the fonts and hero images needed for first paint.
+ *
+ * The theme's static upright Inter TTFs used to be preloaded here (4 x ~335 KB at high priority),
+ * but they are overridden by the global-styles variable Inter (see above) and never rendered.
+ * Preloading the face that is actually used keeps text rendering identical and frees bandwidth.
  */
 function sawerna_preload_fonts() {
-	$fonts_dir = get_template_directory_uri() . '/assets/fonts/';
-	?>
-	<link rel="preload" href="<?php echo esc_url( $fonts_dir . 'Inter_18pt-Regular.ttf' ); ?>" as="font" type="font/ttf" crossorigin="anonymous">
-	<link rel="preload" href="<?php echo esc_url( $fonts_dir . 'Inter_18pt-Medium.ttf' ); ?>" as="font" type="font/ttf" crossorigin="anonymous">
-	<link rel="preload" href="<?php echo esc_url( $fonts_dir . 'Inter_18pt-SemiBold.ttf' ); ?>" as="font" type="font/ttf" crossorigin="anonymous">
-	<link rel="preload" href="<?php echo esc_url( $fonts_dir . 'Inter_18pt-Bold.ttf' ); ?>" as="font" type="font/ttf" crossorigin="anonymous">
-	<?php
+	$inter_url = sawerna_get_global_styles_inter_url();
+
+	if ( '' !== $inter_url ) {
+		printf(
+			'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
+			esc_url( $inter_url )
+		);
+	} else {
+		$fonts_dir = get_template_directory_uri() . '/assets/fonts/';
+		foreach ( array( 'Regular', 'Medium', 'SemiBold' ) as $weight ) {
+			printf(
+				'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
+				esc_url( $fonts_dir . 'Inter_18pt-' . $weight . '.woff2' )
+			);
+		}
+	}
+
+	// Homepage hero: the first slide of each lane is a CSS background (inline style), which the
+	// preload scanner cannot discover. It is the LCP element, so fetch it early.
+	if ( is_front_page() && is_page_template( 'template-homepage.php' ) && function_exists( 'sawerna_get_homepage_options' ) ) {
+		$options = sawerna_get_homepage_options();
+		foreach ( array( 'hero_narrow_slides', 'hero_wide_slides' ) as $lane ) {
+			$slides = ! empty( $options[ $lane ] ) && is_array( $options[ $lane ] ) ? array_values( $options[ $lane ] ) : array();
+			$url    = ! empty( $slides[0]['image_id'] ) ? sawerna_homepage_hero_image_url( (int) $slides[0]['image_id'] ) : '';
+			if ( '' !== $url ) {
+				printf( '<link rel="preload" href="%s" as="image" fetchpriority="high">' . "\n", esc_url( $url ) );
+			}
+		}
+	}
+
+	// Contact / About heroes are full-width inline CSS backgrounds (LCP) as well.
+	$hero_id = 0;
+	if ( is_page_template( 'contact-page.php' ) && function_exists( 'sawerna_get_contact_options' ) ) {
+		$contact_options = sawerna_get_contact_options();
+		$hero_id         = ! empty( $contact_options['hero_image_id'] ) ? (int) $contact_options['hero_image_id'] : 0;
+	} elseif ( is_page_template( 'about-page.php' ) && function_exists( 'sawerna_get_about_options' ) ) {
+		$about_options = sawerna_get_about_options();
+		$hero_id       = ! empty( $about_options['hero_image_id'] ) ? (int) $about_options['hero_image_id'] : 0;
+	}
+	$hero_url = $hero_id ? wp_get_attachment_image_url( $hero_id, 'full' ) : '';
+	if ( $hero_url ) {
+		printf( '<link rel="preload" href="%s" as="image" fetchpriority="high">' . "\n", esc_url( $hero_url ) );
+	}
 }
 add_action( 'wp_head', 'sawerna_preload_fonts', 1 );
 
 /**
- * Add resource hints for better performance.
+ * Image URL used for homepage hero card backgrounds.
+ *
+ * Cards are at most 785x460 CSS px (background-size: cover on square sources), so the
+ * 1536px variant covers them at 2x; WordPress falls back to the original when that
+ * size does not exist. Originals are up to 2560px / 550 KB.
+ *
+ * @param int $image_id Attachment ID.
+ * @return string
  */
-function sawerna_resource_hints( $urls, $relation_type ) {
-	if ( 'preconnect' === $relation_type ) {
-		// Add preconnect for external resources if needed
-		// Example: $urls[] = array( 'href' => 'https://fonts.googleapis.com', 'crossorigin' => 'anonymous' );
-	}
-	return $urls;
+function sawerna_homepage_hero_image_url( $image_id ) {
+	$url = wp_get_attachment_image_url( (int) $image_id, '1536x1536' );
+	return $url ? (string) $url : '';
 }
-add_filter( 'wp_resource_hints', 'sawerna_resource_hints', 10, 2 );
 
 /**
- * Add async/defer attributes to scripts for better performance.
+ * Elementor content here never uses its default Roboto / Roboto Slab kit fonts (all text is
+ * Inter), yet Elementor enqueued them as render-blocking Google Fonts stylesheets on every page.
  */
-function sawerna_script_loader_tag( $tag, $handle, $src ) {
-	// Add defer to specific scripts
-	$defer_scripts = array( 'sawerna-navigation', 'sawerna-header', 'sawerna-header-desktop', 'sawerna-mobile-menu', 'sawerna-wishlist', 'sawerna-mini-cart', 'sawerna-core-mini-cart-ajax', 'sawerna-ajax-search' );
-	if ( in_array( $handle, $defer_scripts, true ) && false === strpos( $tag, ' defer ' ) ) {
-		$tag = str_replace( ' src', ' defer src', $tag );
+add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
+
+/**
+ * WooCommerce "coming soon" (store pages only) renders its block template between get_header()
+ * and get_footer() from inside the template_include filter, so the block styles it needs are only
+ * enqueued mid-body and printed in the footer: the page first paints unstyled, then shifts
+ * (desktop CLS ~0.24 on shop/category/product/cart). Enqueue them in <head> for that case only.
+ */
+function sawerna_coming_soon_head_styles() {
+	if ( ! doing_filter( 'template_include' ) ) {
+		return;
+	}
+
+	foreach ( array( 'wc-blocks-style', 'wc-blocks-style-coming-soon' ) as $handle ) {
+		if ( wp_style_is( $handle, 'registered' ) ) {
+			wp_enqueue_style( $handle );
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'sawerna_coming_soon_head_styles', 20 );
+
+/**
+ * Add the defer attribute to scripts that ask for it.
+ *
+ * Theme and Sawerna Core scripts mark themselves with wp_script_add_data( $handle, 'defer', true ).
+ * Core only understands the newer 'strategy' data, so this filter honours the flag (previously a
+ * hard-coded list that missed the homepage and footer scripts).
+ *
+ * @param string $tag    Script tag HTML.
+ * @param string $handle Script handle.
+ * @return string
+ */
+function sawerna_script_loader_tag( $tag, $handle ) {
+	$legacy_list = array( 'sawerna-wishlist', 'sawerna-mini-cart' ); // Enqueued without the data flag.
+	$wants_defer = wp_scripts()->get_data( $handle, 'defer' ) || in_array( $handle, $legacy_list, true );
+
+	if ( $wants_defer && false === strpos( $tag, ' defer' ) && false !== strpos( $tag, ' src=' ) ) {
+		$tag = str_replace( ' src=', ' defer src=', $tag );
 	}
 	return $tag;
 }
-add_filter( 'script_loader_tag', 'sawerna_script_loader_tag', 10, 3 );
+add_filter( 'script_loader_tag', 'sawerna_script_loader_tag', 10, 2 );
 
 /**
  * Add lazy loading support for images.
  */
-function sawerna_add_lazy_loading( $attr, $attachment, $size ) {
-	if ( ! is_admin() ) {
-		$attr['loading'] = 'lazy';
+function sawerna_add_lazy_loading( $attr ) {
+	// Never lazy-load the image core marked as the LCP candidate (fetchpriority=high).
+	if ( ! is_admin() && ( empty( $attr['fetchpriority'] ) || 'high' !== $attr['fetchpriority'] ) ) {
+		$attr['loading']  = 'lazy';
 		$attr['decoding'] = 'async';
 	}
 	return $attr;
 }
-add_filter( 'wp_get_attachment_image_attributes', 'sawerna_add_lazy_loading', 10, 3 );
+add_filter( 'wp_get_attachment_image_attributes', 'sawerna_add_lazy_loading', 10, 1 );
 
 /**
  * Remove unnecessary WordPress features for better performance.
@@ -564,7 +681,7 @@ if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
  * Security: Disable file editing from WordPress admin.
  */
 if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
-	define( 'DISALLOW_FILE_EDIT', true );
+	define( 'DISALLOW_FILE_EDIT', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- WordPress core constant.
 }
 
 /**
@@ -604,17 +721,17 @@ add_action( 'admin_head', 'sawerna_fix_svg_display' );
 function sawerna_get_svg_logo_choices() {
 	$choices = array( '' => __( 'Use WordPress Custom Logo', 'sawerna' ) );
 	$svg_dir = get_template_directory() . '/assets/SVG/';
-	
+
 	if ( is_dir( $svg_dir ) ) {
 		$files = glob( $svg_dir . '*.svg' );
 		if ( $files ) {
 			foreach ( $files as $file ) {
-				$filename = basename( $file );
+				$filename             = basename( $file );
 				$choices[ $filename ] = $filename;
 			}
 		}
 	}
-	
+
 	return $choices;
 }
 
@@ -647,11 +764,11 @@ function sawerna_prepare_inline_logo_svg_markup( $svg_markup ) {
 	return $svg_markup;
 }
 
-function sawerna_custom_logo_output( $html, $_blog_id ) {
-	$custom_logo_id = (int) get_theme_mod( 'custom_logo', 0 );
+function sawerna_custom_logo_output( $html ) {
+	$custom_logo_id   = (int) get_theme_mod( 'custom_logo', 0 );
 	$custom_logo_mime = $custom_logo_id > 0 ? (string) get_post_mime_type( $custom_logo_id ) : '';
-	$site_name = get_bloginfo( 'name' );
-	$home_url  = esc_url( home_url( '/' ) );
+	$site_name        = get_bloginfo( 'name' );
+	$home_url         = esc_url( home_url( '/' ) );
 
 	// Keep standard WordPress custom logos for common raster formats.
 	if ( $custom_logo_id > 0 && 0 === strpos( $custom_logo_mime, 'image/' ) && 'image/svg+xml' !== $custom_logo_mime ) {
@@ -663,7 +780,7 @@ function sawerna_custom_logo_output( $html, $_blog_id ) {
 		$attachment_path = get_attached_file( $custom_logo_id );
 
 		if ( ! empty( $attachment_path ) && file_exists( $attachment_path ) ) {
-			$svg_markup = file_get_contents( $attachment_path );
+			$svg_markup = file_get_contents( $attachment_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local attachment file, not a remote URL.
 			$svg_markup = preg_replace( '/<\?xml[^>]*\?>/i', '', (string) $svg_markup );
 			$svg_markup = sawerna_prepare_inline_logo_svg_markup( $svg_markup );
 
@@ -702,7 +819,7 @@ function sawerna_custom_logo_output( $html, $_blog_id ) {
 		$svg_markup
 	);
 }
-add_filter( 'get_custom_logo', 'sawerna_custom_logo_output', 10, 2 );
+add_filter( 'get_custom_logo', 'sawerna_custom_logo_output', 10, 1 );
 
 /**
  * Get client IP address securely.
@@ -721,7 +838,7 @@ function sawerna_get_client_ip() {
 	);
 	foreach ( $ip_keys as $key ) {
 		if ( array_key_exists( $key, $_SERVER ) === true ) {
-			foreach ( explode( ',', $_SERVER[ $key ] ) as $ip ) {
+			foreach ( explode( ',', sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) ) ) as $ip ) {
 				$ip = trim( $ip );
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
 					return sanitize_text_field( $ip );
@@ -822,213 +939,270 @@ function sawerna_core_required_notice() {
 }
 add_action( 'admin_notices', 'sawerna_core_required_notice' );
 
-add_action('customize_register', function (WP_Customize_Manager $wp_customize) {
-  // Header Section
-  $wp_customize->add_section('sawerna_header', [
-    'title' => __('Header Settings', 'sawerna'),
-    'priority' => 30,
-  ]);
+add_action(
+	'customize_register',
+	function ( WP_Customize_Manager $wp_customize ) {
+		// Header Section
+		$wp_customize->add_section(
+			'sawerna_header',
+			array(
+				'title'    => __( 'Header Settings', 'sawerna' ),
+				'priority' => 30,
+			)
+		);
 
-  // Header top bar promotional text
-  $wp_customize->add_setting('sawerna_header_promo_text', [
-    'default' => __('Tasuta tarne alates 1 000 € ostust!', 'sawerna'),
-    'sanitize_callback' => 'sanitize_text_field',
-    'transport' => 'postMessage',
-  ]);
-  $wp_customize->add_control('sawerna_header_promo_text', [
-    'section' => 'sawerna_header',
-    'label' => __('Promotional Text (Top Bar)', 'sawerna'),
-    'type' => 'text',
-    'description' => __('Text displayed in the center of the top header bar', 'sawerna'),
-  ]);
+		// Header top bar promotional text
+		$wp_customize->add_setting(
+			'sawerna_header_promo_text',
+			array(
+				'default'           => __( 'Tasuta tarne alates 1 000 € ostust!', 'sawerna' ),
+				'sanitize_callback' => 'sanitize_text_field',
+				'transport'         => 'postMessage',
+			)
+		);
+		$wp_customize->add_control(
+			'sawerna_header_promo_text',
+			array(
+				'section'     => 'sawerna_header',
+				'label'       => __( 'Promotional Text (Top Bar)', 'sawerna' ),
+				'type'        => 'text',
+				'description' => __( 'Text displayed in the center of the top header bar', 'sawerna' ),
+			)
+		);
 
-  // Mobile header phone number
-  $wp_customize->add_setting('sawerna_header_phone', [
-    'default' => '+372 6066 941',
-    'sanitize_callback' => 'sanitize_text_field',
-  ]);
-  $wp_customize->add_control('sawerna_header_phone', [
-    'section' => 'sawerna_header',
-    'label' => __('Phone (Mobile Header)', 'sawerna'),
-    'type' => 'text',
-  ]);
+		// Mobile header phone number
+		$wp_customize->add_setting(
+			'sawerna_header_phone',
+			array(
+				'default'           => '+372 6066 941',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		$wp_customize->add_control(
+			'sawerna_header_phone',
+			array(
+				'section' => 'sawerna_header',
+				'label'   => __( 'Phone (Mobile Header)', 'sawerna' ),
+				'type'    => 'text',
+			)
+		);
 
-  // Option to use SVG logo from assets folder
-  $wp_customize->add_setting('sawerna_header_logo_svg', [
-    'default' => '',
-    'sanitize_callback' => 'sanitize_file_name',
-  ]);
-  $wp_customize->add_control('sawerna_header_logo_svg', [
-    'section' => 'sawerna_header',
-    'label' => __('Use SVG Logo from Assets', 'sawerna'),
-    'type' => 'select',
-    'description' => __('Select an SVG logo from the assets/SVG folder. Leave empty to use WordPress custom logo.', 'sawerna'),
-    'choices' => sawerna_get_svg_logo_choices(),
-  ]);
+		// Option to use SVG logo from assets folder
+		$wp_customize->add_setting(
+			'sawerna_header_logo_svg',
+			array(
+				'default'           => '',
+				'sanitize_callback' => 'sanitize_file_name',
+			)
+		);
+		$wp_customize->add_control(
+			'sawerna_header_logo_svg',
+			array(
+				'section'     => 'sawerna_header',
+				'label'       => __( 'Use SVG Logo from Assets', 'sawerna' ),
+				'type'        => 'select',
+				'description' => __( 'Select an SVG logo from the assets/SVG folder. Leave empty to use WordPress custom logo.', 'sawerna' ),
+				'choices'     => sawerna_get_svg_logo_choices(),
+			)
+		);
 
-  // Footer Section
-  $wp_customize->add_section('rm_footer', [
-    'title' => __('Footer', 'sawerna'),
-    'priority' => 160,
-  ]);
+		// Footer Section
+		$wp_customize->add_section(
+			'rm_footer',
+			array(
+				'title'    => __( 'Footer', 'sawerna' ),
+				'priority' => 160,
+			)
+		);
 
-  $wp_customize->add_setting('rm_footer_phone', [
-    'default' => '+372 6066 941',
-    'sanitize_callback' => 'sanitize_text_field',
-  ]);
-  $wp_customize->add_control('rm_footer_phone', [
-    'section' => 'rm_footer',
-    'label' => __('Phone', 'sawerna'),
-    'type' => 'text',
-  ]);
+		$wp_customize->add_setting(
+			'rm_footer_phone',
+			array(
+				'default'           => '+372 6066 941',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+		$wp_customize->add_control(
+			'rm_footer_phone',
+			array(
+				'section' => 'rm_footer',
+				'label'   => __( 'Phone', 'sawerna' ),
+				'type'    => 'text',
+			)
+		);
 
-  $wp_customize->add_setting('rm_footer_email', [
-    'default' => 'info@rm.ee',
-    'sanitize_callback' => 'sanitize_email',
-  ]);
-  $wp_customize->add_control('rm_footer_email', [
-    'section' => 'rm_footer',
-    'label' => __('Email', 'sawerna'),
-    'type' => 'text',
-  ]);
+		$wp_customize->add_setting(
+			'rm_footer_email',
+			array(
+				'default'           => 'info@rm.ee',
+				'sanitize_callback' => 'sanitize_email',
+			)
+		);
+		$wp_customize->add_control(
+			'rm_footer_email',
+			array(
+				'section' => 'rm_footer',
+				'label'   => __( 'Email', 'sawerna' ),
+				'type'    => 'text',
+			)
+		);
 
-  $footer_year = date_i18n('Y');
-  $wp_customize->add_setting('rm_footer_bottom_text', [
-    'default' => sprintf(__('© %s Sawerna. Veebiarendus: Nimmi. Tippasemel e-poe lahendused ettevõtetele.', 'sawerna'), $footer_year),
-    'sanitize_callback' => 'wp_kses_post',
-  ]);
-  $wp_customize->add_control('rm_footer_bottom_text', [
-    'section' => 'rm_footer',
-    'label' => __('Footer Bottom Text', 'sawerna'),
-    'type' => 'textarea',
-    'description' => __('You can add links using HTML, e.g. <a href="https://example.com">Text</a>.', 'sawerna'),
-  ]);
+		$footer_year = date_i18n( 'Y' );
+		$wp_customize->add_setting(
+			'rm_footer_bottom_text',
+			array(
+				/* translators: %s: current year. */
+				'default'           => sprintf( __( '© %s Sawerna. Veebiarendus: Nimmi. Tippasemel e-poe lahendused ettevõtetele.', 'sawerna' ), $footer_year ),
+				'sanitize_callback' => 'wp_kses_post',
+			)
+		);
+		$wp_customize->add_control(
+			'rm_footer_bottom_text',
+			array(
+				'section'     => 'rm_footer',
+				'label'       => __( 'Footer Bottom Text', 'sawerna' ),
+				'type'        => 'textarea',
+				'description' => __( 'You can add links using HTML, e.g. <a href="https://example.com">Text</a>.', 'sawerna' ),
+			)
+		);
 
-  $socials = [
-    'rm_footer_social_facebook' => ['Facebook URL', 'https://facebook.com/'],
-    'rm_footer_social_instagram' => ['Instagram URL', 'https://instagram.com/'],
-    'rm_footer_social_tiktok' => ['TikTok URL', 'https://tiktok.com/'],
-    'rm_footer_social_youtube' => ['YouTube URL', 'https://youtube.com/'],
-  ];
+		$socials = array(
+			'rm_footer_social_facebook'  => array( __( 'Facebook URL', 'sawerna' ), 'https://facebook.com/' ),
+			'rm_footer_social_instagram' => array( __( 'Instagram URL', 'sawerna' ), 'https://instagram.com/' ),
+			'rm_footer_social_tiktok'    => array( __( 'TikTok URL', 'sawerna' ), 'https://tiktok.com/' ),
+			'rm_footer_social_youtube'   => array( __( 'YouTube URL', 'sawerna' ), 'https://youtube.com/' ),
+		);
 
-  foreach ($socials as $key => [$label, $default]) {
-    $wp_customize->add_setting($key, [
-      'default' => $default,
-      'sanitize_callback' => 'esc_url_raw',
-    ]);
-    $wp_customize->add_control($key, [
-      'section' => 'rm_footer',
-      'label' => __($label, 'sawerna'),
-      'type' => 'url',
-    ]);
-  }
-});
+		foreach ( $socials as $key => [$label, $default] ) {
+			$wp_customize->add_setting(
+				$key,
+				array(
+					'default'           => $default,
+					'sanitize_callback' => 'esc_url_raw',
+				)
+			);
+			$wp_customize->add_control(
+				$key,
+				array(
+					'section' => 'rm_footer',
+					'label'   => $label,
+					'type'    => 'url',
+				)
+			);
+		}
+	}
+);
 
 /**
  * Footer contacts defaults and helpers.
  */
 function sawerna_footer_contacts_defaults(): array {
-	return [
-		'ecommerce_support' => [
-			'title' => __('E-poe klienditeenindus', 'sawerna'),
+	return array(
+		'ecommerce_support' => array(
+			'title'  => __( 'E-poe klienditeenindus', 'sawerna' ),
 			'line_1' => 'E-R 10-18',
 			'line_2' => '',
-			'phone' => '+372 5687 8750',
-			'email' => 'info@sawerna.ee',
-		],
-		'tallinn_salon' => [
-			'title' => __('Tallinna salong', 'sawerna'),
+			'phone'  => '+372 5687 8750',
+			'email'  => 'info@sawerna.ee',
+		),
+		'tallinn_salon'     => array(
+			'title'  => __( 'Tallinna salong', 'sawerna' ),
 			'line_1' => 'E-R 11-19, L 11-15',
 			'line_2' => 'Pärnu mnt 139b / Karamelli 2',
-			'phone' => '+372 5687 8750',
-			'email' => 'info@sawerna.ee',
-		],
-		'tartu_showroom' => [
-			'title' => __('Showroom Tartu Kaubamajas', 'sawerna'),
+			'phone'  => '+372 5687 8750',
+			'email'  => 'info@sawerna.ee',
+		),
+		'tartu_showroom'    => array(
+			'title'  => __( 'Showroom Tartu Kaubamajas', 'sawerna' ),
 			'line_1' => 'E-L 10-21, P 10-19',
 			'line_2' => 'Riia 1, Tartu',
-			'phone' => '+372 5687 8750',
-			'email' => 'info@sawerna.ee',
-		],
-		'outlet_sawerna' => [
-			'title' => __('Outlet Sawernas', 'sawerna'),
+			'phone'  => '+372 5687 8750',
+			'email'  => 'info@sawerna.ee',
+		),
+		'outlet_sawerna'    => array(
+			'title'  => __( 'Outlet Sawernas', 'sawerna' ),
 			'line_1' => 'E-R 10-15, L-P kokkuleppel',
 			'line_2' => 'Hannula, Savarna küla',
-			'phone' => '+372 5687 9844',
-			'email' => 'hendri@sawerna.ee',
-		],
-		'warehouse_sawerna' => [
-			'title' => __('Ladu Sawernas', 'sawerna'),
+			'phone'  => '+372 5687 9844',
+			'email'  => 'hendri@sawerna.ee',
+		),
+		'warehouse_sawerna' => array(
+			'title'  => __( 'Ladu Sawernas', 'sawerna' ),
 			'line_1' => 'E-R 10-15, L-P kokkuleppel',
 			'line_2' => 'Hannula, Savarna küla',
-			'phone' => '+372 5687 9843',
-			'email' => 'roland@sawerna.ee',
-		],
-	];
+			'phone'  => '+372 5687 9843',
+			'email'  => 'roland@sawerna.ee',
+		),
+	);
 }
 
 function sawerna_footer_contacts_labels(): array {
-	return [
-		'ecommerce_support' => __('E-poe klienditeenindus', 'sawerna'),
-		'tallinn_salon' => __('Tallinna salong', 'sawerna'),
-		'tartu_showroom' => __('Showroom Tartu Kaubamajas', 'sawerna'),
-		'outlet_sawerna' => __('Outlet Sawernas', 'sawerna'),
-		'warehouse_sawerna' => __('Ladu Sawernas', 'sawerna'),
-	];
+	return array(
+		'ecommerce_support' => __( 'E-poe klienditeenindus', 'sawerna' ),
+		'tallinn_salon'     => __( 'Tallinna salong', 'sawerna' ),
+		'tartu_showroom'    => __( 'Showroom Tartu Kaubamajas', 'sawerna' ),
+		'outlet_sawerna'    => __( 'Outlet Sawernas', 'sawerna' ),
+		'warehouse_sawerna' => __( 'Ladu Sawernas', 'sawerna' ),
+	);
 }
 
 function sawerna_get_footer_contacts_settings(): array {
 	$defaults = sawerna_footer_contacts_defaults();
-	$stored = get_option('sawerna_footer_contacts', []);
-	$contacts = [];
+	$stored   = get_option( 'sawerna_footer_contacts', array() );
+	$contacts = array();
 
-	foreach ($defaults as $key => $default) {
+	foreach ( $defaults as $key => $default ) {
 		$data = $default;
-		if (isset($stored[$key]) && is_array($stored[$key])) {
-			$data = array_merge($data, $stored[$key]);
+		if ( isset( $stored[ $key ] ) && is_array( $stored[ $key ] ) ) {
+			$data = array_merge( $data, $stored[ $key ] );
 		}
-		$contacts[$key] = $data;
+		$contacts[ $key ] = $data;
 	}
 
 	return $contacts;
 }
 
 function sawerna_get_footer_contacts(): array {
-	$contacts = [];
+	$contacts = array();
 	$settings = sawerna_get_footer_contacts_settings();
 
-	foreach ($settings as $data) {
-		$lines = array_values(array_filter([
-			$data['line_1'] ?? '',
-			$data['line_2'] ?? '',
-		], static function ($value) {
-			return trim((string) $value) !== '';
-		}));
+	foreach ( $settings as $data ) {
+		$lines = array_values(
+			array_filter(
+				array(
+					$data['line_1'] ?? '',
+					$data['line_2'] ?? '',
+				),
+				static function ( $value ) {
+					return trim( (string) $value ) !== '';
+				}
+			)
+		);
 
-		$contacts[] = [
+		$contacts[] = array(
 			'title' => $data['title'] ?? '',
 			'lines' => $lines,
 			'phone' => $data['phone'] ?? '',
 			'email' => $data['email'] ?? '',
-		];
+		);
 	}
 
 	return $contacts;
 }
 
-function sawerna_sanitize_footer_contacts($input): array {
-	$defaults = sawerna_footer_contacts_defaults();
-	$sanitized = [];
+function sawerna_sanitize_footer_contacts( $input ): array {
+	$defaults  = sawerna_footer_contacts_defaults();
+	$sanitized = array();
 
-	foreach ($defaults as $key => $default) {
-		$item = (isset($input[$key]) && is_array($input[$key])) ? $input[$key] : [];
-		$sanitized[$key] = [
-			'title' => sanitize_text_field($item['title'] ?? $default['title']),
-			'line_1' => sanitize_text_field($item['line_1'] ?? ''),
-			'line_2' => sanitize_text_field($item['line_2'] ?? ''),
-			'phone' => sanitize_text_field($item['phone'] ?? ''),
-			'email' => sanitize_email($item['email'] ?? ''),
-		];
+	foreach ( $defaults as $key => $default ) {
+		$item              = ( isset( $input[ $key ] ) && is_array( $input[ $key ] ) ) ? $input[ $key ] : array();
+		$sanitized[ $key ] = array(
+			'title'  => sanitize_text_field( $item['title'] ?? $default['title'] ),
+			'line_1' => sanitize_text_field( $item['line_1'] ?? '' ),
+			'line_2' => sanitize_text_field( $item['line_2'] ?? '' ),
+			'phone'  => sanitize_text_field( $item['phone'] ?? '' ),
+			'email'  => sanitize_email( $item['email'] ?? '' ),
+		);
 	}
 
 	return $sanitized;
@@ -1041,11 +1215,11 @@ function sawerna_sanitize_footer_contacts($input): array {
  * so admins can add as many logos as they need from the "Footer Slider" admin page.
  */
 function sawerna_footer_slider_default_item(): array {
-	return [
+	return array(
 		'label' => '',
 		'image' => '',
-		'url' => '',
-	];
+		'url'   => '',
+	);
 }
 
 /**
@@ -1053,75 +1227,75 @@ function sawerna_footer_slider_default_item(): array {
  * logo_1..logo_8 keyed option shape as well as the current list shape.
  */
 function sawerna_get_footer_slider_items(): array {
-	$stored = get_option('sawerna_footer_slider', []);
+	$stored = get_option( 'sawerna_footer_slider', array() );
 
-	if (!is_array($stored)) {
-		return [];
+	if ( ! is_array( $stored ) ) {
+		return array();
 	}
 
-	$items = [];
-	foreach ($stored as $item) {
-		if (!is_array($item)) {
+	$items = array();
+	foreach ( $stored as $item ) {
+		if ( ! is_array( $item ) ) {
 			continue;
 		}
 
-		$label = isset($item['label']) ? (string) $item['label'] : '';
-		$image = isset($item['image']) ? (string) $item['image'] : '';
-		$url   = isset($item['url']) ? (string) $item['url'] : '';
+		$label = isset( $item['label'] ) ? (string) $item['label'] : '';
+		$image = isset( $item['image'] ) ? (string) $item['image'] : '';
+		$url   = isset( $item['url'] ) ? (string) $item['url'] : '';
 
-		if ('' === $label && '' === $image) {
+		if ( '' === $label && '' === $image ) {
 			continue;
 		}
 
-		$items[] = [
+		$items[] = array(
 			'label' => $label,
 			'image' => $image,
-			'url' => $url,
-		];
+			'url'   => $url,
+		);
 	}
 
 	return $items;
 }
 
-function sawerna_sanitize_footer_slider($input): array {
-	if (!is_array($input)) {
-		return [];
+function sawerna_sanitize_footer_slider( $input ): array {
+	if ( ! is_array( $input ) ) {
+		return array();
 	}
 
-	$sanitized = [];
-	foreach ($input as $item) {
-		if (!is_array($item)) {
+	$sanitized = array();
+	foreach ( $input as $item ) {
+		if ( ! is_array( $item ) ) {
 			continue;
 		}
 
-		$label = sanitize_text_field($item['label'] ?? '');
-		$image = esc_url_raw($item['image'] ?? '');
-		$url   = esc_url_raw($item['url'] ?? '');
+		$label = sanitize_text_field( $item['label'] ?? '' );
+		$image = esc_url_raw( $item['image'] ?? '' );
+		$url   = esc_url_raw( $item['url'] ?? '' );
 
-		if ('' === $label && '' === $image && '' === $url) {
+		if ( '' === $label && '' === $image && '' === $url ) {
 			continue;
 		}
 
-		$sanitized[] = [
+		$sanitized[] = array(
 			'label' => $label,
 			'image' => $image,
-			'url' => $url,
-		];
+			'url'   => $url,
+		);
 	}
 
-	return array_values($sanitized);
+	return array_values( $sanitized );
 }
 
 function sawerna_cart_settings_defaults(): array {
-	return [
-		'free_shipping_threshold'        => '1000',
-		'mini_cart_show_shop_button'     => '1',
-	];
+	return array(
+		'free_shipping_threshold'    => '1000',
+		'mini_cart_show_shop_button' => '1',
+	);
 }
 
 function sawerna_get_cart_settings(): array {
 	$defaults = sawerna_cart_settings_defaults();
-	$stored = get_option( 'sawerna_cart_settings', [] );
+	$stored   = get_option( 'sawerna_cart_settings', array() );
 
 	if ( ! is_array( $stored ) ) {
 		return $defaults;
@@ -1138,10 +1312,10 @@ function sawerna_sanitize_cart_settings( $input ): array {
 		$threshold     = function_exists( 'wc_format_decimal' ) ? wc_format_decimal( $raw_threshold, 2 ) : (float) str_replace( ',', '.', (string) $raw_threshold );
 	}
 
-	return [
+	return array(
 		'free_shipping_threshold'    => (string) max( 0, (float) $threshold ),
 		'mini_cart_show_shop_button' => isset( $input['mini_cart_show_shop_button'] ) ? '1' : '0',
-	];
+	);
 }
 
 function sawerna_get_free_shipping_threshold(): float {
@@ -1152,8 +1326,8 @@ function sawerna_get_free_shipping_threshold(): float {
 
 function sawerna_register_menu_options_page() {
 	add_menu_page(
-		__('Menu options', 'sawerna'),
-		__('Menu options', 'sawerna'),
+		__( 'Menu options', 'sawerna' ),
+		__( 'Menu options', 'sawerna' ),
 		'manage_options',
 		'sawerna-menu-options',
 		'sawerna_render_menu_options_page',
@@ -1163,14 +1337,14 @@ function sawerna_register_menu_options_page() {
 
 	$footer_slider_hook = add_submenu_page(
 		'sawerna-menu-options',
-		__('Footer Slider', 'sawerna'),
-		__('Footer Slider', 'sawerna'),
+		__( 'Footer Slider', 'sawerna' ),
+		__( 'Footer Slider', 'sawerna' ),
 		'manage_options',
 		'sawerna-footer-slider-options',
 		'sawerna_render_footer_slider_options_page'
 	);
 
-	add_action('load-' . $footer_slider_hook, 'sawerna_footer_slider_enqueue_admin_assets');
+	add_action( 'load-' . $footer_slider_hook, 'sawerna_footer_slider_enqueue_admin_assets' );
 
 	add_submenu_page(
 		'sawerna-menu-options',
@@ -1181,101 +1355,113 @@ function sawerna_register_menu_options_page() {
 		'sawerna_render_cart_options_page'
 	);
 }
-add_action('admin_menu', 'sawerna_register_menu_options_page');
+add_action( 'admin_menu', 'sawerna_register_menu_options_page' );
 
 function sawerna_register_menu_options_settings() {
-	register_setting('sawerna_menu_options_contacts', 'sawerna_footer_contacts', [
-		'sanitize_callback' => 'sawerna_sanitize_footer_contacts',
-	]);
-	register_setting('sawerna_menu_options_slider', 'sawerna_footer_slider', [
-		'sanitize_callback' => 'sawerna_sanitize_footer_slider',
-	]);
-	register_setting( 'sawerna_menu_options_cart', 'sawerna_cart_settings', [
-		'sanitize_callback' => 'sawerna_sanitize_cart_settings',
-	] );
+	register_setting(
+		'sawerna_menu_options_contacts',
+		'sawerna_footer_contacts',
+		array(
+			'sanitize_callback' => 'sawerna_sanitize_footer_contacts',
+		)
+	);
+	register_setting(
+		'sawerna_menu_options_slider',
+		'sawerna_footer_slider',
+		array(
+			'sanitize_callback' => 'sawerna_sanitize_footer_slider',
+		)
+	);
+	register_setting(
+		'sawerna_menu_options_cart',
+		'sawerna_cart_settings',
+		array(
+			'sanitize_callback' => 'sawerna_sanitize_cart_settings',
+		)
+	);
 }
-add_action('admin_init', 'sawerna_register_menu_options_settings');
+add_action( 'admin_init', 'sawerna_register_menu_options_settings' );
 
 function sawerna_render_menu_options_page() {
-	if (!current_user_can('manage_options')) {
+	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
 	$contacts = sawerna_get_footer_contacts_settings();
-	$labels = sawerna_footer_contacts_labels();
+	$labels   = sawerna_footer_contacts_labels();
 	?>
 	<div class="wrap">
-		<h1><?php echo esc_html__('Menu options', 'sawerna'); ?></h1>
+		<h1><?php echo esc_html__( 'Menu options', 'sawerna' ); ?></h1>
 		<form method="post" action="options.php">
-			<?php settings_fields('sawerna_menu_options_contacts'); ?>
+			<?php settings_fields( 'sawerna_menu_options_contacts' ); ?>
 
-			<?php foreach ($labels as $key => $label): ?>
-				<?php $contact = $contacts[$key] ?? []; ?>
-				<h2><?php echo esc_html($label); ?></h2>
+			<?php foreach ( $labels as $key => $label ) : ?>
+				<?php $contact = $contacts[ $key ] ?? array(); ?>
+				<h2><?php echo esc_html( $label ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row">
-							<label for="sawerna-footer-<?php echo esc_attr($key); ?>-title">
-								<?php echo esc_html__('Title', 'sawerna'); ?>
+							<label for="sawerna-footer-<?php echo esc_attr( $key ); ?>-title">
+								<?php echo esc_html__( 'Title', 'sawerna' ); ?>
 							</label>
 						</th>
 						<td>
 							<input class="regular-text" type="text"
-								id="sawerna-footer-<?php echo esc_attr($key); ?>-title"
-								name="sawerna_footer_contacts[<?php echo esc_attr($key); ?>][title]"
-								value="<?php echo esc_attr($contact['title'] ?? ''); ?>">
+								id="sawerna-footer-<?php echo esc_attr( $key ); ?>-title"
+								name="sawerna_footer_contacts[<?php echo esc_attr( $key ); ?>][title]"
+								value="<?php echo esc_attr( $contact['title'] ?? '' ); ?>">
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="sawerna-footer-<?php echo esc_attr($key); ?>-line1">
-								<?php echo esc_html__('Line 1', 'sawerna'); ?>
+							<label for="sawerna-footer-<?php echo esc_attr( $key ); ?>-line1">
+								<?php echo esc_html__( 'Line 1', 'sawerna' ); ?>
 							</label>
 						</th>
 						<td>
 							<input class="regular-text" type="text"
-								id="sawerna-footer-<?php echo esc_attr($key); ?>-line1"
-								name="sawerna_footer_contacts[<?php echo esc_attr($key); ?>][line_1]"
-								value="<?php echo esc_attr($contact['line_1'] ?? ''); ?>">
+								id="sawerna-footer-<?php echo esc_attr( $key ); ?>-line1"
+								name="sawerna_footer_contacts[<?php echo esc_attr( $key ); ?>][line_1]"
+								value="<?php echo esc_attr( $contact['line_1'] ?? '' ); ?>">
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="sawerna-footer-<?php echo esc_attr($key); ?>-line2">
-								<?php echo esc_html__('Line 2', 'sawerna'); ?>
+							<label for="sawerna-footer-<?php echo esc_attr( $key ); ?>-line2">
+								<?php echo esc_html__( 'Line 2', 'sawerna' ); ?>
 							</label>
 						</th>
 						<td>
 							<input class="regular-text" type="text"
-								id="sawerna-footer-<?php echo esc_attr($key); ?>-line2"
-								name="sawerna_footer_contacts[<?php echo esc_attr($key); ?>][line_2]"
-								value="<?php echo esc_attr($contact['line_2'] ?? ''); ?>">
+								id="sawerna-footer-<?php echo esc_attr( $key ); ?>-line2"
+								name="sawerna_footer_contacts[<?php echo esc_attr( $key ); ?>][line_2]"
+								value="<?php echo esc_attr( $contact['line_2'] ?? '' ); ?>">
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="sawerna-footer-<?php echo esc_attr($key); ?>-phone">
-								<?php echo esc_html__('Phone', 'sawerna'); ?>
+							<label for="sawerna-footer-<?php echo esc_attr( $key ); ?>-phone">
+								<?php echo esc_html__( 'Phone', 'sawerna' ); ?>
 							</label>
 						</th>
 						<td>
 							<input class="regular-text" type="text"
-								id="sawerna-footer-<?php echo esc_attr($key); ?>-phone"
-								name="sawerna_footer_contacts[<?php echo esc_attr($key); ?>][phone]"
-								value="<?php echo esc_attr($contact['phone'] ?? ''); ?>">
+								id="sawerna-footer-<?php echo esc_attr( $key ); ?>-phone"
+								name="sawerna_footer_contacts[<?php echo esc_attr( $key ); ?>][phone]"
+								value="<?php echo esc_attr( $contact['phone'] ?? '' ); ?>">
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="sawerna-footer-<?php echo esc_attr($key); ?>-email">
-								<?php echo esc_html__('Email', 'sawerna'); ?>
+							<label for="sawerna-footer-<?php echo esc_attr( $key ); ?>-email">
+								<?php echo esc_html__( 'Email', 'sawerna' ); ?>
 							</label>
 						</th>
 						<td>
 							<input class="regular-text" type="email"
-								id="sawerna-footer-<?php echo esc_attr($key); ?>-email"
-								name="sawerna_footer_contacts[<?php echo esc_attr($key); ?>][email]"
-								value="<?php echo esc_attr($contact['email'] ?? ''); ?>">
+								id="sawerna-footer-<?php echo esc_attr( $key ); ?>-email"
+								name="sawerna_footer_contacts[<?php echo esc_attr( $key ); ?>][email]"
+								value="<?php echo esc_attr( $contact['email'] ?? '' ); ?>">
 						</td>
 					</tr>
 				</table>
@@ -1294,30 +1480,30 @@ function sawerna_render_menu_options_page() {
  * @param array      $item  Row data (label/image/url).
  * @return string
  */
-function sawerna_get_footer_slider_row_markup($index, array $item): string {
+function sawerna_get_footer_slider_row_markup( $index, array $item ): string {
 	ob_start();
 	?>
 	<div class="sawerna-footer-slider-row" data-sawerna-footer-slider-row="1" style="border:1px solid #dcdcde; background:#fff; padding:12px 16px; margin-bottom:12px; max-width:520px;">
 		<p>
-			<label><?php echo esc_html__('Text label', 'sawerna'); ?></label><br>
+			<label><?php echo esc_html__( 'Text label', 'sawerna' ); ?></label><br>
 			<input class="regular-text" type="text"
-				name="sawerna_footer_slider[<?php echo esc_attr((string) $index); ?>][label]"
-				value="<?php echo esc_attr($item['label'] ?? ''); ?>">
+				name="sawerna_footer_slider[<?php echo esc_attr( (string) $index ); ?>][label]"
+				value="<?php echo esc_attr( $item['label'] ?? '' ); ?>">
 		</p>
 		<p>
-			<label><?php echo esc_html__('Image URL', 'sawerna'); ?></label><br>
+			<label><?php echo esc_html__( 'Image URL', 'sawerna' ); ?></label><br>
 			<input class="regular-text" type="url"
-				name="sawerna_footer_slider[<?php echo esc_attr((string) $index); ?>][image]"
-				value="<?php echo esc_attr($item['image'] ?? ''); ?>">
+				name="sawerna_footer_slider[<?php echo esc_attr( (string) $index ); ?>][image]"
+				value="<?php echo esc_attr( $item['image'] ?? '' ); ?>">
 		</p>
 		<p>
-			<label><?php echo esc_html__('Link URL', 'sawerna'); ?></label><br>
+			<label><?php echo esc_html__( 'Link URL', 'sawerna' ); ?></label><br>
 			<input class="regular-text" type="url"
-				name="sawerna_footer_slider[<?php echo esc_attr((string) $index); ?>][url]"
-				value="<?php echo esc_attr($item['url'] ?? ''); ?>">
+				name="sawerna_footer_slider[<?php echo esc_attr( (string) $index ); ?>][url]"
+				value="<?php echo esc_attr( $item['url'] ?? '' ); ?>">
 		</p>
 		<p style="margin-bottom:0;">
-			<button type="button" class="button-link-delete" data-sawerna-footer-slider-remove="1"><?php echo esc_html__('Remove logo', 'sawerna'); ?></button>
+			<button type="button" class="button-link-delete" data-sawerna-footer-slider-remove="1"><?php echo esc_html__( 'Remove logo', 'sawerna' ); ?></button>
 		</p>
 	</div>
 	<?php
@@ -1325,33 +1511,33 @@ function sawerna_get_footer_slider_row_markup($index, array $item): string {
 }
 
 function sawerna_render_footer_slider_options_page() {
-	if (!current_user_can('manage_options')) {
+	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
 	$items = sawerna_get_footer_slider_items();
-	if (empty($items)) {
-		$items = [ sawerna_footer_slider_default_item() ];
+	if ( empty( $items ) ) {
+		$items = array( sawerna_footer_slider_default_item() );
 	}
 	?>
 	<div class="wrap">
-		<h1><?php echo esc_html__('Footer Slider', 'sawerna'); ?></h1>
-		<p><?php echo esc_html__('Add as many partner logos as you need — there is no fixed limit.', 'sawerna'); ?></p>
+		<h1><?php echo esc_html__( 'Footer Slider', 'sawerna' ); ?></h1>
+		<p><?php echo esc_html__( 'Add as many partner logos as you need — there is no fixed limit.', 'sawerna' ); ?></p>
 		<form method="post" action="options.php">
-			<?php settings_fields('sawerna_menu_options_slider'); ?>
+			<?php settings_fields( 'sawerna_menu_options_slider' ); ?>
 
 			<div data-sawerna-footer-slider-rows="1">
-				<?php foreach ($items as $index => $item): ?>
-					<?php echo sawerna_get_footer_slider_row_markup($index, $item); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php foreach ( $items as $index => $item ) : ?>
+					<?php echo sawerna_get_footer_slider_row_markup( $index, $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				<?php endforeach; ?>
 			</div>
 
 			<template id="sawerna-footer-slider-row-template">
-				<?php echo sawerna_get_footer_slider_row_markup('__INDEX__', sawerna_footer_slider_default_item()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo sawerna_get_footer_slider_row_markup( '__INDEX__', sawerna_footer_slider_default_item() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</template>
 
 			<p>
-				<button type="button" class="button" data-sawerna-footer-slider-add="1"><?php echo esc_html__('+ Add logo', 'sawerna'); ?></button>
+				<button type="button" class="button" data-sawerna-footer-slider-add="1"><?php echo esc_html__( '+ Add logo', 'sawerna' ); ?></button>
 			</p>
 
 			<?php submit_button(); ?>
@@ -1367,12 +1553,12 @@ function sawerna_render_footer_slider_options_page() {
  */
 function sawerna_footer_slider_enqueue_admin_assets() {
 	$script_path = get_template_directory() . '/assets/js/footer-slider-admin.js';
-	if (!file_exists($script_path)) {
+	if ( ! file_exists( $script_path ) ) {
 		return;
 	}
 
-	$version = defined('WP_DEBUG') && WP_DEBUG ? filemtime($script_path) : _S_VERSION;
-	wp_enqueue_script('sawerna-footer-slider-admin', get_template_directory_uri() . '/assets/js/footer-slider-admin.js', [], $version, true);
+	$version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $script_path ) : _S_VERSION;
+	wp_enqueue_script( 'sawerna-footer-slider-admin', get_template_directory_uri() . '/assets/js/footer-slider-admin.js', array(), $version, true );
 }
 
 function sawerna_render_cart_options_page() {
@@ -1456,10 +1642,10 @@ function sawerna_get_svg_url( $filename ) {
 function sawerna_get_svg_path( $filename ) {
 	// Don't sanitize if filename contains spaces (for files like "Asset 4.svg")
 	// Only sanitize if needed for security, but preserve spaces for actual filenames
-	$sanitized = sanitize_file_name( $filename );
-	$original_path = get_template_directory() . '/assets/SVG/' . $filename;
+	$sanitized      = sanitize_file_name( $filename );
+	$original_path  = get_template_directory() . '/assets/SVG/' . $filename;
 	$sanitized_path = get_template_directory() . '/assets/SVG/' . $sanitized;
-	
+
 	// Check if original filename exists first (with space)
 	if ( file_exists( $original_path ) ) {
 		return $original_path;
@@ -1521,8 +1707,8 @@ function sawerna_footer_icon_youtube(): string {
  * @return string SVG markup
  */
 function sawerna_header_icon_account(): string {
-	$svg_content = sawerna_get_svg_inline('Asset 11.svg');
-	if (!empty($svg_content)) {
+	$svg_content = sawerna_get_svg_inline( 'Asset 11.svg' );
+	if ( ! empty( $svg_content ) ) {
 		return $svg_content;
 	}
 	// Fallback to inline SVG
@@ -1530,8 +1716,8 @@ function sawerna_header_icon_account(): string {
 }
 
 function sawerna_header_icon_search(): string {
-	$svg_content = sawerna_get_svg_inline('Asset 12.svg');
-	if (!empty($svg_content)) {
+	$svg_content = sawerna_get_svg_inline( 'Asset 12.svg' );
+	if ( ! empty( $svg_content ) ) {
 		return $svg_content;
 	}
 	// Fallback to inline SVG
@@ -1539,8 +1725,8 @@ function sawerna_header_icon_search(): string {
 }
 
 function sawerna_header_icon_wishlist(): string {
-	$svg_content = sawerna_get_svg_inline('Asset 13.svg');
-	if (!empty($svg_content)) {
+	$svg_content = sawerna_get_svg_inline( 'Asset 13.svg' );
+	if ( ! empty( $svg_content ) ) {
 		return $svg_content;
 	}
 	// Fallback to inline SVG
@@ -1548,8 +1734,8 @@ function sawerna_header_icon_wishlist(): string {
 }
 
 function sawerna_header_icon_cart(): string {
-	$svg_content = sawerna_get_svg_inline('Asset 14.svg');
-	if (!empty($svg_content)) {
+	$svg_content = sawerna_get_svg_inline( 'Asset 14.svg' );
+	if ( ! empty( $svg_content ) ) {
 		return $svg_content;
 	}
 	// Fallback to inline SVG

@@ -1,0 +1,672 @@
+/**
+ * Sawerna content components: product layouts, banner, image grid, image with
+ * text and blog cards used in mega-menu HTML blocks, Gutenberg blocks,
+ * Elementor widgets and shortcodes. Loaded on every page (the mega menu is
+ * site-wide) and in the block editor / Elementor canvas.
+ * Tokens mirror homepage.css, product-card.css and footer.css.
+ */
+
+:root {
+	--sawerna-c-text: #111;
+	--sawerna-c-heading: #2f2f2a;
+	--sawerna-c-muted: #7c7c76;
+	--sawerna-c-meta: #706a63;
+	--sawerna-c-accent: #a8a06f;
+	--sawerna-c-accent-hover: #8f875c;
+	--sawerna-c-olive: #38371b;
+	--sawerna-c-sale: #c94c43;
+	--sawerna-c-old-price: #888;
+	--sawerna-c-media: #f2efe9;
+	--sawerna-c-line: #e4ddd2;
+	--sawerna-c-scrim: 20, 18, 16;
+	--sawerna-c-radius-card: 4px;
+	--sawerna-c-pill: 999px;
+	--sawerna-c-ease: 0.2s ease;
+	--sawerna-c-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 14' fill='none' stroke='%23000' stroke-width='1.6'%3E%3Cpath d='M0 7h18M12 1l6 6-6 6'/%3E%3C/svg%3E");
+}
+
+/* Shared: hover underline (homepage category/blog pattern), focus ring. */
+.sawerna-menu-product__title,
+.sawerna-image-grid__caption,
+.sawerna-image-text__title,
+.sawerna-post-feature__title,
+.sawerna-post-feature__more,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__read-more {
+	text-decoration: underline;
+	text-decoration-color: transparent;
+	text-underline-offset: 3px;
+	transition: text-decoration-color var(--sawerna-c-ease);
+}
+
+.sawerna-menu-product:hover .sawerna-menu-product__title,
+.sawerna-menu-product:focus-visible .sawerna-menu-product__title,
+a.sawerna-image-grid__item:hover .sawerna-image-grid__caption,
+a.sawerna-image-text:hover .sawerna-image-text__title,
+.sawerna-post-feature__link:hover .sawerna-post-feature__title,
+.sawerna-post-feature__link:hover .sawerna-post-feature__more,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card:hover .sawerna-blog-post-card__read-more {
+	text-decoration-color: currentColor;
+}
+
+.sawerna-menu-product:focus-visible,
+.sawerna-banner-shortcode:focus-visible,
+.sawerna-image-grid__item:focus-visible,
+.sawerna-image-text:focus-visible,
+.sawerna-post-feature__link:focus-visible,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card:focus-visible {
+	outline: 2px solid var(--sawerna-c-text);
+	outline-offset: 3px;
+}
+
+/* Products: [sawerna_products layout="compact|grid|list|featured"]. */
+.sawerna-menu-products {
+	display: grid;
+	align-content: start;
+	gap: 24px 20px;
+	margin: 0;
+}
+
+.sawerna-menu-product {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	min-width: 0;
+	color: var(--sawerna-c-text);
+	text-decoration: none;
+}
+
+.sawerna-menu-product__media {
+	display: block;
+	overflow: hidden;
+	aspect-ratio: 1 / 1;
+	border-radius: var(--sawerna-c-radius-card);
+	background: var(--sawerna-c-media);
+}
+
+.sawerna-menu-product__media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 8%;
+	object-fit: contain;
+	mix-blend-mode: multiply; /* White packshots sit on the warm tile. */
+}
+
+.sawerna-menu-product__body {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.sawerna-menu-product__title {
+	display: -webkit-box;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.35;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.sawerna-menu-product__price {
+	color: var(--sawerna-c-text);
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.sawerna-menu-product__price del {
+	margin-right: 6px;
+	color: var(--sawerna-c-old-price);
+	font-weight: 400;
+}
+
+.sawerna-menu-product__price ins {
+	background: none;
+	color: var(--sawerna-c-sale);
+	text-decoration: none;
+}
+
+.sawerna-menu-product__delivery {
+	color: var(--sawerna-c-muted);
+	font-size: 12px;
+}
+
+.sawerna-menu-products--compact {
+	grid-template-columns: repeat(var(--sawerna-menu-products-cols, 3), minmax(0, 1fr));
+}
+
+.sawerna-menu-products--grid {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 20px 16px;
+	max-width: 440px;
+}
+
+.sawerna-menu-products--grid .sawerna-menu-product__title {
+	font-size: 13px;
+}
+
+.sawerna-menu-products--list {
+	grid-template-columns: minmax(0, 1fr);
+	gap: 0;
+}
+
+.sawerna-menu-products--list .sawerna-menu-product {
+	flex-direction: row;
+	align-items: center;
+	gap: 16px;
+	padding: 12px 0;
+	border-bottom: 1px solid var(--sawerna-c-line);
+}
+
+.sawerna-menu-products--list .sawerna-menu-product:first-child {
+	padding-top: 0;
+}
+
+.sawerna-menu-products--list .sawerna-menu-product:last-child {
+	border-bottom: 0;
+}
+
+.sawerna-menu-products--list .sawerna-menu-product__media {
+	flex: 0 0 80px;
+	width: 80px;
+}
+
+.sawerna-menu-products--featured .sawerna-menu-product {
+	gap: 14px;
+}
+
+.sawerna-menu-products--featured .sawerna-menu-product__media {
+	aspect-ratio: 4 / 3;
+}
+
+.sawerna-menu-products--featured .sawerna-menu-product__title {
+	color: var(--sawerna-c-heading);
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.sawerna-menu-products--featured .sawerna-menu-product__price {
+	font-size: 15px;
+}
+
+/* Pill button, as the homepage hero buttons. */
+.sawerna-menu-product__button,
+.sawerna-banner-shortcode__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	align-self: flex-start;
+	min-height: 48px;
+	padding: 0 22px;
+	border: 1px solid transparent;
+	border-radius: var(--sawerna-c-pill);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.2;
+	transition: transform var(--sawerna-c-ease), background-color var(--sawerna-c-ease), color var(--sawerna-c-ease);
+}
+
+.sawerna-menu-product__button {
+	margin-top: 4px;
+	background: rgba(17, 17, 17, 0.84);
+	color: #fff;
+}
+
+.sawerna-menu-product:hover .sawerna-menu-product__button {
+	transform: translateY(-1px);
+	background: rgba(17, 17, 17, 0.96);
+}
+
+/* Banner: [sawerna_banner]. --primary white pill, --light dark pill, --outline. */
+.sawerna-banner-shortcode {
+	position: relative;
+	display: flex;
+	overflow: hidden;
+	background: #d7d2c8 center / cover no-repeat;
+	color: #fff;
+	text-decoration: none;
+}
+
+.sawerna-banner-shortcode__overlay,
+.sawerna-image-text__overlay {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.sawerna-banner-shortcode__overlay {
+	--o: var(--sawerna-overlay, 0.35);
+	background: linear-gradient(180deg, rgba(var(--sawerna-c-scrim), calc(var(--o) * 0.35)) 0%, rgba(var(--sawerna-c-scrim), min(0.85, calc(var(--o) * 1.65))) 100%);
+}
+
+.sawerna-banner-shortcode--v-top .sawerna-banner-shortcode__overlay {
+	background: linear-gradient(0deg, rgba(var(--sawerna-c-scrim), calc(var(--o) * 0.35)) 0%, rgba(var(--sawerna-c-scrim), min(0.85, calc(var(--o) * 1.65))) 100%);
+}
+
+.sawerna-banner-shortcode--v-center .sawerna-banner-shortcode__overlay {
+	background: rgba(var(--sawerna-c-scrim), var(--o));
+}
+
+.sawerna-banner-shortcode__content {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	width: 100%;
+	padding: 32px;
+}
+
+.sawerna-banner-shortcode--v-top .sawerna-banner-shortcode__content {
+	justify-content: flex-start;
+}
+
+.sawerna-banner-shortcode--v-center .sawerna-banner-shortcode__content {
+	justify-content: center;
+}
+
+.sawerna-banner-shortcode--center .sawerna-banner-shortcode__content {
+	align-items: center;
+	text-align: center;
+}
+
+.sawerna-banner-shortcode--right .sawerna-banner-shortcode__content {
+	align-items: flex-end;
+	text-align: right;
+}
+
+.sawerna-banner-shortcode__title {
+	max-width: 14ch;
+	font-size: 34px;
+	font-weight: 600;
+	line-height: 1.02;
+}
+
+.sawerna-banner-shortcode__text {
+	max-width: 32ch;
+	margin-top: 14px;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+.sawerna-banner-shortcode__title,
+.sawerna-banner-shortcode__text,
+.sawerna-image-text__content {
+	text-shadow: 0 1px 12px rgba(var(--sawerna-c-scrim), 0.3);
+}
+
+.sawerna-banner-shortcode__button {
+	margin-top: 22px;
+	background: rgba(255, 255, 255, 0.94);
+	color: var(--sawerna-c-text);
+}
+
+.sawerna-banner-shortcode--center .sawerna-banner-shortcode__button {
+	align-self: center;
+}
+
+.sawerna-banner-shortcode--right .sawerna-banner-shortcode__button {
+	align-self: flex-end;
+}
+
+.sawerna-banner-shortcode:hover .sawerna-banner-shortcode__button {
+	transform: translateY(-1px);
+	background: #fff;
+}
+
+.sawerna-banner-shortcode .sawerna-banner-shortcode__button--light {
+	background: rgba(17, 17, 17, 0.84);
+	color: #fff;
+}
+
+.sawerna-banner-shortcode:hover .sawerna-banner-shortcode__button--light {
+	background: rgba(17, 17, 17, 0.96);
+}
+
+.sawerna-banner-shortcode .sawerna-banner-shortcode__button--outline {
+	border-color: rgba(255, 255, 255, 0.85);
+	background: transparent;
+	color: #fff;
+}
+
+.sawerna-banner-shortcode:hover .sawerna-banner-shortcode__button--outline {
+	background: #fff;
+	color: var(--sawerna-c-text);
+}
+
+/* Image grid: [sawerna_image_grid]. */
+.sawerna-image-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--sawerna-image-grid-cols, 2), minmax(0, 1fr));
+	gap: var(--sawerna-image-grid-gap, 12px);
+}
+
+.sawerna-image-grid__item {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	aspect-ratio: var(--sawerna-image-grid-ratio, 1 / 1);
+	background: var(--sawerna-c-media);
+	color: #fff;
+	text-decoration: none;
+}
+
+.sawerna-image-grid__image,
+.sawerna-image-text__media img,
+.sawerna-post-feature__media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.sawerna-image-grid__caption {
+	position: absolute;
+	inset: auto 0 0;
+	padding: 40px 16px 14px;
+	background: linear-gradient(180deg, rgba(var(--sawerna-c-scrim), 0) 0%, rgba(var(--sawerna-c-scrim), 0.62) 100%);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+/* Image with text: [sawerna_image_text]. Scrim only behind the text. */
+.sawerna-image-text {
+	--o: var(--sawerna-overlay, 0.25);
+	--s: rgba(var(--sawerna-c-scrim), min(0.85, calc(var(--o) + 0.35)));
+	position: relative;
+	display: block;
+	overflow: hidden;
+	aspect-ratio: var(--sawerna-image-text-ratio, 4 / 5);
+	background: var(--sawerna-c-media);
+	color: #fff;
+	text-decoration: none;
+}
+
+.sawerna-image-text__media {
+	position: absolute;
+	inset: 0;
+}
+
+.sawerna-image-text__overlay {
+	background: linear-gradient(0deg, var(--s) 0%, transparent 60%);
+}
+
+.sawerna-image-text--v-top .sawerna-image-text__overlay {
+	background: linear-gradient(180deg, var(--s) 0%, transparent 60%);
+}
+
+.sawerna-image-text--v-center .sawerna-image-text__overlay {
+	background: radial-gradient(ellipse 80% 45% at 50% 50%, var(--s) 0%, var(--s) 25%, transparent 100%);
+}
+
+.sawerna-image-text__content {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 24px;
+	text-align: left;
+}
+
+/* Vertical position */
+.sawerna-image-text--v-top .sawerna-image-text__content {
+	justify-content: flex-start;
+}
+
+.sawerna-image-text--v-center .sawerna-image-text__content {
+	justify-content: center;
+}
+
+/* Horizontal position */
+.sawerna-image-text--h-center .sawerna-image-text__content {
+	align-items: center;
+	text-align: center;
+}
+
+.sawerna-image-text--h-right .sawerna-image-text__content {
+	align-items: flex-end;
+	text-align: right;
+}
+
+.sawerna-image-text__title {
+	max-width: 16ch;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.08;
+}
+
+.sawerna-image-text__text {
+	max-width: 32ch;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+/* Blog: single card and the [sawerna_blog_posts] grid (homepage "Nõuanded ja blogi" card).
+ * The shared .sawerna-blog-post-card is only restyled inside the grid; /blogi/ is untouched.
+ * article.* beats blog.css's main.sawerna-post-feature page padding. */
+article.sawerna-post-feature {
+	margin: 0;
+	padding: 0;
+}
+
+.sawerna-post-feature__link,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: transparent;
+	color: var(--sawerna-c-heading);
+	text-decoration: none;
+}
+
+.sawerna-post-feature__media,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__image {
+	display: block;
+	overflow: hidden;
+	aspect-ratio: 1.28 / 1;
+	background: var(--sawerna-c-media);
+}
+
+.sawerna-post-feature__body,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 16px 0 0;
+}
+
+.sawerna-post-feature__meta,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__date {
+	margin: 0 0 8px;
+	color: var(--sawerna-c-meta);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	line-height: 1.5;
+	text-transform: uppercase;
+}
+
+.sawerna-post-feature__title,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__title {
+	margin: 0;
+	color: var(--sawerna-c-heading);
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.sawerna-post-feature__excerpt,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__excerpt {
+	display: -webkit-box;
+	overflow: hidden;
+	margin: 8px 0 0;
+	color: var(--sawerna-c-muted);
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.65;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.sawerna-post-feature__more,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__read-more {
+	display: inline-flex;
+	align-items: center;
+	align-self: flex-start;
+	gap: 8px;
+	margin-top: auto;
+	padding-top: 14px;
+	color: var(--sawerna-c-accent);
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.sawerna-post-feature__more::after,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__arrow {
+	content: "";
+	flex: 0 0 18px;
+	width: 18px;
+	height: 13px;
+	background: currentColor;
+	-webkit-mask: var(--sawerna-c-arrow) center / contain no-repeat;
+	mask: var(--sawerna-c-arrow) center / contain no-repeat;
+}
+
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__arrow::before,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card__arrow::after {
+	display: none;
+}
+
+.sawerna-post-feature__link:hover .sawerna-post-feature__more,
+.sawerna-blog-post-card-grid .sawerna-blog-post-card:hover .sawerna-blog-post-card__read-more {
+	color: var(--sawerna-c-accent-hover);
+}
+
+@media (max-width: 767px) {
+	.sawerna-menu-products--compact {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.sawerna-banner-shortcode__content {
+		padding: 24px;
+	}
+
+	.sawerna-banner-shortcode__title {
+		font-size: 28px;
+	}
+
+	.sawerna-image-text__content {
+		padding: 20px;
+	}
+
+	.sawerna-image-text__title {
+		font-size: 22px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sawerna-image-grid {
+		gap: min(var(--sawerna-image-grid-gap, 12px), 8px);
+	}
+
+	.sawerna-image-grid__caption {
+		padding: 28px 10px 10px;
+		font-size: 14px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sawerna-menu-product__button,
+	.sawerna-banner-shortcode__button {
+		transition: none;
+		transform: none !important;
+	}
+}
+
+/* Columns inside mega-menu HTML blocks. Core column CSS is not guaranteed in the header
+   (block styles load on demand), so give columns a reliable equal split here. */
+.sawerna-html-block-dropdown-inner .wp-block-columns {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-column {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.sawerna-image-text {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .sawerna-html-block-dropdown-inner .wp-block-columns {
+    flex-direction: column;
+  }
+
+  /* Stacked: each column takes its natural height (flex-basis 0 would collapse aspect-ratio content). */
+  .sawerna-html-block-dropdown-inner .wp-block-column {
+    flex: none;
+    width: 100%;
+  }
+}
+
+/* Mobile: compact product cards become one swipeable row instead of wrapping (no orphaned card). */
+@media (max-width: 767px) {
+  .sawerna-menu-products--compact {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .sawerna-menu-products--compact::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sawerna-menu-products--compact .sawerna-menu-product {
+    flex: 0 0 42%;
+    scroll-snap-align: start;
+  }
+}
+
+/* Keep card text inside the card: long words (e.g. "variatsioonidega") must wrap, not overflow. */
+.sawerna-menu-product__body {
+  width: 100%;
+  min-width: 0;
+}
+
+.sawerna-menu-product__title {
+  overflow-wrap: anywhere;
+}
+
+/* Mobile menu: an open item with sub-items plus a tall HTML block can exceed the theme's
+   1000px max-height (used for the open animation), which cut the block off. */
+@media (max-width: 1024px) {
+  .sawerna-mobile-menu--main > li.is-open > .sub-menu {
+    max-height: 5000px;
+  }
+
+  .sawerna-mobile-menu--main > li.is-open > .sawerna-html-block-dropdown {
+    max-height: 5000px;
+  }
+}
+
+/* Image boxes must fill their frame everywhere, including the mobile menu (its img rules set height:auto). */
+.sawerna-image-text .sawerna-image-text__media img,
+.sawerna-post-feature .sawerna-post-feature__media img,
+.sawerna-image-grid .sawerna-image-grid__image {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}

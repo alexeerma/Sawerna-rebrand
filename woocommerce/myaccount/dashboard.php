@@ -8,10 +8,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$current_user = wp_get_current_user();
-$display_name = $current_user instanceof WP_User && '' !== trim( $current_user->display_name ) ? $current_user->display_name : __( 'klient', 'sawerna' );
-$items        = function_exists( 'sawerna_woocommerce_account_menu_items' ) ? sawerna_woocommerce_account_menu_items() : array();
-$card_keys    = array( 'orders', 'downloads', 'edit-address', 'edit-account', 'wishlist', 'newsletter', 'customer-logout' );
+$logged_in_user = wp_get_current_user();
+$display_name   = $logged_in_user instanceof WP_User && '' !== trim( $logged_in_user->display_name ) ? $logged_in_user->display_name : __( 'klient', 'sawerna' );
+$items          = function_exists( 'sawerna_woocommerce_account_menu_items' ) ? sawerna_woocommerce_account_menu_items() : array();
+$card_keys      = array( 'orders', 'downloads', 'edit-address', 'edit-account', 'wishlist', 'newsletter', 'customer-logout' );
 ?>
 
 <section class="sawerna-account-dashboard">

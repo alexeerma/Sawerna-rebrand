@@ -9,7 +9,7 @@
  * Inject styles on the WP login page.
  */
 function sawerna_admin_login_styles(): void {
-	$logo_url = esc_attr( esc_url( get_template_directory_uri() . '/assets/SVG/sawerna_logo.svg' ) );
+	$logo_url = get_template_directory_uri() . '/assets/SVG/sawerna_logo.svg';
 	?>
 	<style>
 		body.login {
@@ -22,7 +22,7 @@ function sawerna_admin_login_styles(): void {
 
 		/* Logo */
 		#login h1 a {
-			background-image: url('<?php echo $logo_url; ?>');
+			background-image: url('<?php echo esc_url( $logo_url ); ?>');
 			background-repeat: no-repeat;
 			background-size: contain;
 			background-position: center center;

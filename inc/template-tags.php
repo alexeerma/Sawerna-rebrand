@@ -32,7 +32,6 @@ if ( ! function_exists( 'sawerna_posted_on' ) ) :
 		);
 
 		echo '<span class="posted-on">' . $posted_on . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 	}
 endif;
 
@@ -48,7 +47,6 @@ if ( ! function_exists( 'sawerna_posted_by' ) ) :
 		);
 
 		echo '<span class="byline"> ' . $byline . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
 	}
 endif;
 
@@ -159,7 +157,7 @@ if ( ! function_exists( 'wp_body_open' ) ) :
 	 *
 	 * @link https://core.trac.wordpress.org/ticket/12563
 	 */
-	function wp_body_open() {
-		do_action( 'wp_body_open' );
+	function wp_body_open() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Core back-compat shim, only defined when missing.
+		do_action( 'wp_body_open' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core hook.
 	}
 endif;

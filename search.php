@@ -77,16 +77,16 @@ $results_count = isset( $wp_query ) && $wp_query instanceof WP_Query ? (int) $wp
 					while ( have_posts() ) :
 						the_post();
 
-						$post_id       = get_the_ID();
-						$post_type     = get_post_type( $post_id );
-						$is_product    = 'product' === $post_type && function_exists( 'wc_get_product' );
-						$product       = $is_product ? wc_get_product( $post_id ) : false;
-						$image_url     = get_the_post_thumbnail_url( $post_id, 'medium_large' );
+						$result_id     = get_the_ID();
+						$result_type   = get_post_type( $result_id );
+						$is_product    = 'product' === $result_type && function_exists( 'wc_get_product' );
+						$product       = $is_product ? wc_get_product( $result_id ) : false;
+						$image_url     = get_the_post_thumbnail_url( $result_id, 'medium_large' );
 						$result_label  = '';
 						$result_detail = '';
 
 						if ( $is_product ) {
-							$terms = get_the_terms( $post_id, 'product_cat' );
+							$terms = get_the_terms( $result_id, 'product_cat' );
 
 							if ( is_array( $terms ) && ! empty( $terms ) && $terms[0] instanceof WP_Term ) {
 								$result_label = $terms[0]->name;
@@ -102,9 +102,9 @@ $results_count = isset( $wp_query ) && $wp_query instanceof WP_Query ? (int) $wp
 								}
 							}
 						} else {
-							$post_type_object = get_post_type_object( (string) $post_type );
-							$result_label     = $post_type_object && isset( $post_type_object->labels->singular_name ) ? (string) $post_type_object->labels->singular_name : __( 'Leht', 'sawerna' );
-							$result_detail    = wp_strip_all_tags( get_the_excerpt() );
+							$result_type_obj = get_post_type_object( (string) $result_type );
+							$result_label    = $result_type_obj && isset( $result_type_obj->labels->singular_name ) ? (string) $result_type_obj->labels->singular_name : __( 'Leht', 'sawerna' );
+							$result_detail   = wp_strip_all_tags( get_the_excerpt() );
 						}
 						?>
 						<article id="post-<?php the_ID(); ?>" <?php post_class( 'sawerna-search-card' ); ?>>

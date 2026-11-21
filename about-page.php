@@ -8,9 +8,9 @@
 
 get_header();
 
-$about_options   = sawerna_get_about_options();
-$hero_image_url  = ! empty( $about_options['hero_image_id'] ) ? wp_get_attachment_image_url( (int) $about_options['hero_image_id'], 'full' ) : '';
-$accent_image    = ! empty( $about_options['hero_accent_image_id'] )
+$about_options  = sawerna_get_about_options();
+$hero_image_url = ! empty( $about_options['hero_image_id'] ) ? wp_get_attachment_image_url( (int) $about_options['hero_image_id'], 'full' ) : '';
+$accent_image   = ! empty( $about_options['hero_accent_image_id'] )
 	? wp_get_attachment_image(
 		(int) $about_options['hero_accent_image_id'],
 		'medium_large',
@@ -23,7 +23,7 @@ $accent_image    = ! empty( $about_options['hero_accent_image_id'] )
 		)
 	)
 	: '';
-$owner_image     = ! empty( $about_options['owner_image_id'] )
+$owner_image    = ! empty( $about_options['owner_image_id'] )
 	? wp_get_attachment_image(
 		(int) $about_options['owner_image_id'],
 		'large',
@@ -73,7 +73,7 @@ $owner_image     = ! empty( $about_options['owner_image_id'] )
 							<?php the_post(); ?>
 							<?php if ( '' !== trim( (string) get_the_content() ) ) : ?>
 								<?php
-								$about_content = apply_filters( 'the_content', get_the_content() );
+								$about_content                                      = apply_filters( 'the_content', get_the_content() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core filter.
 								list( $content_before_quote, $content_after_quote ) = sawerna_about_split_content_before_last_paragraph( $about_content );
 								?>
 								<div class="sawerna-about-story__content entry-content">

@@ -767,15 +767,18 @@
       );
     };
 
+    // Escape values read from data attributes before placing them in HTML attributes.
+    const escAttr = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
     const buildPreviewMarkup = (button, fallbackIcon) => {
       if (!button) {
         return '';
       }
 
       const type = button.getAttribute('data-swatch-type') || 'label';
-      const image = button.getAttribute('data-option-image') || '';
-      const color = button.getAttribute('data-option-color') || '';
-      const label = button.getAttribute('data-option-label') || '';
+      const image = escAttr(button.getAttribute('data-option-image') || '');
+      const color = escAttr(button.getAttribute('data-option-color') || '');
+      const label = escAttr(button.getAttribute('data-option-label') || '');
 
       if (type === 'image' && image) {
         return `<img src="${image}" alt="${label}">`;
@@ -1040,7 +1043,15 @@
         const optLabel = optBtn ? (optBtn.getAttribute('data-option-label') || '') : '';
         const imgSrc = optBtn ? (optBtn.getAttribute('data-option-image') || '') : '';
         if (valueNode) valueNode.textContent = optLabel;
-        if (previewNode) previewNode.innerHTML = imgSrc ? `<img src="${imgSrc}" alt="${optLabel}">` : '';
+        if (previewNode) {
+          previewNode.textContent = '';
+          if (imgSrc) {
+            const previewImg = document.createElement('img');
+            previewImg.src = imgSrc;
+            previewImg.alt = optLabel;
+            previewNode.appendChild(previewImg);
+          }
+        }
       }
 
       syncGroupSelectionState(group, optBtn || null);
@@ -1314,7 +1325,12 @@
         lightboxThumbTrack.prepend(temporaryLightboxThumb);
       }
 
-      temporaryLightboxThumb.innerHTML = `<img src="${temporaryVariationImage.fullSrc}" alt="${temporaryVariationImage.alt || ''}" loading="lazy" decoding="async">`;
+      const temporaryThumbImg = document.createElement('img');
+      temporaryThumbImg.src = temporaryVariationImage.fullSrc;
+      temporaryThumbImg.alt = temporaryVariationImage.alt || '';
+      temporaryThumbImg.loading = 'lazy';
+      temporaryThumbImg.decoding = 'async';
+      temporaryLightboxThumb.replaceChildren(temporaryThumbImg);
     };
 
     const syncLightboxImage = (index) => {

@@ -1,0 +1,125 @@
+/**
+ * Editor-only styles for the Sawerna blocks (block.json editorStyle).
+ * Controls inside the canvas: preview notice, placeholders, column override
+ * for the full product card grid (inline on the front end, see
+ * sawerna_products_shortcode_assets()).
+ */
+
+.sawerna-block-notice {
+	margin: 0 0 10px;
+	padding: 6px 10px;
+	border-left: 3px solid #a99c6a;
+	background: #f7f5ef;
+	color: #555;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.sawerna-block-preview {
+	position: relative;
+}
+
+/* Links in previews must not navigate away from the editor. */
+.sawerna-block-preview a {
+	pointer-events: none;
+}
+
+.sawerna-shortcode-product-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--sawerna-shortcode-product-cols, 3), minmax(0, 1fr));
+}
+
+.sawerna-block-placeholder.components-placeholder {
+	min-height: 160px;
+}
+
+/* Inspector (admin frame): searchable pickers and repeatable grid items. */
+.sawerna-picker__selected,
+.sawerna-picker__results {
+	margin: 0 0 8px;
+	padding: 0;
+	list-style: none;
+}
+
+.sawerna-picker__results {
+	max-height: 220px;
+	overflow-y: auto;
+	margin-top: 8px;
+	border: 1px solid #ddd;
+}
+
+.sawerna-picker__item {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0;
+	padding: 4px 0 4px 8px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.sawerna-picker__label {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 0;
+	text-align: left;
+	overflow-wrap: anywhere;
+}
+
+.sawerna-picker__label small {
+	color: #757575;
+	font-size: 11px;
+}
+
+.sawerna-picker__option.components-button {
+	width: 100%;
+	height: auto;
+	min-height: 36px;
+	padding: 6px 8px;
+}
+
+.sawerna-picker__empty {
+	margin: 4px 0 8px;
+	color: #757575;
+	font-size: 12px;
+}
+
+.sawerna-image-picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.sawerna-image-picker__thumb {
+	display: block;
+	width: 100%;
+	max-height: 160px;
+	object-fit: cover;
+}
+
+.sawerna-grid-item {
+	display: grid;
+	gap: 8px;
+	margin-bottom: 16px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.sawerna-grid-item__head {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.sawerna-grid-item__head strong {
+	flex: 1;
+}
+
+.sawerna-grid-item__thumb {
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: #f0f0f0;
+	object-fit: cover;
+}

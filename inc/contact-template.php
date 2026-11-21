@@ -63,10 +63,10 @@ function sawerna_contact_format_contact_line( $line ) {
 	}
 
 	if ( preg_match( '/(\+?[0-9][0-9\s().-]{5,}[0-9])/', $line, $matches ) ) {
-		$phone = preg_replace( '/[^0-9+]/', '', $matches[0] );
-		$parts = explode( $matches[0], $line, 2 );
+		$phone  = preg_replace( '/[^0-9+]/', '', $matches[0] );
+		$parts  = explode( $matches[0], $line, 2 );
 		$before = isset( $parts[0] ) ? sawerna_contact_format_rich_text( $parts[0] ) : '';
-		$after = isset( $parts[1] ) ? sawerna_contact_format_rich_text( $parts[1] ) : '';
+		$after  = isset( $parts[1] ) ? sawerna_contact_format_rich_text( $parts[1] ) : '';
 
 		return $before . '<a href="' . esc_url( 'tel:' . $phone ) . '">' . esc_html( $matches[0] ) . '</a>' . $after;
 	}
@@ -76,14 +76,14 @@ function sawerna_contact_format_contact_line( $line ) {
 
 function sawerna_contact_location_defaults() {
 	return array(
-		'image_id'  => 0,
-		'name'      => '',
-		'address'   => '',
-		'hours'     => '',
-		'contacts'  => '',
-		'note'      => '',
-		'maps_url'  => '',
-		'waze_url'  => '',
+		'image_id' => 0,
+		'name'     => '',
+		'address'  => '',
+		'hours'    => '',
+		'contacts' => '',
+		'note'     => '',
+		'maps_url' => '',
+		'waze_url' => '',
 	);
 }
 
@@ -203,15 +203,15 @@ function sawerna_contact_default_people() {
 
 function sawerna_contact_options_defaults() {
 	return array(
-		'hero_image_id'       => 0,
-		'hero_side_image_id'  => 0,
-		'hero_subtitle'       => __( 'KONTAKT', 'sawerna' ),
-		'hero_title'          => __( 'Leia endale sobiv Sawerna müügipunkt', 'sawerna' ),
-		'hero_text'           => __( 'Leiame koos mööbli, mis sobib sinu koju ja elustiiliga. Tule salongi, kirjuta või helista meile.', 'sawerna' ),
-		'locations'           => sawerna_contact_default_locations(),
-		'dropdown_locations'  => sawerna_contact_default_dropdown_locations(),
-		'people_title'        => __( 'Oleme alati rõõmuga valmis vastama kõigile sinu küsimustele', 'sawerna' ),
-		'people'              => sawerna_contact_default_people(),
+		'hero_image_id'      => 0,
+		'hero_side_image_id' => 0,
+		'hero_subtitle'      => __( 'KONTAKT', 'sawerna' ),
+		'hero_title'         => __( 'Leia endale sobiv Sawerna müügipunkt', 'sawerna' ),
+		'hero_text'          => __( 'Leiame koos mööbli, mis sobib sinu koju ja elustiiliga. Tule salongi, kirjuta või helista meile.', 'sawerna' ),
+		'locations'          => sawerna_contact_default_locations(),
+		'dropdown_locations' => sawerna_contact_default_dropdown_locations(),
+		'people_title'       => __( 'Oleme alati rõõmuga valmis vastama kõigile sinu küsimustele', 'sawerna' ),
+		'people'             => sawerna_contact_default_people(),
 	);
 }
 
@@ -220,7 +220,7 @@ function sawerna_contact_wpml_register_string( $name, $value ) {
 		return;
 	}
 
-	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value );
+	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 function sawerna_contact_wpml_translate_string( $name, $value ) {
@@ -228,7 +228,7 @@ function sawerna_contact_wpml_translate_string( $name, $value ) {
 		return (string) $value;
 	}
 
-	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name );
+	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 function sawerna_contact_sanitize_locations( $locations ) {
@@ -544,7 +544,7 @@ function sawerna_contact_render_location_fields( array $location, $index ) {
 	?>
 	<div class="sawerna-home-admin__slide" data-home-slide-item="1">
 		<div class="sawerna-home-admin__slide-head">
-			<h4><?php echo esc_html( sprintf( __( 'Location %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
+			<h4><?php echo esc_html( sprintf( /* translators: %s: location number. */ __( 'Location %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
 			<button type="button" class="button-link-delete" data-home-slide-remove="1"><?php esc_html_e( 'Remove location', 'sawerna' ); ?></button>
 		</div>
 
@@ -596,7 +596,7 @@ function sawerna_contact_render_dropdown_location_fields( array $location, $inde
 	?>
 	<div class="sawerna-home-admin__slide" data-home-slide-item="1">
 		<div class="sawerna-home-admin__slide-head">
-			<h4><?php echo esc_html( sprintf( __( 'Dropdown location %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
+			<h4><?php echo esc_html( sprintf( /* translators: %s: location number. */ __( 'Dropdown location %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
 			<button type="button" class="button-link-delete" data-home-slide-remove="1"><?php esc_html_e( 'Remove dropdown location', 'sawerna' ); ?></button>
 		</div>
 
@@ -638,7 +638,7 @@ function sawerna_contact_render_person_fields( array $person, $index ) {
 	?>
 	<div class="sawerna-home-admin__slide">
 		<div class="sawerna-home-admin__slide-head">
-			<h4><?php echo esc_html( sprintf( __( 'Person card %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
+			<h4><?php echo esc_html( sprintf( /* translators: %s: card number. */ __( 'Person card %s', 'sawerna' ), is_numeric( $index ) ? (int) $index + 1 : '' ) ); ?></h4>
 		</div>
 
 		<div class="sawerna-home-admin__columns">
@@ -675,7 +675,7 @@ function sawerna_contact_render_admin_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Contact page options', 'sawerna' ); ?></h1>
 
-		<?php if ( isset( $_GET['updated'] ) ) : ?>
+		<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flag for the post-save admin notice. ?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Contact page options saved.', 'sawerna' ); ?></p></div>
 		<?php endif; ?>
 

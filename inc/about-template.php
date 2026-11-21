@@ -15,17 +15,17 @@ function sawerna_about_template_slug() {
 
 function sawerna_about_options_defaults() {
 	return array(
-		'hero_image_id'          => 0,
-		'hero_accent_image_id'   => 0,
-		'hero_eyebrow'           => __( 'MEIST', 'sawerna' ),
-		'hero_title'             => __( 'Uus bränd, pikk ajalugu - perefirma eelmise sajandi keskpaigast', 'sawerna' ),
-		'hero_text'              => __( 'Sawerna aitab sul teha õiged valikud nii vormi, funktsiooni kui ka materjalide osas.', 'sawerna' ),
-		'content_quote_text'     => __( 'Mulle väga meeldib see, mida me teeme. Ma kohe tunnen, et me ajame õiget asja ja senine tagasiside annab ainult hoogu juurde!', 'sawerna' ),
-		'content_quote_author'   => __( 'Carl', 'sawerna' ),
-		'owner_card_text'        => __( 'Me ei tahtnud lihtsalt midagi müüa müümise pärast. Tahtsime luua midagi, mille eest võib ka päriselt vastutada. Nii toodete kui ka suhtumise mõttes.', 'sawerna' ),
-		'owner_name'             => __( 'Carl-Johannes Kinnunen', 'sawerna' ),
-		'owner_title'            => __( 'Sawerna asutaja', 'sawerna' ),
-		'owner_image_id'         => 0,
+		'hero_image_id'        => 0,
+		'hero_accent_image_id' => 0,
+		'hero_eyebrow'         => __( 'MEIST', 'sawerna' ),
+		'hero_title'           => __( 'Uus bränd, pikk ajalugu - perefirma eelmise sajandi keskpaigast', 'sawerna' ),
+		'hero_text'            => __( 'Sawerna aitab sul teha õiged valikud nii vormi, funktsiooni kui ka materjalide osas.', 'sawerna' ),
+		'content_quote_text'   => __( 'Mulle väga meeldib see, mida me teeme. Ma kohe tunnen, et me ajame õiget asja ja senine tagasiside annab ainult hoogu juurde!', 'sawerna' ),
+		'content_quote_author' => __( 'Carl', 'sawerna' ),
+		'owner_card_text'      => __( 'Me ei tahtnud lihtsalt midagi müüa müümise pärast. Tahtsime luua midagi, mille eest võib ka päriselt vastutada. Nii toodete kui ka suhtumise mõttes.', 'sawerna' ),
+		'owner_name'           => __( 'Carl-Johannes Kinnunen', 'sawerna' ),
+		'owner_title'          => __( 'Sawerna asutaja', 'sawerna' ),
+		'owner_image_id'       => 0,
 	);
 }
 
@@ -34,7 +34,7 @@ function sawerna_about_wpml_register_string( $name, $value ) {
 		return;
 	}
 
-	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value );
+	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 function sawerna_about_wpml_translate_string( $name, $value ) {
@@ -42,7 +42,7 @@ function sawerna_about_wpml_translate_string( $name, $value ) {
 		return (string) $value;
 	}
 
-	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name );
+	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 function sawerna_about_sanitize_options( $options ) {
@@ -118,7 +118,7 @@ function sawerna_about_render_story_quote( array $options ) {
 	<blockquote class="sawerna-about-quote">
 		<p><?php echo nl2br( esc_html( (string) $options['content_quote_text'] ) ); ?></p>
 		<?php if ( '' !== trim( (string) ( $options['content_quote_author'] ?? '' ) ) ) : ?>
-			<cite><?php echo esc_html( sprintf( __( '- %s', 'sawerna' ), (string) $options['content_quote_author'] ) ); ?></cite>
+			<cite><?php echo esc_html( sprintf( /* translators: %s: quote author name. */ __( '- %s', 'sawerna' ), (string) $options['content_quote_author'] ) ); ?></cite>
 		<?php endif; ?>
 	</blockquote>
 	<?php
@@ -237,7 +237,7 @@ function sawerna_about_render_admin_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'About Us page options', 'sawerna' ); ?></h1>
 
-		<?php if ( isset( $_GET['updated'] ) ) : ?>
+		<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flag for the post-save admin notice. ?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'About Us page options saved.', 'sawerna' ); ?></p></div>
 		<?php endif; ?>
 

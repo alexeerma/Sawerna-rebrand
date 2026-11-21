@@ -6,7 +6,7 @@
 /* Inter Regular (400) */
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-Regular.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-Regular.woff2') format('woff2'), url('../fonts/Inter_18pt-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-Italic.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-Italic.woff2') format('woff2'), url('../fonts/Inter_18pt-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -23,7 +23,7 @@
 /* Inter Medium (500) */
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-Medium.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-Medium.woff2') format('woff2'), url('../fonts/Inter_18pt-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -31,7 +31,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-MediumItalic.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-MediumItalic.woff2') format('woff2'), url('../fonts/Inter_18pt-MediumItalic.ttf') format('truetype');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -40,7 +40,7 @@
 /* Inter SemiBold (600) */
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-SemiBold.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-SemiBold.woff2') format('woff2'), url('../fonts/Inter_18pt-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -48,7 +48,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-SemiBoldItalic.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-SemiBoldItalic.woff2') format('woff2'), url('../fonts/Inter_18pt-SemiBoldItalic.ttf') format('truetype');
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -57,7 +57,7 @@
 /* Inter Bold (700) */
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-Bold.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-Bold.woff2') format('woff2'), url('../fonts/Inter_18pt-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -65,7 +65,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../fonts/Inter_18pt-BoldItalic.ttf') format('truetype');
+  src: url('../fonts/Inter_18pt-BoldItalic.woff2') format('woff2'), url('../fonts/Inter_18pt-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;

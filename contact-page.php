@@ -82,8 +82,8 @@ $people          = ! empty( $contact_options['people'] ) && is_array( $contact_o
 			<div class="sawerna-contact__locations-inner">
 				<?php foreach ( $locations as $location ) : ?>
 					<?php
-					$location = wp_parse_args( is_array( $location ) ? $location : array(), sawerna_contact_location_defaults() );
-					$image    = ! empty( $location['image_id'] )
+					$location         = wp_parse_args( is_array( $location ) ? $location : array(), sawerna_contact_location_defaults() );
+					$image            = ! empty( $location['image_id'] )
 						? wp_get_attachment_image(
 							(int) $location['image_id'],
 							'medium_large',
@@ -96,13 +96,25 @@ $people          = ! empty( $contact_options['people'] ) && is_array( $contact_o
 							)
 						)
 						: '';
-					$address_lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['address'] ) ) );
-					$hour_lines    = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['hours'] ) ) );
-					$contact_lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['contacts'] ) ) );
-					$note_lines    = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['note'] ) ) );
+					$address_lines    = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['address'] ) ) );
+					$hour_lines       = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['hours'] ) ) );
+					$contact_lines    = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['contacts'] ) ) );
+					$note_lines       = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $location['note'] ) ) );
 					$directions_query = trim( implode( ', ', array_filter( array_merge( array( (string) $location['name'] ), $address_lines ) ) ) );
-					$maps_url         = '' !== trim( (string) $location['maps_url'] ) ? (string) $location['maps_url'] : ( '' !== $directions_query ? add_query_arg( array( 'api' => '1', 'query' => $directions_query ), 'https://www.google.com/maps/search/' ) : '' );
-					$waze_url         = '' !== trim( (string) $location['waze_url'] ) ? (string) $location['waze_url'] : ( '' !== $directions_query ? add_query_arg( array( 'q' => $directions_query, 'navigate' => 'yes' ), 'https://waze.com/ul' ) : '' );
+					$maps_url         = '' !== trim( (string) $location['maps_url'] ) ? (string) $location['maps_url'] : ( '' !== $directions_query ? add_query_arg(
+						array(
+							'api'   => '1',
+							'query' => $directions_query,
+						),
+						'https://www.google.com/maps/search/'
+					) : '' );
+					$waze_url         = '' !== trim( (string) $location['waze_url'] ) ? (string) $location['waze_url'] : ( '' !== $directions_query ? add_query_arg(
+						array(
+							'q'        => $directions_query,
+							'navigate' => 'yes',
+						),
+						'https://waze.com/ul'
+					) : '' );
 					?>
 					<article class="sawerna-contact-location">
 						<div class="sawerna-contact-location__media">

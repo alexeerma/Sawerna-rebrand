@@ -76,6 +76,7 @@
 			the_content(
 				sprintf(
 					wp_kses(
+						/* translators: %s: post title. */
 						__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'sawerna' ),
 						array(
 							'span' => array(

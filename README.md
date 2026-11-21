@@ -48,3 +48,48 @@ Zip the theme folder, upload it under Appearance > Themes > Add New, then activa
 ## License
 
 GPLv2 or later. Based on Underscores, (C) 2012-2020 Automattic, Inc.
+
+## Quality checks
+
+Coding standards (WPCS 3 + WooCommerce sniffs, rulesets: `phpcs.xml.dist` here and in `sawerna-core`):
+
+```bash
+composer global require wp-coding-standards/wpcs:"^3.1" woocommerce/woocommerce-sniffs
+phpcs -q .            # theme
+phpcbf .              # auto-fix formatting (check rendered HTML afterwards)
+```
+
+PHP compatibility before PHP/WP upgrades: `bash tests/php/compat-check.sh` (install notes inside).
+
+Front-end tests (Playwright + Lighthouse, needs the local site at https://sawernau.local with the store **Live**, not "coming soon"):
+
+```bash
+cd tests && npm install
+npm run test:visual     # full-page screenshot comparison, 18 templates x desktop/mobile
+npm run test:baseline   # accept current look as the new baseline (only after a deliberate design change)
+npm run test:smoke      # page health, PHP/JS errors, search, wishlist, filters, cart, checkout, menus
+npm run lighthouse      # Core Web Vitals, writes tests/reports/<label>/summary.json
+npx playwright test menu-products  # menu product layouts, menu category, cache, Elementor widgets
+npx playwright test blocks         # Gutenberg blocks: rendering, sanitizing, security regressions
+npm run auth && npm run test:admin # admin UI (menu links, usage column, templates, both editors); auth saves a login session to tests/.auth (gitignored, delete when done)
+```
+
+The tests install `tests/fixtures/sawerna-test-fixture.php` into `mu-plugins` for the run and remove it afterwards. It only activates on `*.local` hosts with `WP_DEBUG` on. Never deploy it.
+
+## Menu content (HTML blocks)
+
+In the block editor, the "Sawerna" category has the same four as blocks (`sawerna/products`, `sawerna/blog-posts`, `sawerna/banner`, `sawerna/image-grid`) plus patterns in "Sawerna menüü". In Elementor, the "Sawerna" widget category has Tooted, Blogipostitused, Bänner and Pildiruudustik. They build the shortcodes below, so both stay interchangeable.
+
+`[sawerna_products layout="compact|grid|list|featured|cards" category="menu|<slugs>" ids="" limit="3" columns="3" on_sale="yes" orderby="date|popularity|..." show_price="yes" show_delivery="no"]`
+
+- `category="menu"` uses the product category of the menu item the block is attached to, so one block serves every menu item.
+- `grid` is always 2x2, `featured` always one product.
+- Output of `sawerna_products` and `sawerna_blog_posts` is cached for 6 hours and invalidated on product, post or HTML block saves and stock changes. Output containing wishlist buttons (`cards` layout) is not cached.
+
+`[sawerna_blog_posts layout="grid|single" id="" ids="" category="<slug>" ...]`: `single` shows one post (id, else newest from category, else newest; published, no password).
+
+`[sawerna_banner ... button_style="primary|light|outline" overlay="0-80" valign="top|center|bottom"]` (legacy `light="yes"` = `button_style="light"`).
+
+`[sawerna_image_text image="<attachment ID>" title="" text="" link="" position="bottom-left|bottom-center|center|top-left" overlay="25" ratio="4/5|1/1|16/9|3/2"]`, block `sawerna/image-text`, widget "Sawerna: Pilt tekstiga". Block variation "Tooted 2x2" = `sawerna/products` with `layout: grid`.
+
+When updating WooCommerce, compare the `@version` of each file in `woocommerce/` with the same file in `plugins/woocommerce/templates/` and port upstream changes.

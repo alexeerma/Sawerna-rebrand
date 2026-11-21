@@ -3,7 +3,7 @@
  * Checkout shipping form.
  *
  * @package WooCommerce\Templates
- * @version 3.6.0
+ * @version 11.2.0
  * @global WC_Checkout $checkout
  */
 
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 <div class="woocommerce-shipping-fields sawerna-checkout-fields sawerna-checkout-fields--shipping">
-	<?php if ( WC()->cart->needs_shipping_address() ) : ?>
+	<?php if ( true === WC()->cart->needs_shipping_address() ) : ?>
 		<div id="ship-to-different-address" class="sawerna-checkout-fields__shipping-toggle">
 			<label class="sawerna-checkout-checkbox" for="ship-to-different-address-checkbox">
 				<input
@@ -47,9 +47,11 @@ defined( 'ABSPATH' ) || exit;
 <div class="woocommerce-additional-fields sawerna-checkout-fields sawerna-checkout-fields--additional">
 	<?php do_action( 'woocommerce_before_order_notes', $checkout ); ?>
 
-	<?php if ( apply_filters( 'woocommerce_enable_order_notes_field', 'yes' === get_option( 'woocommerce_enable_order_comments', 'yes' ) ) ) : ?>
+	<?php $order_fields = $checkout->get_checkout_fields( 'order' ); ?>
+
+	<?php if ( ! empty( $order_fields ) ) : ?>
 		<div class="woocommerce-additional-fields__field-wrapper sawerna-checkout-fields__notes">
-			<?php foreach ( $checkout->get_checkout_fields( 'order' ) as $key => $field ) : ?>
+			<?php foreach ( $order_fields as $key => $field ) : ?>
 				<?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
 			<?php endforeach; ?>
 		</div>

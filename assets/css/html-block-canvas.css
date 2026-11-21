@@ -1,0 +1,48 @@
+/**
+ * Elementor canvas for HTML blocks (mega menu content).
+ *
+ * Loaded only inside the Elementor preview iframe of a sawerna_html_block
+ * (see sawerna_html_block_canvas_styles() in sawerna-core/includes/html-blocks.php).
+ * Mirrors the dropdown box in header-desktop.css so the editor shows the
+ * block at the width it gets in the menu:
+ *   full  = .sawerna-html-block-dropdown (1200px) + -inner padding 35px 50px 40px
+ *   panel = mega menu side panel next to sub-items: calc(50% - 66px), no padding
+ * The public site never loads this file.
+ */
+
+.sawerna-html-block-canvas {
+	--sawerna-canvas-width: min(1200px, calc(100vw - 36px));
+	--sawerna-canvas-padding: 35px 50px 40px 50px;
+}
+
+.sawerna-html-block-canvas--panel {
+	--sawerna-canvas-width: min(534px, calc((100vw - 36px) / 2 - 66px));
+	--sawerna-canvas-padding: 0;
+}
+
+.sawerna-html-block-canvas .elementor-edit-area {
+	box-sizing: border-box;
+	width: var(--sawerna-canvas-width);
+	max-width: none;
+	margin: 24px 0 48px calc(50% - var(--sawerna-canvas-width) / 2);
+	padding: var(--sawerna-canvas-padding);
+	background: #fff;
+	color: #1a1a1a;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	outline: 1px dashed rgba(0, 0, 0, 0.2);
+	outline-offset: 0;
+}
+
+/* Mobile accordion (header-desktop.css, max-width: 1024px). */
+@media (max-width: 1024px) {
+	.sawerna-html-block-canvas,
+	.sawerna-html-block-canvas--panel {
+		--sawerna-canvas-width: 100%;
+		--sawerna-canvas-padding: 16px 14px;
+	}
+
+	.sawerna-html-block-canvas .elementor-edit-area {
+		margin-left: 0;
+		box-shadow: none;
+	}
+}

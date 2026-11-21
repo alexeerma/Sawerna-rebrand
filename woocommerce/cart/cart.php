@@ -6,7 +6,7 @@
  * custom Sawerna design while preserving standard cart actions and hooks.
  *
  * @package WooCommerce\Templates
- * @version 10.8.0
+ * @version 11.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -99,8 +99,9 @@ do_action( 'woocommerce_before_cart' );
 											continue;
 										}
 
-										$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink() : '', $cart_item, $cart_item_key );
-										$product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
+										$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
+										$cart_item_name    = WC()->cart->get_item_product_name( $cart_item, $_product );
+										$product_name      = apply_filters( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
 										$thumbnail         = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image( 'woocommerce_thumbnail' ), $cart_item, $cart_item_key );
 										$unit_price_text   = wp_strip_all_tags( html_entity_decode( wp_kses_post( wc_price( (float) wc_get_price_to_display( $_product ) ) ), ENT_QUOTES, 'UTF-8' ) );
 
@@ -148,10 +149,10 @@ do_action( 'woocommerce_before_cart' );
 
 														<div class="sawerna-cart__product-meta">
 															<?php do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
-															<?php echo wc_get_formatted_cart_item_data( $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+															<?php echo wc_get_formatted_cart_item_data( $cart_item, false, $cart_item_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 															<?php if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) : ?>
-																<?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id ) ); ?>
+																<?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id, $cart_item, $cart_item_key ) ); ?>
 															<?php endif; ?>
 														</div>
 
@@ -183,7 +184,7 @@ do_action( 'woocommerce_before_cart' );
 													sprintf(
 														'<a role="button" href="%s" class="sawerna-cart__remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">%s</a>',
 														esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-														esc_attr( sprintf( __( 'Eemalda toode "%s" ostukorvist', 'sawerna' ), wp_strip_all_tags( $product_name ) ) ),
+														esc_attr( sprintf( /* translators: %s: product name. */ __( 'Eemalda toode "%s" ostukorvist', 'sawerna' ), wp_strip_all_tags( $product_name ) ) ),
 														esc_attr( (string) $product_id ),
 														esc_attr( $_product->get_sku() ),
 														sawerna_woocommerce_mini_cart_remove_icon()

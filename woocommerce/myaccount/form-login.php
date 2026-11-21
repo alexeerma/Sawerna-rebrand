@@ -20,7 +20,7 @@ $login_banner_text  = get_theme_mod( 'sawerna_login_banner_text', '' );
 <?php if ( $login_banner_image || $login_banner_text ) : ?>
 <div class="sawerna-login-banner">
 	<?php if ( $login_banner_image ) : ?>
-	<div class="sawerna-login-banner__image" style="background-image: url('<?php echo str_replace( ')', '%29', esc_url( $login_banner_image ) ); ?>');" role="img" aria-hidden="true"></div>
+	<div class="sawerna-login-banner__image" style="background-image: url('<?php echo esc_url( str_replace( ')', '%29', $login_banner_image ) ); ?>');" role="img" aria-hidden="true"></div>
 	<?php endif; ?>
 	<?php if ( $login_banner_text ) : ?>
 	<div class="sawerna-login-banner__text"><?php echo wp_kses_post( $login_banner_text ); ?></div>
@@ -52,7 +52,7 @@ $login_banner_text  = get_theme_mod( 'sawerna_login_banner_text', '' );
 					name="username"
 					id="username"
 					autocomplete="username"
-					value="<?php echo ( ! empty( $_POST['username'] ) && is_string( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>"
+					value="<?php echo ( ! empty( $_POST['username'] ) && is_string( $_POST['username'] ) ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['username'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only redisplay of the submitted value; WC_Form_Handler verifies the nonce when processing. ?>"
 					required
 					aria-required="true"
 				><?php // @codingStandardsIgnoreLine ?>
@@ -125,7 +125,7 @@ $login_banner_text  = get_theme_mod( 'sawerna_login_banner_text', '' );
 							name="username"
 							id="reg_username"
 							autocomplete="username"
-							value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>"
+							value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['username'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only redisplay of the submitted value; WC_Form_Handler verifies the nonce when processing. ?>"
 							required
 							aria-required="true"
 						><?php // @codingStandardsIgnoreLine ?>
@@ -143,7 +143,7 @@ $login_banner_text  = get_theme_mod( 'sawerna_login_banner_text', '' );
 						name="email"
 						id="reg_email"
 						autocomplete="email"
-						value="<?php echo ( ! empty( $_POST['email'] ) ) ? esc_attr( wp_unslash( $_POST['email'] ) ) : ''; ?>"
+						value="<?php echo ( ! empty( $_POST['email'] ) ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['email'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Read-only redisplay of the submitted value; WC_Form_Handler verifies the nonce when processing. ?>"
 						required
 						aria-required="true"
 					><?php // @codingStandardsIgnoreLine ?>

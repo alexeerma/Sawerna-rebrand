@@ -12,7 +12,10 @@ get_header();
 <main id="primary" class="site-main sawerna-claims-page">
 	<div class="sawerna-claims-page__container">
 
-		<?php while ( have_posts() ) : the_post(); ?>
+		<?php
+		while ( have_posts() ) :
+			the_post();
+			?>
 			<?php if ( get_the_title() ) : ?>
 				<h1 class="sawerna-claims-page__title"><?php the_title(); ?></h1>
 			<?php endif; ?>

@@ -1,0 +1,19 @@
+{
+  "name": "sawerna-theme-tests",
+  "private": true,
+  "description": "Visual regression, functional smoke and Lighthouse tests for the Sawerna theme.",
+  "scripts": {
+    "test": "playwright test",
+    "test:visual": "playwright test visual",
+    "test:baseline": "playwright test visual --update-snapshots",
+    "test:smoke": "playwright test smoke",
+    "lighthouse": "node lighthouse.mjs",
+    "auth": "playwright codegen --channel=chrome --ignore-https-errors --save-storage=.auth/admin.json https://sawernau.local/wp-login.php",
+    "test:admin": "playwright test admin"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1",
+    "lighthouse": "12.3.0",
+    "chrome-launcher": "1.1.2"
+  }
+}

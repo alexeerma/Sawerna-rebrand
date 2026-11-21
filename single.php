@@ -33,7 +33,7 @@ get_header();
 		endwhile;
 		?>
 	</main><!-- #main -->
-	<?php
+		<?php
 else :
 	?>
 	<main id="primary" class="site-main">

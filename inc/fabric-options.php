@@ -143,7 +143,7 @@ function sawerna_get_jarelmaks_providers(): array {
 		);
 	}
 
-	return $active ?: sawerna_jarelmaks_default_providers();
+	return ! empty( $active ) ? $active : sawerna_jarelmaks_default_providers();
 }
 
 /**
@@ -163,10 +163,34 @@ function sawerna_fabric_render_admin_page(): void {
 	$jarelmaks_disclaimer = isset( $options['jarelmaks_disclaimer'] ) ? (string) $options['jarelmaks_disclaimer'] : '';
 
 	// Append one blank row so the user can add a new provider.
-	$display_providers = array_merge( $stored_providers, array( array( 'label' => '', 'apr' => '', 'enabled' => '1' ) ) );
+	$display_providers = array_merge(
+		$stored_providers,
+		array(
+			array(
+				'label'   => '',
+				'apr'     => '',
+				'enabled' => '1',
+			),
+		)
+	);
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'kangavalik';
+
+	$kangavalik_tab_url = add_query_arg(
+		array(
+			'page' => 'sawerna-fabric-options',
+			'tab'  => 'kangavalik',
+		),
+		admin_url( 'admin.php' )
+	);
+	$jarelmaks_tab_url  = add_query_arg(
+		array(
+			'page' => 'sawerna-fabric-options',
+			'tab'  => 'jarelmaks',
+		),
+		admin_url( 'admin.php' )
+	);
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Single product options', 'sawerna' ); ?></h1>
@@ -178,11 +202,11 @@ function sawerna_fabric_render_admin_page(): void {
 		<?php endif; ?>
 
 		<nav class="nav-tab-wrapper">
-			<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'sawerna-fabric-options', 'tab' => 'kangavalik' ), admin_url( 'admin.php' ) ) ); ?>"
+			<a href="<?php echo esc_url( $kangavalik_tab_url ); ?>"
 			   class="nav-tab<?php echo 'kangavalik' === $active_tab ? ' nav-tab-active' : ''; ?>">
 				<?php esc_html_e( 'Kangavalik', 'sawerna' ); ?>
 			</a>
-			<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'sawerna-fabric-options', 'tab' => 'jarelmaks' ), admin_url( 'admin.php' ) ) ); ?>"
+			<a href="<?php echo esc_url( $jarelmaks_tab_url ); ?>"
 			   class="nav-tab<?php echo 'jarelmaks' === $active_tab ? ' nav-tab-active' : ''; ?>">
 				<?php esc_html_e( 'Järelmaks', 'sawerna' ); ?>
 			</a>
@@ -293,13 +317,13 @@ function sawerna_fabric_render_admin_page(): void {
 /**
  * Get a single value from sawerna_page_options.
  *
- * @param string $key     Option key.
- * @param string $default Default value.
+ * @param string $key           Option key.
+ * @param string $default_value Default value.
  * @return string
  */
 if ( ! function_exists( 'sawerna_get_page_option' ) ) {
-	function sawerna_get_page_option( string $key, string $default = '' ): string {
+	function sawerna_get_page_option( string $key, string $default_value = '' ): string {
 		$options = (array) get_option( 'sawerna_page_options', array() );
-		return isset( $options[ $key ] ) ? (string) $options[ $key ] : $default;
+		return isset( $options[ $key ] ) ? (string) $options[ $key ] : $default_value;
 	}
 }

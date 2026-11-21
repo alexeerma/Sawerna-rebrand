@@ -7,13 +7,13 @@
 
 get_header();
 
-$shop_url      = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' );
-$blog_url      = function_exists( 'sawerna_get_blog_archive_url' ) ? sawerna_get_blog_archive_url() : home_url( '/blog/' );
-$account_url   = function_exists( 'sawerna_get_account_url' ) ? sawerna_get_account_url() : wp_login_url();
-$categories    = function_exists( 'sawerna_get_homepage_category_terms' ) ? array_slice( sawerna_get_homepage_category_terms(), 0, 4 ) : array();
-$uploads       = wp_get_upload_dir();
-$hero_image    = isset( $uploads['baseurl'] ) ? trailingslashit( (string) $uploads['baseurl'] ) . '2026/02/Diivanvoodi-Loora-2-1320x1320.jpg' : '';
-$search_query  = get_search_query();
+$shop_url     = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' );
+$blog_url     = function_exists( 'sawerna_get_blog_archive_url' ) ? sawerna_get_blog_archive_url() : home_url( '/blog/' );
+$account_url  = function_exists( 'sawerna_get_account_url' ) ? sawerna_get_account_url() : wp_login_url();
+$categories   = function_exists( 'sawerna_get_homepage_category_terms' ) ? array_slice( sawerna_get_homepage_category_terms(), 0, 4 ) : array();
+$uploads      = wp_get_upload_dir();
+$hero_image   = isset( $uploads['baseurl'] ) ? trailingslashit( (string) $uploads['baseurl'] ) . '2026/02/Diivanvoodi-Loora-2-1320x1320.jpg' : '';
+$search_query = get_search_query();
 ?>
 
 <main id="primary" class="site-main sawerna-error-page">
@@ -69,13 +69,13 @@ $search_query  = get_search_query();
 
 			<div class="sawerna-error-page__grid">
 				<?php if ( ! empty( $categories ) ) : ?>
-					<?php foreach ( $categories as $term ) : ?>
-						<a class="sawerna-error-page__card" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
+					<?php foreach ( $categories as $category_term ) : ?>
+						<a class="sawerna-error-page__card" href="<?php echo esc_url( get_term_link( $category_term ) ); ?>">
 							<span class="sawerna-error-page__card-media">
-								<?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $term ) ); ?>
+								<?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $category_term ) ); ?>
 							</span>
 							<span class="sawerna-error-page__card-body">
-								<strong><?php echo esc_html( $term->name ); ?></strong>
+								<strong><?php echo esc_html( $category_term->name ); ?></strong>
 								<span><?php esc_html_e( 'Vaata tooteid', 'sawerna' ); ?></span>
 							</span>
 						</a>

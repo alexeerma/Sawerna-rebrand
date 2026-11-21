@@ -41,10 +41,16 @@ if ( apply_filters( 'woocommerce_checkout_show_terms', true ) && function_exists
 					<?php
 					if ( $privacy_policy_url ) {
 						printf(
-							/* translators: %s: privacy policy URL */
 							wp_kses(
+								/* translators: %s: privacy policy URL */
 								__( 'Olen lugenud ja nõustun <a href="%s" target="_blank" rel="noopener noreferrer">privaatsuspoliitikaga</a>', 'sawerna' ),
-								array( 'a' => array( 'href' => array(), 'target' => array(), 'rel' => array() ) )
+								array(
+									'a' => array(
+										'href'   => array(),
+										'target' => array(),
+										'rel'    => array(),
+									),
+								)
 							),
 							esc_url( $privacy_policy_url )
 						);

@@ -25,17 +25,17 @@ function sawerna_homepage_template_slug() {
  */
 function sawerna_homepage_slide_defaults() {
 	return array(
-		'left_image_id'      => 0,
-		'left_title'         => '',
-		'left_text'          => '',
-		'left_button_text'   => '',
-		'left_button_url'    => '',
-		'right_image_id'     => 0,
-		'right_title'        => '',
-		'right_text'         => '',
-		'right_list'         => '',
-		'right_button_text'  => '',
-		'right_button_url'   => '',
+		'left_image_id'     => 0,
+		'left_title'        => '',
+		'left_text'         => '',
+		'left_button_text'  => '',
+		'left_button_url'   => '',
+		'right_image_id'    => 0,
+		'right_title'       => '',
+		'right_text'        => '',
+		'right_list'        => '',
+		'right_button_text' => '',
+		'right_button_url'  => '',
 	);
 }
 
@@ -60,17 +60,17 @@ function sawerna_sanitize_homepage_slides( $slides ) {
 		$item = wp_parse_args( $slide, sawerna_homepage_slide_defaults() );
 
 		$item = array(
-			'left_image_id'      => absint( $item['left_image_id'] ),
-			'left_title'         => sanitize_text_field( $item['left_title'] ),
-			'left_text'          => sanitize_textarea_field( $item['left_text'] ),
-			'left_button_text'   => sanitize_text_field( $item['left_button_text'] ),
-			'left_button_url'    => esc_url_raw( $item['left_button_url'] ),
-			'right_image_id'     => absint( $item['right_image_id'] ),
-			'right_title'        => sanitize_text_field( $item['right_title'] ),
-			'right_text'         => sanitize_textarea_field( $item['right_text'] ),
-			'right_list'         => sanitize_textarea_field( $item['right_list'] ),
-			'right_button_text'  => sanitize_text_field( $item['right_button_text'] ),
-			'right_button_url'   => esc_url_raw( $item['right_button_url'] ),
+			'left_image_id'     => absint( $item['left_image_id'] ),
+			'left_title'        => sanitize_text_field( $item['left_title'] ),
+			'left_text'         => sanitize_textarea_field( $item['left_text'] ),
+			'left_button_text'  => sanitize_text_field( $item['left_button_text'] ),
+			'left_button_url'   => esc_url_raw( $item['left_button_url'] ),
+			'right_image_id'    => absint( $item['right_image_id'] ),
+			'right_title'       => sanitize_text_field( $item['right_title'] ),
+			'right_text'        => sanitize_textarea_field( $item['right_text'] ),
+			'right_list'        => sanitize_textarea_field( $item['right_list'] ),
+			'right_button_text' => sanitize_text_field( $item['right_button_text'] ),
+			'right_button_url'  => esc_url_raw( $item['right_button_url'] ),
 		);
 
 		$has_content = false;
@@ -145,11 +145,11 @@ function sawerna_homepage_media_attachment_id_by_upload_path( $relative_path ) {
  */
 function sawerna_homepage_wide_slide_defaults() {
 	return array(
-		'image_id'     => 0,
-		'title'        => '',
-		'text'         => '',
-		'button_text'  => '',
-		'button_url'   => '',
+		'image_id'    => 0,
+		'title'       => '',
+		'text'        => '',
+		'button_text' => '',
+		'button_url'  => '',
 	);
 }
 
@@ -160,12 +160,12 @@ function sawerna_homepage_wide_slide_defaults() {
  */
 function sawerna_homepage_narrow_slide_defaults() {
 	return array(
-		'image_id'     => 0,
-		'title'        => '',
-		'text'         => '',
-		'list'         => '',
-		'button_text'  => '',
-		'button_url'   => '',
+		'image_id'    => 0,
+		'title'       => '',
+		'text'        => '',
+		'list'        => '',
+		'button_text' => '',
+		'button_url'  => '',
 	);
 }
 
@@ -210,7 +210,7 @@ function sawerna_homepage_wpml_register_string( $name, $value ) {
 		return;
 	}
 
-	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value );
+	do_action( 'wpml_register_single_string', 'sawerna-page-options', (string) $name, $value ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 /**
@@ -225,7 +225,7 @@ function sawerna_homepage_wpml_translate_string( $name, $value ) {
 		return (string) $value;
 	}
 
-	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name );
+	return (string) apply_filters( 'wpml_translate_single_string', $value, 'sawerna-page-options', (string) $name ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 }
 
 /**
@@ -252,7 +252,6 @@ function sawerna_homepage_register_wpml_option_strings( array $options ) {
 			sawerna_homepage_wpml_register_string( $field, (string) $options[ $field ] );
 		}
 	}
-
 }
 
 /**
@@ -303,11 +302,11 @@ function sawerna_sanitize_homepage_wide_slides( $slides ) {
 
 		$item = wp_parse_args( $slide, sawerna_homepage_wide_slide_defaults() );
 		$item = array(
-			'image_id'     => absint( $item['image_id'] ),
-			'title'        => sanitize_text_field( $item['title'] ),
-			'text'         => sanitize_textarea_field( $item['text'] ),
-			'button_text'  => sanitize_text_field( $item['button_text'] ),
-			'button_url'   => esc_url_raw( $item['button_url'] ),
+			'image_id'    => absint( $item['image_id'] ),
+			'title'       => sanitize_text_field( $item['title'] ),
+			'text'        => sanitize_textarea_field( $item['text'] ),
+			'button_text' => sanitize_text_field( $item['button_text'] ),
+			'button_url'  => esc_url_raw( $item['button_url'] ),
 		);
 
 		$has_content = false;
@@ -351,12 +350,12 @@ function sawerna_sanitize_homepage_narrow_slides( $slides ) {
 
 		$item = wp_parse_args( $slide, sawerna_homepage_narrow_slide_defaults() );
 		$item = array(
-			'image_id'     => absint( $item['image_id'] ),
-			'title'        => sanitize_text_field( $item['title'] ),
-			'text'         => sanitize_textarea_field( $item['text'] ),
-			'list'         => sanitize_textarea_field( $item['list'] ),
-			'button_text'  => sanitize_text_field( $item['button_text'] ),
-			'button_url'   => esc_url_raw( $item['button_url'] ),
+			'image_id'    => absint( $item['image_id'] ),
+			'title'       => sanitize_text_field( $item['title'] ),
+			'text'        => sanitize_textarea_field( $item['text'] ),
+			'list'        => sanitize_textarea_field( $item['list'] ),
+			'button_text' => sanitize_text_field( $item['button_text'] ),
+			'button_url'  => esc_url_raw( $item['button_url'] ),
 		);
 
 		$has_content = false;
@@ -522,33 +521,33 @@ function sawerna_get_homepage_legacy_narrow_slides() {
 /**
  * Get legacy homepage meta setting from the front page.
  *
- * @param string $meta_key Meta key.
- * @param string $default  Default value.
+ * @param string $meta_key      Meta key.
+ * @param string $default_value Default value.
  * @return string
  */
-function sawerna_get_homepage_legacy_setting( $meta_key, $default = '' ) {
+function sawerna_get_homepage_legacy_setting( $meta_key, $default_value = '' ) {
 	$front_page_id = sawerna_homepage_front_page_id();
 
 	if ( $front_page_id < 1 ) {
-		return $default;
+		return $default_value;
 	}
 
-	return sawerna_get_homepage_setting( $front_page_id, $meta_key, $default );
+	return sawerna_get_homepage_setting( $front_page_id, $meta_key, $default_value );
 }
 
 /**
  * Get homepage setting.
  *
- * @param int    $post_id Post ID.
- * @param string $key     Setting key.
- * @param string $default Default value.
+ * @param int    $post_id       Post ID.
+ * @param string $key           Setting key.
+ * @param string $default_value Default value.
  * @return string
  */
-function sawerna_get_homepage_setting( $post_id, $key, $default = '' ) {
+function sawerna_get_homepage_setting( $post_id, $key, $default_value = '' ) {
 	$value = get_post_meta( $post_id, $key, true );
 
 	if ( ! is_string( $value ) || '' === trim( $value ) ) {
-		return $default;
+		return $default_value;
 	}
 
 	return $value;
@@ -700,11 +699,11 @@ function sawerna_homepage_render_slide_fields( array $slide, $index ) {
  * @return void
  */
 function sawerna_homepage_render_metabox( $post ) {
-	$template_slug          = get_page_template_slug( $post );
-	$slides                 = sawerna_get_homepage_slides( $post->ID );
-	$category_heading       = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_heading', __( 'Alusta shoppamist oiges kategoorias', 'sawerna' ) );
-	$category_button_more   = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_more_label', __( 'Kuva rohkem kategooriaid', 'sawerna' ) );
-	$category_button_less   = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_less_label', __( 'Peida kategooriad', 'sawerna' ) );
+	$template_slug        = get_page_template_slug( $post );
+	$slides               = sawerna_get_homepage_slides( $post->ID );
+	$category_heading     = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_heading', __( 'Alusta shoppamist oiges kategoorias', 'sawerna' ) );
+	$category_button_more = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_more_label', __( 'Kuva rohkem kategooriaid', 'sawerna' ) );
+	$category_button_less = sawerna_get_homepage_setting( $post->ID, '_sawerna_homepage_category_less_label', __( 'Peida kategooriad', 'sawerna' ) );
 
 	wp_nonce_field( 'sawerna_homepage_save', 'sawerna_homepage_nonce' );
 	?>
@@ -795,12 +794,12 @@ function sawerna_homepage_save_metabox( $post_id ) {
 		return;
 	}
 
-	$slides = isset( $_POST['sawerna_homepage_slides'] ) ? wp_unslash( $_POST['sawerna_homepage_slides'] ) : array();
-	update_post_meta( $post_id, '_sawerna_homepage_slides', sawerna_sanitize_homepage_slides( $slides ) );
+	$slides = sawerna_sanitize_homepage_slides( isset( $_POST['sawerna_homepage_slides'] ) ? wp_unslash( $_POST['sawerna_homepage_slides'] ) : array() );
+	update_post_meta( $post_id, '_sawerna_homepage_slides', $slides );
 
-	$category_heading     = isset( $_POST['sawerna_homepage_category_heading'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_heading'] ) ) : '';
-	$category_more_label  = isset( $_POST['sawerna_homepage_category_more_label'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_more_label'] ) ) : '';
-	$category_less_label  = isset( $_POST['sawerna_homepage_category_less_label'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_less_label'] ) ) : '';
+	$category_heading    = isset( $_POST['sawerna_homepage_category_heading'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_heading'] ) ) : '';
+	$category_more_label = isset( $_POST['sawerna_homepage_category_more_label'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_more_label'] ) ) : '';
+	$category_less_label = isset( $_POST['sawerna_homepage_category_less_label'] ) ? sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_category_less_label'] ) ) : '';
 
 	update_post_meta( $post_id, '_sawerna_homepage_category_heading', $category_heading );
 	update_post_meta( $post_id, '_sawerna_homepage_category_more_label', $category_more_label );
@@ -867,29 +866,29 @@ function sawerna_get_homepage_category_terms() {
  */
 function sawerna_homepage_options_defaults() {
 	return array(
-		'category_heading'             => __( 'Alusta shoppamist oiges kategoorias', 'sawerna' ),
-		'category_more_label'          => __( 'Kuva rohkem kategooriaid', 'sawerna' ),
-		'category_less_label'          => __( 'Peida kategooriad', 'sawerna' ),
-		'products_archive_url'         => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
-		'new_products_use_latest'      => 1,
-		'new_products_ids'             => array(),
-		'recommendation_category_ids'  => array(),
-		'about_title'                  => __( 'Sawerna – uus bränd, pikk ajalugu', 'sawerna' ),
-		'about_subtitle'               => __( 'Perefirma eelmise sajandi keskpaigast', 'sawerna' ),
-		'about_text'                   => __( 'Sawerna sai alguse soovist teha mööblist asumaks, lihtsamaks ja inimlikumaks. Selle taga on Carl, meie looja ja tegevjuht, kelle peres on mööblit tehtud juba kolm põlvkonda. Kui varasemalt tegutseti rohkem tootja ja hulgimüüjana, siis Carl soovis midagi isiklikumat - suhelda otse klientidega ja pakkuda neile valikuid, mis on läbimõeldud, kvaliteetsed ja päriselt vajalikud. Just nii sündiski Sawerna.', 'sawerna' ),
-		'about_button_text'            => __( 'Loe rohkem', 'sawerna' ),
-		'about_button_url'             => home_url( '/meist/' ),
-		'factory_products_ids'         => array(),
-		'factory_archive_url'          => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
-		'testimonials_title'           => __( 'Mida kliendid meist räägivad?', 'sawerna' ),
-		'sale_products_use_random'     => 1,
-		'sale_products_ids'            => array(),
-		'sale_archive_url'             => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
-		'best_sellers_use_automatic'   => 1,
-		'best_sellers_products_ids'    => array(),
-		'best_sellers_archive_url'     => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
-		'blog_title'                   => __( 'Nõuanded ja blogi', 'sawerna' ),
-		'blog_archive_url'             => (int) get_option( 'page_for_posts' ) > 0 ? get_permalink( (int) get_option( 'page_for_posts' ) ) : home_url( '/blog/' ),
+		'category_heading'            => __( 'Alusta shoppamist oiges kategoorias', 'sawerna' ),
+		'category_more_label'         => __( 'Kuva rohkem kategooriaid', 'sawerna' ),
+		'category_less_label'         => __( 'Peida kategooriad', 'sawerna' ),
+		'products_archive_url'        => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
+		'new_products_use_latest'     => 1,
+		'new_products_ids'            => array(),
+		'recommendation_category_ids' => array(),
+		'about_title'                 => __( 'Sawerna – uus bränd, pikk ajalugu', 'sawerna' ),
+		'about_subtitle'              => __( 'Perefirma eelmise sajandi keskpaigast', 'sawerna' ),
+		'about_text'                  => __( 'Sawerna sai alguse soovist teha mööblist asumaks, lihtsamaks ja inimlikumaks. Selle taga on Carl, meie looja ja tegevjuht, kelle peres on mööblit tehtud juba kolm põlvkonda. Kui varasemalt tegutseti rohkem tootja ja hulgimüüjana, siis Carl soovis midagi isiklikumat - suhelda otse klientidega ja pakkuda neile valikuid, mis on läbimõeldud, kvaliteetsed ja päriselt vajalikud. Just nii sündiski Sawerna.', 'sawerna' ),
+		'about_button_text'           => __( 'Loe rohkem', 'sawerna' ),
+		'about_button_url'            => home_url( '/meist/' ),
+		'factory_products_ids'        => array(),
+		'factory_archive_url'         => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
+		'testimonials_title'          => __( 'Mida kliendid meist räägivad?', 'sawerna' ),
+		'sale_products_use_random'    => 1,
+		'sale_products_ids'           => array(),
+		'sale_archive_url'            => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
+		'best_sellers_use_automatic'  => 1,
+		'best_sellers_products_ids'   => array(),
+		'best_sellers_archive_url'    => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
+		'blog_title'                  => __( 'Nõuanded ja blogi', 'sawerna' ),
+		'blog_archive_url'            => (int) get_option( 'page_for_posts' ) > 0 ? get_permalink( (int) get_option( 'page_for_posts' ) ) : home_url( '/blog/' ),
 	);
 }
 
@@ -899,11 +898,19 @@ function sawerna_homepage_options_defaults() {
  * @return array<string, mixed>
  */
 function sawerna_get_homepage_options() {
+	// Front end calls this twice per homepage request (hero preload in wp_head + template); the
+	// defaults resolve attachment IDs by URL, so memoize per language. Admin is never memoized.
+	static $memo = array();
+	$memo_key    = is_admin() ? '' : (string) apply_filters( 'wpml_current_language', 'et' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
+	if ( '' !== $memo_key && isset( $memo[ $memo_key ] ) ) {
+		return $memo[ $memo_key ];
+	}
+
 	$stored   = get_option( 'sawerna_homepage_options', array() );
 	$defaults = sawerna_homepage_options_defaults();
 	$options  = wp_parse_args( is_array( $stored ) ? $stored : array(), $defaults );
 
-	$lang                                   = (string) apply_filters( 'wpml_current_language', 'et' );
+	$lang                                   = (string) apply_filters( 'wpml_current_language', 'et' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
 	$slides                                 = sawerna_get_homepage_slides_for_lang( $lang );
 	$options['hero_wide_slides']            = $slides['hero_wide'];
 	$options['hero_narrow_slides']          = $slides['hero_narrow'];
@@ -932,12 +939,12 @@ function sawerna_get_homepage_options() {
 	$options['blog_archive_url']            = esc_url_raw( (string) $options['blog_archive_url'] );
 
 	if ( empty( $options['hero_wide_slides'] ) ) {
-		$legacy_wide = sawerna_get_homepage_legacy_wide_slides();
+		$legacy_wide                 = sawerna_get_homepage_legacy_wide_slides();
 		$options['hero_wide_slides'] = ! empty( $legacy_wide ) ? $legacy_wide : $defaults['hero_wide_slides'];
 	}
 
 	if ( empty( $options['hero_narrow_slides'] ) ) {
-		$legacy_narrow = sawerna_get_homepage_legacy_narrow_slides();
+		$legacy_narrow                 = sawerna_get_homepage_legacy_narrow_slides();
 		$options['hero_narrow_slides'] = ! empty( $legacy_narrow ) ? $legacy_narrow : $defaults['hero_narrow_slides'];
 	}
 
@@ -953,7 +960,12 @@ function sawerna_get_homepage_options() {
 		$options['category_less_label'] = sawerna_get_homepage_legacy_setting( '_sawerna_homepage_category_less_label', (string) $defaults['category_less_label'] );
 	}
 
-	return sawerna_homepage_translate_wpml_option_strings( $options );
+	$options = sawerna_homepage_translate_wpml_option_strings( $options );
+	if ( '' !== $memo_key ) {
+		$memo[ $memo_key ] = $options;
+	}
+
+	return $options;
 }
 
 /**
@@ -991,7 +1003,7 @@ function sawerna_homepage_register_testimonials_post_type() {
 	register_post_type(
 		'sawerna_testimonial',
 		array(
-			'labels' => array(
+			'labels'        => array(
 				'name'               => __( 'Testimonials', 'sawerna' ),
 				'singular_name'      => __( 'Testimonial', 'sawerna' ),
 				'add_new'            => __( 'Add New', 'sawerna' ),
@@ -1004,15 +1016,15 @@ function sawerna_homepage_register_testimonials_post_type() {
 				'not_found_in_trash' => __( 'No testimonials found in Trash.', 'sawerna' ),
 				'menu_name'          => __( 'Testimonials', 'sawerna' ),
 			),
-			'public'          => false,
-			'show_ui'         => true,
-			'show_in_menu'    => true,
-			'menu_position'   => 59,
-			'menu_icon'       => 'dashicons-format-quote',
-			'supports'        => array( 'title', 'editor' ),
-			'has_archive'     => false,
-			'rewrite'         => false,
-			'show_in_rest'    => true,
+			'public'        => false,
+			'show_ui'       => true,
+			'show_in_menu'  => true,
+			'menu_position' => 59,
+			'menu_icon'     => 'dashicons-format-quote',
+			'supports'      => array( 'title', 'editor' ),
+			'has_archive'   => false,
+			'rewrite'       => false,
+			'show_in_rest'  => true,
 		)
 	);
 }
@@ -1094,7 +1106,7 @@ function sawerna_homepage_options_admin_assets( $hook_suffix ) {
 		wp_enqueue_style( 'woocommerce_admin_styles' );
 	}
 
-	$theme_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( get_template_directory() . '/style.css' ) : _S_VERSION;
+	$theme_version   = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( get_template_directory() . '/style.css' ) : _S_VERSION;
 	$options_js_path = get_template_directory() . '/js/admin-homepage-options.js';
 	$slider_js_path  = get_template_directory() . '/js/admin-homepage.js';
 
@@ -1131,31 +1143,31 @@ function sawerna_homepage_handle_admin_save() {
 	}
 
 	$options = array(
-		'hero_wide_slides'             => isset( $_POST['hero_wide_slides'] ) ? sawerna_sanitize_homepage_wide_slides( wp_unslash( $_POST['hero_wide_slides'] ) ) : array(),
-		'hero_narrow_slides'           => isset( $_POST['hero_narrow_slides'] ) ? sawerna_sanitize_homepage_narrow_slides( wp_unslash( $_POST['hero_narrow_slides'] ) ) : array(),
-		'category_heading'             => isset( $_POST['category_heading'] ) ? sanitize_text_field( wp_unslash( $_POST['category_heading'] ) ) : '',
-		'category_more_label'          => isset( $_POST['category_more_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_more_label'] ) ) : '',
-		'category_less_label'          => isset( $_POST['category_less_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_less_label'] ) ) : '',
-		'products_archive_url'         => isset( $_POST['products_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['products_archive_url'] ) ) : '',
-		'new_products_use_latest'      => isset( $_POST['new_products_use_latest'] ) ? 1 : 0,
-		'new_products_ids'             => isset( $_POST['new_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['new_products_ids'] ) ) ) ) : array(),
-		'recommendation_category_ids'  => isset( $_POST['recommendation_category_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['recommendation_category_ids'] ) ) ) ) : array(),
-		'about_title'                  => isset( $_POST['about_title'] ) ? sanitize_text_field( wp_unslash( $_POST['about_title'] ) ) : '',
-		'about_subtitle'               => isset( $_POST['about_subtitle'] ) ? sanitize_text_field( wp_unslash( $_POST['about_subtitle'] ) ) : '',
-		'about_text'                   => isset( $_POST['about_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['about_text'] ) ) : '',
-		'about_button_text'            => isset( $_POST['about_button_text'] ) ? sanitize_text_field( wp_unslash( $_POST['about_button_text'] ) ) : '',
-		'about_button_url'             => isset( $_POST['about_button_url'] ) ? esc_url_raw( wp_unslash( $_POST['about_button_url'] ) ) : '',
-		'factory_products_ids'         => isset( $_POST['factory_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['factory_products_ids'] ) ) ) ) : array(),
-		'factory_archive_url'          => isset( $_POST['factory_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['factory_archive_url'] ) ) : '',
-		'testimonials_title'           => isset( $_POST['testimonials_title'] ) ? sanitize_text_field( wp_unslash( $_POST['testimonials_title'] ) ) : '',
-		'sale_products_use_random'     => isset( $_POST['sale_products_use_random'] ) ? 1 : 0,
-		'sale_products_ids'            => isset( $_POST['sale_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['sale_products_ids'] ) ) ) ) : array(),
-		'sale_archive_url'             => isset( $_POST['sale_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['sale_archive_url'] ) ) : '',
-		'best_sellers_use_automatic'   => isset( $_POST['best_sellers_use_automatic'] ) ? 1 : 0,
-		'best_sellers_products_ids'    => isset( $_POST['best_sellers_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['best_sellers_products_ids'] ) ) ) ) : array(),
-		'best_sellers_archive_url'     => isset( $_POST['best_sellers_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['best_sellers_archive_url'] ) ) : '',
-		'blog_title'                   => isset( $_POST['blog_title'] ) ? sanitize_text_field( wp_unslash( $_POST['blog_title'] ) ) : '',
-		'blog_archive_url'             => isset( $_POST['blog_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['blog_archive_url'] ) ) : '',
+		'hero_wide_slides'            => isset( $_POST['hero_wide_slides'] ) ? sawerna_sanitize_homepage_wide_slides( wp_unslash( $_POST['hero_wide_slides'] ) ) : array(),
+		'hero_narrow_slides'          => isset( $_POST['hero_narrow_slides'] ) ? sawerna_sanitize_homepage_narrow_slides( wp_unslash( $_POST['hero_narrow_slides'] ) ) : array(),
+		'category_heading'            => isset( $_POST['category_heading'] ) ? sanitize_text_field( wp_unslash( $_POST['category_heading'] ) ) : '',
+		'category_more_label'         => isset( $_POST['category_more_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_more_label'] ) ) : '',
+		'category_less_label'         => isset( $_POST['category_less_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_less_label'] ) ) : '',
+		'products_archive_url'        => isset( $_POST['products_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['products_archive_url'] ) ) : '',
+		'new_products_use_latest'     => isset( $_POST['new_products_use_latest'] ) ? 1 : 0,
+		'new_products_ids'            => isset( $_POST['new_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['new_products_ids'] ) ) ) ) : array(),
+		'recommendation_category_ids' => isset( $_POST['recommendation_category_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['recommendation_category_ids'] ) ) ) ) : array(),
+		'about_title'                 => isset( $_POST['about_title'] ) ? sanitize_text_field( wp_unslash( $_POST['about_title'] ) ) : '',
+		'about_subtitle'              => isset( $_POST['about_subtitle'] ) ? sanitize_text_field( wp_unslash( $_POST['about_subtitle'] ) ) : '',
+		'about_text'                  => isset( $_POST['about_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['about_text'] ) ) : '',
+		'about_button_text'           => isset( $_POST['about_button_text'] ) ? sanitize_text_field( wp_unslash( $_POST['about_button_text'] ) ) : '',
+		'about_button_url'            => isset( $_POST['about_button_url'] ) ? esc_url_raw( wp_unslash( $_POST['about_button_url'] ) ) : '',
+		'factory_products_ids'        => isset( $_POST['factory_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['factory_products_ids'] ) ) ) ) : array(),
+		'factory_archive_url'         => isset( $_POST['factory_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['factory_archive_url'] ) ) : '',
+		'testimonials_title'          => isset( $_POST['testimonials_title'] ) ? sanitize_text_field( wp_unslash( $_POST['testimonials_title'] ) ) : '',
+		'sale_products_use_random'    => isset( $_POST['sale_products_use_random'] ) ? 1 : 0,
+		'sale_products_ids'           => isset( $_POST['sale_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['sale_products_ids'] ) ) ) ) : array(),
+		'sale_archive_url'            => isset( $_POST['sale_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['sale_archive_url'] ) ) : '',
+		'best_sellers_use_automatic'  => isset( $_POST['best_sellers_use_automatic'] ) ? 1 : 0,
+		'best_sellers_products_ids'   => isset( $_POST['best_sellers_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['best_sellers_products_ids'] ) ) ) ) : array(),
+		'best_sellers_archive_url'    => isset( $_POST['best_sellers_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['best_sellers_archive_url'] ) ) : '',
+		'blog_title'                  => isset( $_POST['blog_title'] ) ? sanitize_text_field( wp_unslash( $_POST['blog_title'] ) ) : '',
+		'blog_archive_url'            => isset( $_POST['blog_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['blog_archive_url'] ) ) : '',
 	);
 
 	sawerna_homepage_register_wpml_option_strings( $options );
@@ -1306,7 +1318,7 @@ function sawerna_homepage_render_admin_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Page options', 'sawerna' ); ?></h1>
 
-		<?php if ( isset( $_GET['updated'] ) ) : ?>
+		<?php if ( isset( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only flag for the post-save admin notice. ?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Page options saved.', 'sawerna' ); ?></p></div>
 		<?php endif; ?>
 
@@ -1549,6 +1561,10 @@ function sawerna_homepage_render_admin_page() {
  * @return array<int, WC_Product>
  */
 function sawerna_get_homepage_new_products( array $options ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+
 	$product_ids = ! empty( $options['new_products_use_latest'] ) ? array() : $options['new_products_ids'];
 
 	if ( ! empty( $product_ids ) ) {
@@ -1579,6 +1595,10 @@ function sawerna_get_homepage_new_products( array $options ) {
  * @return array<int, WC_Product>
  */
 function sawerna_get_homepage_products_by_category( $term_id ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+
 	$term = get_term( $term_id, 'product_cat' );
 
 	if ( ! $term || is_wp_error( $term ) ) {
@@ -1603,7 +1623,7 @@ function sawerna_get_homepage_products_by_category( $term_id ) {
  * @return array<int, array{term:WP_Term,products:array<int,WC_Product>}>
  */
 function sawerna_get_homepage_recommendation_tabs( array $options ) {
-	$tabs = array();
+	$tabs     = array();
 	$term_ids = array_slice( $options['recommendation_category_ids'], 0, 8 );
 
 	if ( empty( $term_ids ) && taxonomy_exists( 'product_cat' ) ) {
@@ -1657,6 +1677,10 @@ function sawerna_get_homepage_recommendation_tabs( array $options ) {
  * @return array<int, WC_Product>
  */
 function sawerna_get_homepage_factory_products( array $options ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+
 	$product_ids = array_slice( $options['factory_products_ids'], 0, 12 );
 
 	if ( empty( $product_ids ) ) {
@@ -1680,6 +1704,10 @@ function sawerna_get_homepage_factory_products( array $options ) {
  * @return array<int, WC_Product>
  */
 function sawerna_get_homepage_sale_products( array $options ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+
 	$product_ids = array();
 
 	if ( ! empty( $options['sale_products_use_random'] ) ) {
@@ -1716,6 +1744,10 @@ function sawerna_get_homepage_sale_products( array $options ) {
  * @return array<int, WC_Product>
  */
 function sawerna_get_homepage_best_sellers( array $options ) {
+	if ( ! function_exists( 'wc_get_products' ) ) {
+		return array();
+	}
+
 	if ( empty( $options['best_sellers_use_automatic'] ) ) {
 		$product_ids = array_slice( $options['best_sellers_products_ids'], 0, 12 );
 
@@ -1738,7 +1770,7 @@ function sawerna_get_homepage_best_sellers( array $options ) {
 			'status'   => 'publish',
 			'limit'    => 12,
 			'orderby'  => 'meta_value_num',
-			'meta_key' => 'total_sales',
+			'meta_key' => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Bestseller fallback needs total_sales ordering; limit 12.
 			'order'    => 'DESC',
 		)
 	);
@@ -1751,7 +1783,7 @@ function sawerna_get_homepage_best_sellers( array $options ) {
  * @return void
  */
 function sawerna_homepage_render_products_slider( array $products ) {
-	if ( empty( $products ) ) {
+	if ( empty( $products ) || ! function_exists( 'sawerna_get_product_card_html' ) ) {
 		return;
 	}
 	?>
@@ -1820,7 +1852,7 @@ function sawerna_get_homepage_category_image_html( WP_Term $term ) {
 	$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
 
 	if ( $thumbnail_id <= 0 ) {
-		return wp_kses_post( wc_placeholder_img( 'woocommerce_thumbnail' ) );
+		return function_exists( 'wc_placeholder_img' ) ? wp_kses_post( wc_placeholder_img( 'woocommerce_thumbnail' ) ) : '';
 	}
 
 	return wp_get_attachment_image(

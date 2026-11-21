@@ -8,7 +8,7 @@
  *
  * @see     https://woocommerce.com/document/template-structure/
  * @package Sawerna
- * @version 9.7.0
+ * @version 11.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,8 +27,17 @@ $review_count = $product->get_review_count();
 			<?php
 			if ( $review_count && wc_review_ratings_enabled() ) {
 				/* translators: 1: reviews count 2: product name */
-				$reviews_title = sprintf( esc_html( _n( '%1$s arvustus tootele %2$s', '%1$s arvustust tootele %2$s', $review_count, 'sawerna' ) ), esc_html( (string) $review_count ), '<span>' . esc_html( get_the_title() ) . '</span>' );
-				echo apply_filters( 'woocommerce_reviews_title', $reviews_title, $review_count, $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$reviews_title = sprintf( esc_html( _n( '%1$s arvustus tootele %2$s', '%1$s arvustust tootele %2$s', $review_count, 'sawerna' ) ), esc_html( (string) $review_count ), '<span>' . wp_kses_post( get_the_title() ) . '</span>' );
+				/**
+				 * Filters the heading shown above the product review list.
+				 *
+				 * @since 3.6.0
+				 *
+				 * @param string     $reviews_title Review count heading. The count is escaped, the product title is run through wp_kses_post() and wrapped in a span.
+				 * @param int        $count         Number of reviews for the product.
+				 * @param WC_Product $product       Product the reviews belong to.
+				 */
+				echo apply_filters( 'woocommerce_reviews_title', $reviews_title, $review_count, $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The base heading is sanitised above and the filter returns extension-controlled markup by design.
 			} else {
 				esc_html_e( 'Arvustused', 'sawerna' );
 			}

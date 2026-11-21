@@ -35,7 +35,7 @@ $about_text            = (string) $homepage_options['about_text'];
 $about_button_text     = (string) $homepage_options['about_button_text'];
 $about_button_url      = (string) $homepage_options['about_button_url'];
 $testimonials_title    = (string) $homepage_options['testimonials_title'];
-$blog_title            = (string) $homepage_options['blog_title'];
+$home_blog_title       = (string) $homepage_options['blog_title'];
 ?>
 
 <main id="primary" class="site-main sawerna-homepage">
@@ -49,7 +49,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 								<div class="sawerna-home-hero__viewport">
 									<div class="sawerna-home-hero__track" data-home-slider-track="1">
 										<?php foreach ( $wide_slides as $index => $slide ) : ?>
-											<?php $image_url = ! empty( $slide['image_id'] ) ? wp_get_attachment_image_url( (int) $slide['image_id'], 'full' ) : ''; ?>
+											<?php $image_url = ! empty( $slide['image_id'] ) ? sawerna_homepage_hero_image_url( (int) $slide['image_id'] ) : ''; ?>
 											<div class="sawerna-home-hero__slide" data-home-slide="<?php echo esc_attr( (string) $index ); ?>">
 												<div class="sawerna-home-hero__card sawerna-home-hero__card--wide"<?php echo $image_url ? ' style="background-image:url(' . esc_url( $image_url ) . ')"' : ''; ?>>
 													<div class="sawerna-home-hero__overlay"></div>
@@ -79,7 +79,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 										</button>
 										<div class="sawerna-home-hero__dots" role="tablist" aria-label="<?php esc_attr_e( 'Homepage wide slides', 'sawerna' ); ?>">
 											<?php foreach ( $wide_slides as $index => $slide ) : ?>
-												<button type="button" class="sawerna-home-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" data-home-slider-dot="<?php echo esc_attr( (string) $index ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Go to wide slide %d', 'sawerna' ), $index + 1 ) ); ?>" aria-pressed="<?php echo 0 === $index ? 'true' : 'false'; ?>"></button>
+												<button type="button" class="sawerna-home-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" data-home-slider-dot="<?php echo esc_attr( (string) $index ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: slide number. */ __( 'Go to wide slide %d', 'sawerna' ), $index + 1 ) ); ?>" aria-pressed="<?php echo 0 === $index ? 'true' : 'false'; ?>"></button>
 											<?php endforeach; ?>
 										</div>
 										<button type="button" class="sawerna-home-hero__arrow" data-home-slider-next="1" aria-label="<?php esc_attr_e( 'Next wide slide', 'sawerna' ); ?>">
@@ -96,7 +96,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 									<div class="sawerna-home-hero__track" data-home-slider-track="1">
 										<?php foreach ( $narrow_slides as $index => $slide ) : ?>
 											<?php
-											$image_url  = ! empty( $slide['image_id'] ) ? wp_get_attachment_image_url( (int) $slide['image_id'], 'full' ) : '';
+											$image_url  = ! empty( $slide['image_id'] ) ? sawerna_homepage_hero_image_url( (int) $slide['image_id'] ) : '';
 											$right_list = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $slide['list'] ) ) );
 											?>
 											<div class="sawerna-home-hero__slide" data-home-slide="<?php echo esc_attr( (string) $index ); ?>">
@@ -135,7 +135,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 										</button>
 										<div class="sawerna-home-hero__dots" role="tablist" aria-label="<?php esc_attr_e( 'Homepage narrow slides', 'sawerna' ); ?>">
 											<?php foreach ( $narrow_slides as $index => $slide ) : ?>
-												<button type="button" class="sawerna-home-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" data-home-slider-dot="<?php echo esc_attr( (string) $index ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Go to narrow slide %d', 'sawerna' ), $index + 1 ) ); ?>" aria-pressed="<?php echo 0 === $index ? 'true' : 'false'; ?>"></button>
+												<button type="button" class="sawerna-home-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" data-home-slider-dot="<?php echo esc_attr( (string) $index ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: slide number. */ __( 'Go to narrow slide %d', 'sawerna' ), $index + 1 ) ); ?>" aria-pressed="<?php echo 0 === $index ? 'true' : 'false'; ?>"></button>
 											<?php endforeach; ?>
 										</div>
 										<button type="button" class="sawerna-home-hero__arrow" data-home-slider-next="1" aria-label="<?php esc_attr_e( 'Next narrow slide', 'sawerna' ); ?>">
@@ -162,10 +162,10 @@ $blog_title            = (string) $homepage_options['blog_title'];
 
 				<div class="sawerna-home-categories" data-home-categories="1">
 					<div class="sawerna-home-categories__grid">
-						<?php foreach ( array_slice( $category_terms, 0, $visible_category_max ) as $term ) : ?>
-							<a class="sawerna-home-categories__item" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-								<span class="sawerna-home-categories__media"><?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $term ) ); ?></span>
-								<span class="sawerna-home-categories__name"><?php echo esc_html( $term->name ); ?></span>
+						<?php foreach ( array_slice( $category_terms, 0, $visible_category_max ) as $category_term ) : ?>
+							<a class="sawerna-home-categories__item" href="<?php echo esc_url( get_term_link( $category_term ) ); ?>">
+								<span class="sawerna-home-categories__media"><?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $category_term ) ); ?></span>
+								<span class="sawerna-home-categories__name"><?php echo esc_html( $category_term->name ); ?></span>
 							</a>
 						<?php endforeach; ?>
 					</div>
@@ -173,10 +173,10 @@ $blog_title            = (string) $homepage_options['blog_title'];
 					<?php if ( count( $category_terms ) > $visible_category_max ) : ?>
 						<div class="sawerna-home-categories__more" data-home-categories-more="1" hidden>
 							<div class="sawerna-home-categories__grid">
-								<?php foreach ( array_slice( $category_terms, $visible_category_max ) as $term ) : ?>
-									<a class="sawerna-home-categories__item" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-										<span class="sawerna-home-categories__media"><?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $term ) ); ?></span>
-										<span class="sawerna-home-categories__name"><?php echo esc_html( $term->name ); ?></span>
+								<?php foreach ( array_slice( $category_terms, $visible_category_max ) as $category_term ) : ?>
+									<a class="sawerna-home-categories__item" href="<?php echo esc_url( get_term_link( $category_term ) ); ?>">
+										<span class="sawerna-home-categories__media"><?php echo wp_kses_post( sawerna_get_homepage_category_image_html( $category_term ) ); ?></span>
+										<span class="sawerna-home-categories__name"><?php echo esc_html( $category_term->name ); ?></span>
 									</a>
 								<?php endforeach; ?>
 							</div>
@@ -226,7 +226,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 
 				<div class="sawerna-home-recommendations" data-home-recommendations="1">
 					<div class="sawerna-home-recommendations__tabs" role="tablist" aria-label="<?php esc_attr_e( 'Recommended categories', 'sawerna' ); ?>">
-						<?php foreach ( $recommendation_tabs as $index => $tab ) : ?>
+						<?php foreach ( $recommendation_tabs as $index => $rec_tab ) : ?>
 							<button
 								type="button"
 								class="sawerna-home-recommendations__tab<?php echo 0 === $index ? ' is-active' : ''; ?>"
@@ -234,15 +234,15 @@ $blog_title            = (string) $homepage_options['blog_title'];
 								role="tab"
 								aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>"
 							>
-								<?php echo esc_html( $tab['term']->name ); ?>
+								<?php echo esc_html( $rec_tab['term']->name ); ?>
 							</button>
 						<?php endforeach; ?>
 					</div>
 
 					<div class="sawerna-home-recommendations__panels">
-						<?php foreach ( $recommendation_tabs as $index => $tab ) : ?>
+						<?php foreach ( $recommendation_tabs as $index => $rec_tab ) : ?>
 							<div class="sawerna-home-recommendations__panel<?php echo 0 === $index ? ' is-active' : ''; ?>" data-home-recommendations-panel="<?php echo esc_attr( (string) $index ); ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
-								<?php sawerna_homepage_render_products_slider( $tab['products'] ); ?>
+								<?php sawerna_homepage_render_products_slider( $rec_tab['products'] ); ?>
 							</div>
 						<?php endforeach; ?>
 					</div>
@@ -263,7 +263,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 							<p class="sawerna-home-brand__subtitle"><?php echo esc_html( $about_subtitle ); ?></p>
 						<?php endif; ?>
 						<?php if ( '' !== trim( $about_text ) ) : ?>
-							<div class="sawerna-home-brand__text"><?php echo wpautop( esc_html( $about_text ) ); ?></div>
+							<div class="sawerna-home-brand__text"><?php echo wp_kses_post( wpautop( esc_html( $about_text ) ) ); ?></div>
 						<?php endif; ?>
 
 						<?php if ( '' !== trim( $about_button_text ) && '' !== trim( $about_button_url ) ) : ?>
@@ -326,7 +326,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 									</button>
 									<div class="sawerna-home-testimonials__dots">
 										<?php foreach ( $testimonial_groups as $group_index => $group ) : ?>
-											<button type="button" class="sawerna-home-testimonials__dot<?php echo 0 === $group_index ? ' is-active' : ''; ?>" data-home-testimonials-dot="<?php echo esc_attr( (string) $group_index ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Go to testimonial slide %d', 'sawerna' ), $group_index + 1 ) ); ?>"></button>
+											<button type="button" class="sawerna-home-testimonials__dot<?php echo 0 === $group_index ? ' is-active' : ''; ?>" data-home-testimonials-dot="<?php echo esc_attr( (string) $group_index ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: slide number. */ __( 'Go to testimonial slide %d', 'sawerna' ), $group_index + 1 ) ); ?>"></button>
 										<?php endforeach; ?>
 									</div>
 									<button type="button" class="sawerna-home-testimonials__arrow is-next" data-home-testimonials-next="1" aria-label="<?php esc_attr_e( 'Next testimonials', 'sawerna' ); ?>">
@@ -343,7 +343,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 												<?php foreach ( $group as $testimonial ) : ?>
 													<?php $feedback_date = get_post_meta( $testimonial->ID, '_sawerna_testimonial_date', true ); ?>
 													<article class="sawerna-home-testimonials__item">
-														<div class="sawerna-home-testimonials__text"><?php echo wpautop( esc_html( wp_strip_all_tags( (string) $testimonial->post_content ) ) ); ?></div>
+														<div class="sawerna-home-testimonials__text"><?php echo wp_kses_post( wpautop( esc_html( wp_strip_all_tags( (string) $testimonial->post_content ) ) ) ); ?></div>
 														<h3 class="sawerna-home-testimonials__name"><?php echo esc_html( get_the_title( $testimonial ) ); ?></h3>
 														<?php if ( '' !== trim( (string) $feedback_date ) ) : ?>
 															<p class="sawerna-home-testimonials__date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( (string) $feedback_date ) ) ); ?></p>
@@ -407,7 +407,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 		<section class="sawerna-homepage__blog-band">
 			<div class="sawerna-homepage__container">
 				<div class="sawerna-home-products__section-head">
-					<h2 class="sawerna-homepage__section-title"><?php echo esc_html( $blog_title ); ?></h2>
+					<h2 class="sawerna-homepage__section-title"><?php echo esc_html( $home_blog_title ); ?></h2>
 					<a class="sawerna-home-products__more" href="<?php echo esc_url( $blog_archive_url ); ?>">
 						<span><?php esc_html_e( 'Kuva kõik artiklid', 'sawerna' ); ?></span>
 						<span class="sawerna-home-products__more-icon" aria-hidden="true"><?php echo sawerna_get_svg_inline( 'Asset 9.svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
@@ -428,7 +428,7 @@ $blog_title            = (string) $homepage_options['blog_title'];
 								'sizes'    => '(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px',
 							)
 						);
-						$excerpt = wp_trim_words(
+						$excerpt        = wp_trim_words(
 							wp_strip_all_tags( has_excerpt( $post_item ) ? $post_item->post_excerpt : $post_item->post_content ),
 							18,
 							'...'
@@ -457,7 +457,10 @@ $blog_title            = (string) $homepage_options['blog_title'];
 	<?php endif; ?>
 
 	<?php if ( have_posts() ) : ?>
-		<?php while ( have_posts() ) : the_post(); ?>
+		<?php
+		while ( have_posts() ) :
+			the_post();
+			?>
 			<?php if ( '' !== trim( (string) get_the_content() ) ) : ?>
 				<section class="sawerna-homepage__content">
 					<div class="sawerna-homepage__container entry-content">

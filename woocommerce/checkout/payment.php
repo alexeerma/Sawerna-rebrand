@@ -3,7 +3,7 @@
  * Checkout payment section.
  *
  * @package WooCommerce\Templates
- * @version 9.8.0
+ * @version 10.9.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -18,7 +18,7 @@ if ( ! wp_doing_ajax() ) {
 		<h3 class="sawerna-checkout-payment__title"><?php esc_html_e( 'Makseviisid', 'sawerna' ); ?></h3>
 
 		<?php if ( WC()->cart && WC()->cart->needs_payment() ) : ?>
-			<ul class="wc_payment_methods payment_methods methods sawerna-checkout-payment__methods">
+			<ul class="wc_payment_methods payment_methods methods sawerna-checkout-payment__methods" aria-label="<?php esc_attr_e( 'Payment methods', 'woocommerce' ); ?>">
 				<?php if ( ! empty( $available_gateways ) ) : ?>
 					<?php foreach ( $available_gateways as $gateway ) : ?>
 						<?php wc_get_template( 'checkout/payment-method.php', array( 'gateway' => $gateway ) ); ?>
@@ -45,6 +45,7 @@ if ( ! wp_doing_ajax() ) {
 			<noscript>
 				<?php
 				printf(
+					/* translators: 1: opening em tag, 2: closing em tag. */
 					esc_html__( 'Since your browser does not support JavaScript, or it is disabled, please ensure you click the %1$sUpdate Totals%2$s button before placing your order. You may be charged more than the amount stated above if you fail to do so.', 'woocommerce' ),
 					'<em>',
 					'</em>'
@@ -59,10 +60,12 @@ if ( ! wp_doing_ajax() ) {
 			<?php do_action( 'woocommerce_review_order_before_submit' ); ?>
 
 			<?php
-			echo wp_kses_post( apply_filters(
-				'woocommerce_order_button_html',
-				'<button type="submit" class="button alt sawerna-checkout-payment__button" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>'
-			) );
+			echo wp_kses_post(
+				apply_filters(
+					'woocommerce_order_button_html',
+					'<button type="submit" class="button alt sawerna-checkout-payment__button" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>'
+				)
+			);
 			?>
 
 			<?php do_action( 'woocommerce_review_order_after_submit' ); ?>

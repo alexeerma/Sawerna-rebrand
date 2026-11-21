@@ -74,6 +74,70 @@
   cursor: pointer;
 }
 
+.rm-footer__newsletterForm button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.rm-footer__newsletterForm input:focus-visible,
+.rm-footer__newsletterForm button:focus-visible {
+  outline: 2px solid #f7f6ee;
+  outline-offset: 2px;
+}
+
+/* Honeypot: off-screen, not display:none, so naive bots still fill it. */
+.rm-footer__newsletterHp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.rm-footer__newsletterConsent {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(247, 246, 238, 0.92);
+}
+
+.rm-footer__newsletterConsent--checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rm-footer__newsletterForm .rm-footer__newsletterConsent--checkbox input {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  padding: 0;
+  accent-color: rgb(56, 55, 27);
+}
+
+.rm-footer__newsletterStatus {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rm-footer__newsletterStatus:empty {
+  display: none;
+}
+
+.rm-footer__newsletterStatus.is-success {
+  color: #fff;
+  font-weight: 600;
+}
+
+.rm-footer__newsletterStatus.is-error {
+  padding: 8px 12px;
+  background: rgb(56, 55, 27);
+  color: #fff;
+  border-left: 3px solid #f7f6ee;
+}
+
 .rm-footer a {
   color: inherit;
 }

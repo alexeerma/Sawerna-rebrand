@@ -159,43 +159,43 @@ add_action( 'wp_enqueue_scripts', 'sawerna_woocommerce_my_account_assets', 40 );
  */
 function sawerna_woocommerce_account_menu_items() {
 	$items = array(
-		'dashboard' => array(
+		'dashboard'       => array(
 			'label'    => __( 'Ülevaade', 'sawerna' ),
 			'url'      => wc_get_account_endpoint_url( 'dashboard' ),
 			'icon'     => 'grid',
 			'endpoint' => 'dashboard',
 		),
-		'orders'    => array(
+		'orders'          => array(
 			'label'    => __( 'Tellimused', 'sawerna' ),
 			'url'      => wc_get_account_endpoint_url( 'orders' ),
 			'icon'     => 'list',
 			'endpoint' => 'orders',
 		),
-		'downloads' => array(
+		'downloads'       => array(
 			'label'    => __( 'Allalaadimised', 'sawerna' ),
 			'url'      => wc_get_account_endpoint_url( 'downloads' ),
 			'icon'     => 'download',
 			'endpoint' => 'downloads',
 		),
-		'edit-address' => array(
+		'edit-address'    => array(
 			'label'    => __( 'Aadressid', 'sawerna' ),
 			'url'      => wc_get_account_endpoint_url( 'edit-address' ),
 			'icon'     => 'pin',
 			'endpoint' => 'edit-address',
 		),
-		'edit-account' => array(
+		'edit-account'    => array(
 			'label'    => __( 'Konto andmed', 'sawerna' ),
 			'url'      => wc_get_account_endpoint_url( 'edit-account' ),
 			'icon'     => 'user',
 			'endpoint' => 'edit-account',
 		),
-		'wishlist' => array(
+		'wishlist'        => array(
 			'label'    => __( 'Soovinimekiri', 'sawerna' ),
 			'url'      => function_exists( 'sawerna_get_wishlist_url' ) ? sawerna_get_wishlist_url() : home_url( '/wishlist/' ),
 			'icon'     => 'heart',
 			'endpoint' => 'wishlist',
 		),
-		'newsletter' => array(
+		'newsletter'      => array(
 			'label'    => __( 'Uudiskiri', 'sawerna' ),
 			'url'      => '#rm-footer-newsletter-email',
 			'icon'     => 'mail',
@@ -220,14 +220,14 @@ function sawerna_woocommerce_account_menu_items() {
  */
 function sawerna_woocommerce_account_icon( $icon ) {
 	$icons = array(
-		'grid' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><rect x="14" y="14" width="6" height="6"></rect></svg>',
-		'list' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="4" width="12" height="16" rx="1"></rect><path d="M9 9h1.5M13 9h2M9 13h1.5M13 13h2M9 17h1.5M13 17h2"></path></svg>',
+		'grid'     => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><rect x="14" y="14" width="6" height="6"></rect></svg>',
+		'list'     => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="4" width="12" height="16" rx="1"></rect><path d="M9 9h1.5M13 9h2M9 13h1.5M13 13h2M9 17h1.5M13 17h2"></path></svg>',
 		'download' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v11"></path><path d="M8 11l4 4 4-4"></path><path d="M5 19h14"></path><path d="M6 15v4h12v-4"></path></svg>',
-		'pin' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>',
-		'user' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>',
-		'heart' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 5.8a5.2 5.2 0 0 0-7.4 0L12 6.9l-1.1-1.1a5.2 5.2 0 0 0-7.4 7.4L12 21l8.5-7.8a5.2 5.2 0 0 0 0-7.4z"></path></svg>',
-		'mail' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="6" width="16" height="13" rx="1"></rect><path d="M4 8l8 6 8-6"></path><path d="M8 4h8"></path></svg>',
-		'logout' => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 5H5v14h5"></path><path d="M13 8l4 4-4 4"></path><path d="M8 12h9"></path></svg>',
+		'pin'      => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>',
+		'user'     => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>',
+		'heart'    => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 5.8a5.2 5.2 0 0 0-7.4 0L12 6.9l-1.1-1.1a5.2 5.2 0 0 0-7.4 7.4L12 21l8.5-7.8a5.2 5.2 0 0 0 0-7.4z"></path></svg>',
+		'mail'     => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="6" width="16" height="13" rx="1"></rect><path d="M4 8l8 6 8-6"></path><path d="M8 4h8"></path></svg>',
+		'logout'   => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 5H5v14h5"></path><path d="M13 8l4 4-4 4"></path><path d="M8 12h9"></path></svg>',
 	);
 
 	return isset( $icons[ $icon ] ) ? $icons[ $icon ] : $icons['grid'];
@@ -475,7 +475,7 @@ if ( ! function_exists( 'sawerna_woocommerce_cart_trigger' ) ) {
 	 */
 	function sawerna_woocommerce_cart_trigger( $context = 'desktop' ) {
 		$context = 'mobile' === $context ? 'mobile' : 'desktop';
-		$title   = esc_attr__( 'Shopping cart', 'sawerna' );
+		$title   = __( 'Shopping cart', 'sawerna' );
 		$class   = sprintf(
 			'sawerna-header__icon-btn sawerna-header__icon-btn--cart sawerna-header__cart-trigger sawerna-header__cart-trigger--%s',
 			esc_attr( $context )
@@ -485,8 +485,8 @@ if ( ! function_exists( 'sawerna_woocommerce_cart_trigger' ) ) {
 			href="<?php echo esc_url( wc_get_cart_url() ); ?>"
 			class="<?php echo esc_attr( $class ); ?>"
 			data-mini-cart-trigger="1"
-			aria-label="<?php echo $title; ?>"
-			title="<?php echo $title; ?>"
+			aria-label="<?php echo esc_attr( $title ); ?>"
+			title="<?php echo esc_attr( $title ); ?>"
 			aria-controls="sawerna-mini-cart"
 			aria-expanded="false"
 		>
@@ -543,7 +543,7 @@ if ( ! function_exists( 'sawerna_woocommerce_mini_cart_item_attributes' ) ) {
 			$value    = (string) $attribute_value;
 
 			if ( taxonomy_exists( $taxonomy ) ) {
-				$term = get_term_by( 'slug', $value, $taxonomy );
+				$term  = get_term_by( 'slug', $value, $taxonomy );
 				$value = $term && ! is_wp_error( $term ) ? $term->name : $value;
 			}
 
@@ -582,9 +582,9 @@ if ( ! function_exists( 'sawerna_woocommerce_mini_cart_free_shipping_data' ) ) {
 			);
 		}
 
-		$remaining = max( 0, $threshold - $subtotal );
-		$progress  = min( 100, (int) round( ( $subtotal / $threshold ) * 100 ) );
-		$has_reached = $remaining <= 0;
+		$remaining    = max( 0, $threshold - $subtotal );
+		$progress     = min( 100, (int) round( ( $subtotal / $threshold ) * 100 ) );
+		$has_reached  = $remaining <= 0;
 		$message_text = $has_reached
 			? esc_html__( 'Said tasuta tarne!', 'sawerna' )
 			: sprintf(
@@ -667,7 +667,7 @@ if ( ! function_exists( 'sawerna_woocommerce_mini_cart_items_markup' ) ) {
 				}
 
 				$product_name = $product->get_name();
-				$product_link = apply_filters( 'woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink() : '', $cart_item, $cart_item_key );
+				$product_link = apply_filters( 'woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink() : '', $cart_item, $cart_item_key ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core filter, applied as in the core mini-cart template.
 				$thumbnail    = $product->get_image( 'woocommerce_thumbnail' );
 				$attributes   = sawerna_woocommerce_mini_cart_item_attributes( $cart_item, $product );
 				?>
@@ -694,7 +694,7 @@ if ( ! function_exists( 'sawerna_woocommerce_mini_cart_items_markup' ) ) {
 								type="button"
 								class="sawerna-mini-cart__remove"
 								data-mini-cart-remove="<?php echo esc_attr( $cart_item_key ); ?>"
-								aria-label="<?php echo esc_attr( sprintf( __( 'Eemalda toode "%s" ostukorvist', 'sawerna' ), $product_name ) ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: product name. */ __( 'Eemalda toode "%s" ostukorvist', 'sawerna' ), $product_name ) ); ?>"
 							>
 								<?php echo sawerna_woocommerce_mini_cart_remove_icon(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</button>
@@ -737,7 +737,7 @@ if ( ! function_exists( 'sawerna_woocommerce_mini_cart_footer_markup' ) ) {
 	 */
 	function sawerna_woocommerce_mini_cart_footer_markup() {
 		$free_shipping = sawerna_woocommerce_mini_cart_free_shipping_data();
-		$has_items      = WC()->cart && ! WC()->cart->is_empty();
+		$has_items     = WC()->cart && ! WC()->cart->is_empty();
 
 		if ( ! $has_items ) {
 			return;

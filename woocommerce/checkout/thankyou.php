@@ -3,7 +3,7 @@
  * Custom Sawerna thank-you page.
  *
  * @package WooCommerce\Templates
- * @version 8.1.0
+ * @version 11.2.0
  *
  * @var WC_Order $order
  */
@@ -90,8 +90,22 @@ $get_billing_details = static function ( WC_Order $order ) {
 			<section class="sawerna-thankyou__hero sawerna-thankyou__hero--failed">
 				<div class="sawerna-thankyou__container">
 					<h1 class="sawerna-thankyou__title"><?php esc_html_e( 'Tellimuse vormistamine ebaõnnestus', 'sawerna' ); ?></h1>
+					<?php
+					$default_order_failed_text = esc_html__( 'Kahjuks ei saanud makset töödelda. Palun proovi uuesti või võta meiega ühendust.', 'sawerna' );
+
+					/**
+					 * Filters the message shown when an order has failed.
+					 *
+					 * @param string   $message The failed order message.
+					 * @param WC_Order $order   The failed order.
+					 *
+					 * @since 11.2.0
+					 */
+					$order_failed_text = apply_filters( 'woocommerce_thankyou_order_failed_text', $default_order_failed_text, $order );
+					$order_failed_text = is_string( $order_failed_text ) ? $order_failed_text : $default_order_failed_text;
+					?>
 					<p class="sawerna-thankyou__lead">
-						<?php esc_html_e( 'Kahjuks ei saanud makset töödelda. Palun proovi uuesti või võta meiega ühendust.', 'sawerna' ); ?>
+						<?php echo wp_kses_post( $order_failed_text ); ?>
 					</p>
 				</div>
 			</section>
@@ -174,14 +188,14 @@ $get_billing_details = static function ( WC_Order $order ) {
 										continue;
 									}
 
-									$product            = $item->get_product();
-									$is_visible         = $product && $product->is_visible();
-									$product_permalink  = apply_filters( 'woocommerce_order_item_permalink', $is_visible ? $product->get_permalink( $item ) : '', $item, $order );
-									$item_name          = apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), esc_html( $item->get_name() ) ) : esc_html( $item->get_name() ), $item, $is_visible );
-									$item_quantity      = $item->get_quantity();
-									$refunded_quantity  = $order->get_qty_refunded_for_item( $item_id );
-									$quantity_display   = $refunded_quantity ? '<del>' . esc_html( (string) $item_quantity ) . '</del> <ins>' . esc_html( (string) ( $item_quantity - ( $refunded_quantity * -1 ) ) ) . '</ins>' : esc_html( (string) $item_quantity );
-									$item_meta          = wc_display_item_meta( $item, array( 'echo' => false ) );
+									$product           = $item->get_product();
+									$is_visible        = $product && $product->is_visible();
+									$product_permalink = apply_filters( 'woocommerce_order_item_permalink', $is_visible ? $product->get_permalink( $item ) : '', $item, $order );
+									$item_name         = apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), esc_html( $item->get_name() ) ) : esc_html( $item->get_name() ), $item, $is_visible );
+									$item_quantity     = $item->get_quantity();
+									$refunded_quantity = $order->get_qty_refunded_for_item( $item_id );
+									$quantity_display  = $refunded_quantity ? '<del>' . esc_html( (string) $item_quantity ) . '</del> <ins>' . esc_html( (string) ( $item_quantity - ( $refunded_quantity * -1 ) ) ) . '</ins>' : esc_html( (string) $item_quantity );
+									$item_meta         = wc_display_item_meta( $item, array( 'echo' => false ) );
 									?>
 									<div class="sawerna-thankyou__line" role="row">
 										<div class="sawerna-thankyou__product" role="cell">

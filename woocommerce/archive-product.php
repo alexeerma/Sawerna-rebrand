@@ -70,22 +70,32 @@ $top_categories = get_terms(
 			<?php if ( is_array( $top_categories ) && ! empty( $top_categories ) ) : ?>
 				<div class="sawerna-shop-hero__categories-wrap">
 					<div class="sawerna-shop-hero__categories" data-shop-categories-track="1" aria-label="<?php esc_attr_e( 'Top product categories', 'sawerna' ); ?>">
-					<?php foreach ( $top_categories as $term ) : ?>
-					<?php
-					$is_active = is_tax( 'product_cat', $term->term_id );
-					$term_link = get_term_link( $term );
-					$thumb_id  = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
-					if ( is_wp_error( $term_link ) ) {
-						$term_link = $shop_url;
-					}
-					?>
+					<?php foreach ( $top_categories as $top_term ) : ?>
+						<?php
+						$is_active = is_tax( 'product_cat', $top_term->term_id );
+						$term_link = get_term_link( $top_term );
+						$thumb_id  = (int) get_term_meta( $top_term->term_id, 'thumbnail_id', true );
+						if ( is_wp_error( $term_link ) ) {
+							$term_link = $shop_url;
+						}
+						?>
 					<a class="sawerna-shop-hero__category<?php echo $is_active ? ' is-active' : ''; ?>" href="<?php echo esc_url( $term_link ); ?>">
 						<span class="sawerna-shop-hero__category-icon" aria-hidden="true">
 							<?php if ( $thumb_id ) : ?>
-								<?php echo wp_get_attachment_image( $thumb_id, 'medium', false, array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+								<?php
+								echo wp_get_attachment_image(
+									$thumb_id,
+									'medium',
+									false,
+									array(
+										'loading'  => 'lazy',
+										'decoding' => 'async',
+									)
+								);
+								?>
 							<?php endif; ?>
 						</span>
-						<span class="sawerna-shop-hero__category-label"><?php echo esc_html( $term->name ); ?></span>
+						<span class="sawerna-shop-hero__category-label"><?php echo esc_html( $top_term->name ); ?></span>
 					</a>
 					<?php endforeach; ?>
 					</div>

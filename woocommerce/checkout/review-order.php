@@ -3,7 +3,7 @@
  * Checkout order review.
  *
  * @package WooCommerce\Templates
- * @version 5.2.0
+ * @version 11.2.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -28,9 +28,27 @@ $total_tax = (float) WC()->cart->get_total_tax();
 				foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 					$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 
-					if ( ! $_product || ! $_product->exists() || $cart_item['quantity'] <= 0 || ! apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+					/**
+					 * Filter whether this cart item is visible in the checkout review order table.
+					 *
+					 * @since 2.1.0
+					 * @param bool   $visible       Whether the cart item is visible. Default true.
+					 * @param array  $cart_item     The cart item data.
+					 * @param string $cart_item_key The cart item key.
+					 */
+					$visible = apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key );
+
+					if ( ! $_product instanceof WC_Product || ! $_product->exists() || $cart_item['quantity'] <= 0 || ! $visible ) {
 						continue;
 					}
+
+					$cart_item_name = WC()->cart->get_item_product_name( $cart_item, $_product );
+					/**
+					 * This filter is documented in woocommerce/templates/cart/cart.php.
+					 *
+					 * @since 2.1.0
+					 */
+					$product_name = apply_filters( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
 
 					$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image( 'woocommerce_thumbnail' ), $cart_item, $cart_item_key );
 					?>
@@ -42,8 +60,8 @@ $total_tax = (float) WC()->cart->get_total_tax();
 						<div class="sawerna-checkout-review__item-content">
 							<div class="sawerna-checkout-review__item-title-row">
 								<div class="sawerna-checkout-review__item-title">
-									<?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) ); ?>
-									<span class="sawerna-checkout-review__item-quantity"><?php echo esc_html( sprintf( 'x%s', (string) $cart_item['quantity'] ) ); ?></span>
+									<?php echo wp_kses_post( $product_name ); ?>
+									<?php echo apply_filters( 'woocommerce_checkout_cart_item_quantity', '<span class="sawerna-checkout-review__item-quantity">' . esc_html( sprintf( 'x%s', (string) $cart_item['quantity'] ) ) . '</span>', $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WooCommerce.Commenting.CommentHooks.MissingHookComment ?>
 								</div>
 								<div class="sawerna-checkout-review__item-subtotal">
 									<?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ) ); ?>
@@ -51,7 +69,7 @@ $total_tax = (float) WC()->cart->get_total_tax();
 							</div>
 
 							<div class="sawerna-checkout-review__item-meta">
-								<?php echo wc_get_formatted_cart_item_data( $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php echo wc_get_formatted_cart_item_data( $cart_item, false, $cart_item_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</div>
 						</div>
 					</div>
@@ -95,10 +113,10 @@ $total_tax = (float) WC()->cart->get_total_tax();
 
 					<?php if ( wc_tax_enabled() && ! WC()->cart->display_prices_including_tax() ) : ?>
 						<?php if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) ) : ?>
-							<?php foreach ( WC()->cart->get_tax_totals() as $code => $tax ) : ?>
+							<?php foreach ( WC()->cart->get_tax_totals() as $code => $tax_total ) : ?>
 								<tr class="tax-rate tax-rate-<?php echo esc_attr( sanitize_title( $code ) ); ?>">
-									<th><?php echo esc_html( $tax->label ); ?></th>
-									<td><?php echo wp_kses_post( $tax->formatted_amount ); ?></td>
+									<th><?php echo esc_html( $tax_total->label ); ?></th>
+									<td><?php echo wp_kses_post( $tax_total->formatted_amount ); ?></td>
 								</tr>
 							<?php endforeach; ?>
 						<?php else : ?>

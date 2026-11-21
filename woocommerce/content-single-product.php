@@ -17,26 +17,26 @@ if ( ! $product instanceof WC_Product ) {
 	return;
 }
 
-$gallery_image_ids = sawerna_get_single_product_gallery_image_ids( $product );
-$active_image_id   = ! empty( $gallery_image_ids ) ? $gallery_image_ids[0] : 0;
-$labels            = sawerna_get_product_labels( $product );
-$wishlist_html     = sawerna_get_wishlist_button_html( $product->get_id(), 'card' );
-$sale_label        = sawerna_get_sale_label_text( $product );
-$payment_options   = sawerna_get_single_product_payment_options( $product );
-$summary_badges       = sawerna_get_single_product_summary_badges( $product );
-$location_badge_texts = array();
-$stock_badge_text     = '';
-$attribute_selector_rows    = sawerna_get_single_product_attribute_selector_rows( $product );
-$fabric_banner_enabled = '1' === (string) get_post_meta( $product->get_id(), '_sawerna_fabric_banner_enabled', true );
-$fabric_banner_text    = function_exists( 'sawerna_get_page_option' ) ? sawerna_get_page_option( 'fabric_banner_text' ) : '';
-$tabs              = sawerna_get_single_product_tabs( $product );
-$related_items     = sawerna_get_single_product_related_items( $product );
-$brand_label       = sawerna_get_single_product_brand_label( $product );
-$pdf_url           = function_exists( 'sawerna_get_single_product_pdf_url' ) ? sawerna_get_single_product_pdf_url( $product ) : '';
-$category_list     = wc_get_product_category_list( $product->get_id(), ', ' );
-$theme_uri         = get_template_directory_uri();
-$display_sku       = function_exists( 'sawerna_get_single_product_display_sku' ) ? sawerna_get_single_product_display_sku( $product ) : trim( (string) $product->get_sku() );
-$main_image_sizes  = '(max-width: 767px) calc(100vw - 20px), 600px';
+$gallery_image_ids       = sawerna_get_single_product_gallery_image_ids( $product );
+$active_image_id         = ! empty( $gallery_image_ids ) ? $gallery_image_ids[0] : 0;
+$labels                  = sawerna_get_product_labels( $product );
+$wishlist_html           = sawerna_get_wishlist_button_html( $product->get_id(), 'card' );
+$sale_label              = sawerna_get_sale_label_text( $product );
+$payment_options         = sawerna_get_single_product_payment_options( $product );
+$summary_badges          = sawerna_get_single_product_summary_badges( $product );
+$location_badge_texts    = array();
+$stock_badge_text        = '';
+$attribute_selector_rows = sawerna_get_single_product_attribute_selector_rows( $product );
+$fabric_banner_enabled   = '1' === (string) get_post_meta( $product->get_id(), '_sawerna_fabric_banner_enabled', true );
+$fabric_banner_text      = function_exists( 'sawerna_get_page_option' ) ? sawerna_get_page_option( 'fabric_banner_text' ) : '';
+$product_tabs            = sawerna_get_single_product_tabs( $product );
+$related_items           = sawerna_get_single_product_related_items( $product );
+$brand_label             = sawerna_get_single_product_brand_label( $product );
+$pdf_url                 = function_exists( 'sawerna_get_single_product_pdf_url' ) ? sawerna_get_single_product_pdf_url( $product ) : '';
+$category_list           = wc_get_product_category_list( $product->get_id(), ', ' );
+$theme_uri               = get_template_directory_uri();
+$display_sku             = function_exists( 'sawerna_get_single_product_display_sku' ) ? sawerna_get_single_product_display_sku( $product ) : trim( (string) $product->get_sku() );
+$main_image_sizes        = '(max-width: 767px) calc(100vw - 20px), 600px';
 
 foreach ( $summary_badges as $summary_badge ) {
 	if ( empty( $summary_badge['icon'] ) || empty( $summary_badge['text'] ) ) {
@@ -51,7 +51,7 @@ foreach ( $summary_badges as $summary_badge ) {
 }
 
 $location_badge_texts = array_values( array_unique( array_filter( array_map( 'trim', $location_badge_texts ) ) ) );
-$stock_badge_text    = trim( $stock_badge_text );
+$stock_badge_text     = trim( $stock_badge_text );
 ?>
 
 <?php do_action( 'woocommerce_before_single_product' ); ?>
@@ -129,7 +129,7 @@ $stock_badge_text    = trim( $stock_badge_text );
 						<div class="sawerna-single-product__thumbs" data-gallery-thumbs="1">
 							<?php foreach ( $gallery_image_ids as $index => $image_id ) : ?>
 								<?php
-								$thumb_html = wp_get_attachment_image(
+								$thumb_html      = wp_get_attachment_image(
 									$image_id,
 									'woocommerce_thumbnail',
 									false,
@@ -138,11 +138,11 @@ $stock_badge_text    = trim( $stock_badge_text );
 										'decoding' => 'async',
 									)
 								);
-									$full_src = wp_get_attachment_image_url( $image_id, 'full' );
+									$full_src    = wp_get_attachment_image_url( $image_id, 'full' );
 									$full_srcset = wp_get_attachment_image_srcset( $image_id, 'full' );
 									$full_sizes  = $main_image_sizes;
-									$alt      = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-									?>
+									$alt         = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+								?>
 									<button
 									type="button"
 									class="sawerna-single-product__thumb<?php echo 0 === $index ? ' is-active' : ''; ?>"
@@ -168,14 +168,24 @@ $stock_badge_text    = trim( $stock_badge_text );
 							<div class="sawerna-single-product__lightbox-inner">
 								<div class="sawerna-single-product__lightbox-image-wrap">
 									<?php if ( $active_image_id ) : ?>
-										<?php echo wp_get_attachment_image( $active_image_id, 'full', false, array( 'class' => 'sawerna-single-product__lightbox-image', 'data-gallery-lightbox-image' => '1' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+										<?php
+										echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+											$active_image_id,
+											'full',
+											false,
+											array(
+												'class' => 'sawerna-single-product__lightbox-image',
+												'data-gallery-lightbox-image' => '1',
+											)
+										);
+										?>
 									<?php endif; ?>
 								</div>
 								<?php if ( ! empty( $gallery_image_ids ) ) : ?>
 									<div class="sawerna-single-product__lightbox-thumbs">
 										<?php foreach ( $gallery_image_ids as $index => $image_id ) : ?>
 											<?php
-											$lightbox_thumb = wp_get_attachment_image(
+											$lightbox_thumb      = wp_get_attachment_image(
 												$image_id,
 												'thumbnail',
 												false,
@@ -183,12 +193,12 @@ $stock_badge_text    = trim( $stock_badge_text );
 													'loading'  => 'lazy',
 													'decoding' => 'async',
 												)
-												);
-												$lightbox_full = wp_get_attachment_image_url( $image_id, 'full' );
+											);
+												$lightbox_full   = wp_get_attachment_image_url( $image_id, 'full' );
 												$lightbox_srcset = wp_get_attachment_image_srcset( $image_id, 'full' );
 												$lightbox_sizes  = '100vw';
-												$lightbox_alt  = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-												?>
+												$lightbox_alt    = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+											?>
 												<button
 												type="button"
 												class="sawerna-single-product__lightbox-thumb<?php echo 0 === $index ? ' is-active' : ''; ?>"
@@ -448,10 +458,10 @@ $stock_badge_text    = trim( $stock_badge_text );
 						$jarelmaks_providers      = function_exists( 'sawerna_get_jarelmaks_providers' ) ? sawerna_get_jarelmaks_providers() : array();
 						$jarelmaks_providers_json = wp_json_encode( $jarelmaks_providers );
 						$jarelmaks_disclaimer     = function_exists( 'sawerna_get_page_option' ) ? sawerna_get_page_option( 'jarelmaks_disclaimer' ) : '';
-						if ( '' === $jarelmaks_disclaimer ) {
-							$jarelmaks_disclaimer = __( 'Arvutus on ligikaudne. Täpne pakkumine sõltub laenuandja tingimustest ja krediidiotsusest.', 'sawerna' );
-						}
-						?>
+					if ( '' === $jarelmaks_disclaimer ) {
+						$jarelmaks_disclaimer = __( 'Arvutus on ligikaudne. Täpne pakkumine sõltub laenuandja tingimustest ja krediidiotsusest.', 'sawerna' );
+					}
+					?>
 					<div class="sawerna-single-product__payment-drawer" data-payment-drawer="1" data-jarelmaks-providers="<?php echo esc_attr( $jarelmaks_providers_json ); ?>" hidden>
 						<div class="sawerna-single-product__payment-backdrop" data-payment-drawer-close="1"></div>
 						<div class="sawerna-single-product__payment-panel" role="dialog" aria-modal="true" aria-labelledby="sawerna-payment-drawer-title" id="sawerna-payment-drawer">
@@ -473,9 +483,9 @@ $stock_badge_text    = trim( $stock_badge_text );
 									<div class="sawerna-payment-calc__row">
 										<label class="sawerna-payment-calc__label" for="sawerna-payment-period"><?php esc_html_e( 'Periood', 'sawerna' ); ?></label>
 										<select class="sawerna-payment-calc__select" id="sawerna-payment-period" data-payment-calc-period="1">
-											<?php foreach ( array( 3, 6, 12, 18, 24, 36, 48, 60 ) as $m ) : ?>
-												<option value="<?php echo esc_attr( (string) $m ); ?>"<?php echo 12 === $m ? ' selected' : ''; ?>>
-													<?php echo esc_html( sprintf( _n( '%d kuu', '%d kuud', $m, 'sawerna' ), $m ) ); ?>
+											<?php foreach ( array( 3, 6, 12, 18, 24, 36, 48, 60 ) as $months ) : ?>
+												<option value="<?php echo esc_attr( (string) $months ); ?>"<?php echo 12 === $months ? ' selected' : ''; ?>>
+													<?php echo esc_html( sprintf( /* translators: %d: number of months. */ _n( '%d kuu', '%d kuud', $months, 'sawerna' ), $months ) ); ?>
 												</option>
 											<?php endforeach; ?>
 										</select>
@@ -545,41 +555,41 @@ $stock_badge_text    = trim( $stock_badge_text );
 				</div>
 			</div>
 
-			<?php if ( ! empty( $tabs ) ) : ?>
+			<?php if ( ! empty( $product_tabs ) ) : ?>
 				<section class="sawerna-single-product__tabs sawerna-single-product__tabs--desktop" data-product-tabs="1">
 					<div class="sawerna-single-product__tab-list" role="tablist" aria-label="<?php esc_attr_e( 'Toote sisu', 'sawerna' ); ?>">
-						<?php foreach ( $tabs as $index => $tab ) : ?>
+						<?php foreach ( $product_tabs as $index => $product_tab ) : ?>
 							<button
 								type="button"
 								class="sawerna-single-product__tab-button<?php echo 0 === $index ? ' is-active' : ''; ?>"
-								id="tab-button-<?php echo esc_attr( $tab['key'] ); ?>"
-								data-tab-button="<?php echo esc_attr( $tab['key'] ); ?>"
+								id="tab-button-<?php echo esc_attr( $product_tab['key'] ); ?>"
+								data-tab-button="<?php echo esc_attr( $product_tab['key'] ); ?>"
 								role="tab"
 								aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>"
-								aria-controls="tab-panel-<?php echo esc_attr( $tab['key'] ); ?>"
+								aria-controls="tab-panel-<?php echo esc_attr( $product_tab['key'] ); ?>"
 							>
-								<?php echo esc_html( $tab['title'] ); ?>
+								<?php echo esc_html( $product_tab['title'] ); ?>
 							</button>
 						<?php endforeach; ?>
 					</div>
 
 					<div class="sawerna-single-product__tab-panels">
-						<?php foreach ( $tabs as $index => $tab ) : ?>
+						<?php foreach ( $product_tabs as $index => $product_tab ) : ?>
 							<div
 								class="sawerna-single-product__tab-panel<?php echo 0 === $index ? ' is-active' : ''; ?>"
-								id="tab-panel-<?php echo esc_attr( $tab['key'] ); ?>"
-								data-tab-panel="<?php echo esc_attr( $tab['key'] ); ?>"
+								id="tab-panel-<?php echo esc_attr( $product_tab['key'] ); ?>"
+								data-tab-panel="<?php echo esc_attr( $product_tab['key'] ); ?>"
 								role="tabpanel"
-								aria-labelledby="tab-button-<?php echo esc_attr( $tab['key'] ); ?>"
+								aria-labelledby="tab-button-<?php echo esc_attr( $product_tab['key'] ); ?>"
 								<?php echo 0 === $index ? '' : 'hidden'; ?>
 							>
 								<?php
-								if ( 'reviews' === $tab['key'] ) {
+								if ( 'reviews' === $product_tab['key'] ) {
 									// Reviews HTML is generated by WooCommerce templates (forms, nonces, scripts)
 									// which wp_kses_post() would strip; it is trusted output, so echo it raw.
-									echo $tab['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									echo $product_tab['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								} else {
-									echo wp_kses_post( $tab['content'] );
+									echo wp_kses_post( $product_tab['content'] );
 								}
 								?>
 							</div>
@@ -589,31 +599,31 @@ $stock_badge_text    = trim( $stock_badge_text );
 
 				<section class="sawerna-single-product__tabs sawerna-single-product__tabs--mobile" data-product-accordion="1">
 					<div class="sawerna-single-product__accordion-list">
-						<?php foreach ( $tabs as $index => $tab ) : ?>
+						<?php foreach ( $product_tabs as $index => $product_tab ) : ?>
 							<div class="sawerna-single-product__accordion-item">
 								<button
 									type="button"
 									class="sawerna-single-product__accordion-button"
-									data-accordion-button="<?php echo esc_attr( $tab['key'] ); ?>"
+									data-accordion-button="<?php echo esc_attr( $product_tab['key'] ); ?>"
 									aria-expanded="false"
-									aria-controls="accordion-panel-<?php echo esc_attr( $tab['key'] ); ?>"
-									id="accordion-button-<?php echo esc_attr( $tab['key'] ); ?>"
+									aria-controls="accordion-panel-<?php echo esc_attr( $product_tab['key'] ); ?>"
+									id="accordion-button-<?php echo esc_attr( $product_tab['key'] ); ?>"
 								>
-									<span><?php echo esc_html( $tab['title'] ); ?></span>
+									<span><?php echo esc_html( $product_tab['title'] ); ?></span>
 									<span class="sawerna-single-product__accordion-icon" aria-hidden="true"></span>
 								</button>
 								<div
 									class="sawerna-single-product__accordion-panel"
-									id="accordion-panel-<?php echo esc_attr( $tab['key'] ); ?>"
-									data-accordion-panel="<?php echo esc_attr( $tab['key'] ); ?>"
-									aria-labelledby="accordion-button-<?php echo esc_attr( $tab['key'] ); ?>"
+									id="accordion-panel-<?php echo esc_attr( $product_tab['key'] ); ?>"
+									data-accordion-panel="<?php echo esc_attr( $product_tab['key'] ); ?>"
+									aria-labelledby="accordion-button-<?php echo esc_attr( $product_tab['key'] ); ?>"
 									hidden
 								>
 									<?php
-									if ( 'reviews' === $tab['key'] ) {
-										echo $tab['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									if ( 'reviews' === $product_tab['key'] ) {
+										echo $product_tab['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									} else {
-										echo wp_kses_post( $tab['content'] );
+										echo wp_kses_post( $product_tab['content'] );
 									}
 									?>
 								</div>
