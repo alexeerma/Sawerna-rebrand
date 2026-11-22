@@ -93,3 +93,11 @@ In the block editor, the "Sawerna" category has the same four as blocks (`sawern
 `[sawerna_image_text image="<attachment ID>" title="" text="" link="" position="bottom-left|bottom-center|center|top-left" overlay="25" ratio="4/5|1/1|16/9|3/2"]`, block `sawerna/image-text`, widget "Sawerna: Pilt tekstiga". Block variation "Tooted 2x2" = `sawerna/products` with `layout: grid`.
 
 When updating WooCommerce, compare the `@version` of each file in `woocommerce/` with the same file in `plugins/woocommerce/templates/` and port upstream changes.
+
+## Maintenance page
+
+`maintenance/maintenance.php` replaces WordPress's generic "Briefly unavailable for scheduled maintenance" screen shown during updates. It is a WordPress drop-in, not a theme template: WordPress loads it from `wp-content/maintenance.php` before the theme, plugins and database are available, so it is fully self-contained (inline styles and logo, theme fonts loaded by URL with a system-font fallback).
+
+- Install: copy `maintenance/maintenance.php` to `wp-content/maintenance.php` (once per server, and again after changing it).
+- It returns `503 Service Unavailable` with `Retry-After: 120` and `noindex`, and reloads itself every 60 seconds.
+- Test locally: create `.maintenance` in the WordPress root containing `<?php $upgrading = time(); ?>`, open the site, then delete the file (WordPress also ignores it after 10 minutes).
