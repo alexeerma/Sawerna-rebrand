@@ -601,6 +601,77 @@ article.sawerna-post-feature {
   min-width: 0;
 }
 
+/* Columns start at the top. Global styles give .is-layout-flex align-items:center (shorter column
+   sat lower) and core's columns CSS, when a page loads it, forces align-items:initial !important,
+   hence !important here. Core's explicit "vertical alignment" classes keep working. */
+.sawerna-html-block-dropdown-inner .wp-block-columns {
+  align-items: flex-start !important;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-columns.are-vertically-aligned-center {
+  align-items: center !important;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-columns.are-vertically-aligned-bottom {
+  align-items: flex-end !important;
+}
+
+/* "Täida veeru kõrgus" (fill="yes"): image-text / banner take the height of the tallest column.
+   Side-by-side layouts only; stacked layouts (<= 1024px) keep the normal ratio / height. */
+@media (min-width: 1025px) {
+  .wp-block-column:has(> .wp-block-sawerna-image-text > .sawerna-image-text--fill),
+  .wp-block-column:has(> .wp-block-sawerna-banner > .sawerna-banner-shortcode--fill) {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  .wp-block-column > .wp-block-sawerna-image-text:has(> .sawerna-image-text--fill),
+  .wp-block-column > .wp-block-sawerna-banner:has(> .sawerna-banner-shortcode--fill),
+  .e-con > .elementor-widget-sawerna_image_text:has(.sawerna-image-text--fill),
+  .e-con > .elementor-widget-sawerna_banner:has(.sawerna-banner-shortcode--fill) {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  /* Elementor already gives .elementor-widget-container height:100%; flex keeps it reliable. */
+  .e-con > .elementor-widget-sawerna_image_text:has(.sawerna-image-text--fill) > .elementor-widget-container,
+  .e-con > .elementor-widget-sawerna_banner:has(.sawerna-banner-shortcode--fill) > .elementor-widget-container {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  .sawerna-image-text.sawerna-image-text--fill,
+  .sawerna-banner-shortcode.sawerna-banner-shortcode--fill {
+    flex: 1 1 auto;
+    height: 100%;
+  }
+
+  .sawerna-image-text.sawerna-image-text--fill {
+    aspect-ratio: auto;
+    min-height: 240px;
+  }
+}
+
+/* Explicit per-column alignment wins over the fill stretch (same specificity, later rule). */
+.sawerna-html-block-dropdown-inner .wp-block-column.is-vertically-aligned-top {
+  align-self: flex-start;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-column.is-vertically-aligned-center {
+  align-self: center;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-column.is-vertically-aligned-bottom {
+  align-self: flex-end;
+}
+
+.sawerna-html-block-dropdown-inner .wp-block-column.is-vertically-aligned-stretch {
+  align-self: stretch;
+}
+
 .sawerna-image-text {
   display: block;
   width: 100%;

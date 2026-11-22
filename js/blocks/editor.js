@@ -704,7 +704,16 @@
 					onChange: function ( v ) {
 						set( { height: v || 360 } );
 					},
-				} ) )
+				} ) ),
+				el( ToggleControl, {
+					label: __( 'Täida veeru kõrgus', TD ),
+					help: __( 'Venitab pildi kõrvalveeru kõrguseks', TD ),
+					checked: !! a.fill,
+					__nextHasNoMarginBottom: true,
+					onChange: function ( v ) {
+						set( { fill: v } );
+					},
+				} )
 			),
 			el(
 				PanelBody,
@@ -876,6 +885,15 @@
 						set( { ratio: v } );
 					},
 				} ) ),
+				el( ToggleControl, {
+					label: __( 'Täida veeru kõrgus', TD ),
+					help: __( 'Venitab pildi kõrvalveeru kõrguseks', TD ),
+					checked: !! a.fill,
+					__nextHasNoMarginBottom: true,
+					onChange: function ( v ) {
+						set( { fill: v } );
+					},
+				} ),
 				el( RangeControl, withNext( {
 					label: __( 'Tausta tumedus (%)', TD ),
 					value: 'number' === typeof a.overlay ? a.overlay : 25,
