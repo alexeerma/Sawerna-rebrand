@@ -48,8 +48,10 @@ test('usage notice on the edit screen of a used block', async ({ page }) => {
 
 test('create from template opens Elementor with Sawerna widgets, then clean up', async ({ page }) => {
 	await page.goto('/wp-admin/edit.php?post_type=sawerna_html_block&page=sawerna-html-block-templates');
-	await expect(page.locator('#sawerna-html-block-templates form[data-template]')).toHaveCount(3);
-	await page.locator('form[data-template="products-banner"] button[type=submit]').click();
+	await expect(page.locator('#sawerna-html-block-templates form[data-template]')).toHaveCount(13);
+	await expect(page.locator('#sawerna-html-block-templates form[data-template] button[name=editor][value=block]')).toHaveCount(13);
+	await expect(page.locator('#sawerna-html-block-templates form[data-template] button[name=editor][value=elementor]')).toHaveCount(13);
+	await page.locator('form[data-template="products-grid-banner"] button[name=editor][value=elementor]').click();
 	await page.waitForURL(/action=elementor/, { timeout: 30_000 });
 	const postId = new URL(page.url()).searchParams.get('post');
 	try {
@@ -62,6 +64,23 @@ test('create from template opens Elementor with Sawerna widgets, then clean up',
 		await page.evaluate(async (id) => {
 			await window.fetch(`/wp-json/wp/v2/sawerna_html_block/${id}?force=true`, { method: 'DELETE', headers: { 'X-WP-Nonce': window.wpApiSettings ? window.wpApiSettings.nonce : '' } });
 		}, postId);
+	}
+});
+
+test('create from template opens the block editor with the pattern content, then clean up', async ({ page }) => {
+	await page.goto('/wp-admin/edit.php?post_type=sawerna_html_block&page=sawerna-html-block-templates');
+	await page.locator('form[data-template="products-2x2-image-text"] button[name=editor][value=block]').click();
+	await page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 30_000 });
+	const postId = new URL(page.url()).searchParams.get('post');
+	try {
+		await page.waitForFunction(() => window.wp && window.wp.data && window.wp.data.select('core/block-editor'), null, { timeout: 30_000 });
+		await expect.poll(() => page.evaluate(() => {
+			const walk = (blocks) => blocks.flatMap((b) => [b.name, ...walk(b.innerBlocks)]);
+			return walk(window.wp.data.select('core/block-editor').getBlocks());
+		}), { timeout: 30_000 }).toEqual(expect.arrayContaining(['core/columns', 'sawerna/products', 'sawerna/image-text']));
+	} finally {
+		// The block editor's apiFetch carries the REST nonce.
+		await page.evaluate((id) => window.wp.apiFetch({ path: `/wp/v2/sawerna_html_block/${id}?force=true`, method: 'DELETE' }), postId);
 	}
 });
 

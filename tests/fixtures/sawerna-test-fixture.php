@@ -11,6 +11,7 @@
  *   widgets    JSON list of registered Elementor widget names.
  *   widget     Render one Sawerna Elementor widget with its default settings. Param: type.
  *   blocks     Render serialized block markup server-side. Param: markup.
+ *   templates  JSON: every "Loo mallist" template with both variants rendered. Param: image (attachment ID).
  * Cookie sawerna_layout_preview=<layout> switches every menu products block to that layout + category="menu".
  *
  * @package Sawerna
@@ -199,6 +200,68 @@ add_action(
 				}
 			}
 			wp_send_json( $out );
+		}
+
+		if ( 'templates' === $action ) {
+			// "Loo mallist" templates: both variants rendered server-side. Param image=<attachment ID> fills the
+			// empty image of banner / image-text components so they render (templates ship without an image).
+			if ( ! function_exists( 'sawerna_html_block_templates' ) && defined( 'WP_PLUGIN_DIR' ) ) {
+				require_once WP_PLUGIN_DIR . '/sawerna-core/includes/html-block-admin.php'; // Admin-only file.
+			}
+			$image = absint( $_GET['image'] ?? 0 );
+			add_filter( 'sawerna_shortcode_cache_enabled', '__return_false' );
+			if ( $image ) {
+				add_filter(
+					'render_block_data',
+					function ( $block ) use ( $image ) {
+						if ( in_array( $block['blockName'] ?? '', array( 'sawerna/banner', 'sawerna/image-text' ), true ) && empty( $block['attrs']['imageId'] ) ) {
+							$block['attrs']['imageId'] = $image;
+						}
+						return $block;
+					}
+				);
+			}
+			$fill = function ( array $elements ) use ( &$fill, $image ) {
+				foreach ( $elements as &$el ) {
+					if ( $image && in_array( $el['widgetType'] ?? '', array( 'sawerna_banner', 'sawerna_image_text' ), true ) && empty( $el['settings']['image']['id'] ) ) {
+						$el['settings']['image'] = array( 'id' => $image, 'url' => (string) wp_get_attachment_url( $image ) );
+					}
+					$el['elements'] = $fill( $el['elements'] ?? array() );
+				}
+				return $elements;
+			};
+			$elementor = class_exists( '\Elementor\Plugin' ) && function_exists( 'sawerna_html_block_elementor_active' ) && sawerna_html_block_elementor_active();
+			$out       = array();
+			foreach ( sawerna_html_block_templates() as $slug => $template ) {
+				$data    = sawerna_html_block_template_data( $slug );
+				$el_html = '';
+				if ( $elementor && $data ) {
+					// Same as Elementor's Document::do_print_elements(): top-level instances, children print recursively.
+					$data = json_decode( wp_json_encode( $fill( $data ) ), true ); // Stored (JSON) form.
+					ob_start();
+					foreach ( $data as $element_data ) {
+						$element = \Elementor\Plugin::instance()->elements_manager->create_element_instance( $element_data );
+						if ( $element ) {
+							$element->print_element();
+						}
+					}
+					$el_html = (string) ob_get_clean();
+				}
+				$out[] = array(
+					'slug'           => $slug,
+					'title'          => $template['title'],
+					'combination'    => $template['combination'],
+					'has_block'      => '' !== trim( $template['content'] ),
+					'has_elementor'  => ! empty( $data ),
+					'block_html'     => do_shortcode( do_blocks( $template['content'] ) ),
+					'elementor_html' => $el_html,
+				);
+			}
+			$aliases = array();
+			foreach ( sawerna_html_block_template_aliases() as $old => $new ) {
+				$aliases[ $old ] = sawerna_html_block_resolve_template_slug( $old );
+			}
+			wp_send_json( array( 'templates' => $out, 'aliases' => $aliases, 'elementor_active' => $elementor ) );
 		}
 
 		if ( 'flush' === $action ) {
