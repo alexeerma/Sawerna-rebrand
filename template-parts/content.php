@@ -32,7 +32,7 @@
 						'class'    => 'sawerna-blog-card__image',
 						'loading'  => 'lazy',
 						'decoding' => 'async',
-						'sizes'    => '(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px',
+						'sizes'    => '(max-width: 1024px) 50vw, 380px',
 					)
 				);
 			}

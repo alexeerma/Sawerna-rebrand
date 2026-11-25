@@ -333,12 +333,18 @@
   width: 12px;
   height: 7px;
   background: url('../SVG/Asset 6.svg') no-repeat center / contain;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
 .rm-footer__accordionItem.is-open .rm-footer__accordionIcon {
   transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-footer__accordionIcon {
+    transition: none;
+  }
 }
 
 .rm-footer__menuTitle .rm-footer__accordionToggle,

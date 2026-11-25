@@ -11,7 +11,46 @@
 
   const mobileQuery = window.matchMedia('(max-width: 600px)');
 
-  const setState = (item, isOpen) => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const DURATION = 300;
+  const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+  // Smooth height + fade for the mobile accordion (Web Animations API; instant fallback).
+  const animatePanel = (panel, isOpen) => {
+    if (panel._rmAnim) {
+      panel._rmAnim.cancel();
+      panel._rmAnim = null;
+    }
+
+    if (reducedMotion.matches || typeof panel.animate !== 'function') {
+      panel.hidden = !isOpen;
+      return;
+    }
+
+    panel.hidden = false;
+    const cs = window.getComputedStyle(panel);
+    const open = {
+      height: `${panel.scrollHeight}px`,
+      paddingTop: cs.paddingTop,
+      paddingBottom: cs.paddingBottom,
+      opacity: 1,
+    };
+    const closed = { height: '0px', paddingTop: '0px', paddingBottom: '0px', opacity: 0 };
+
+    panel.style.overflow = 'hidden';
+    const anim = panel.animate(isOpen ? [closed, open] : [open, closed], {
+      duration: DURATION,
+      easing: EASING,
+    });
+    panel._rmAnim = anim;
+    anim.onfinish = () => {
+      panel._rmAnim = null;
+      panel.style.overflow = '';
+      panel.hidden = !isOpen;
+    };
+  };
+
+  const setState = (item, isOpen, animate = false) => {
     const toggle = item.querySelector('.rm-footer__accordionToggle');
     const panel = item.querySelector('.rm-footer__accordionPanel');
     if (!toggle || !panel) {
@@ -19,8 +58,17 @@
     }
 
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    panel.hidden = !isOpen;
     item.classList.toggle('is-open', isOpen);
+    if (animate) {
+      animatePanel(panel, isOpen);
+    } else {
+      if (panel._rmAnim) {
+        panel._rmAnim.cancel();
+        panel._rmAnim = null;
+        panel.style.overflow = '';
+      }
+      panel.hidden = !isOpen;
+    }
   };
 
   const syncState = () => {
@@ -47,7 +95,7 @@
       }
 
       const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      setState(item, !isOpen);
+      setState(item, !isOpen, true);
     });
   });
 

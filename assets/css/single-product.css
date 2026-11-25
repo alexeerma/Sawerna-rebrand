@@ -60,19 +60,29 @@ body.single-product .site-main {
 }
 
 .sawerna-single-product__main-image {
+  position: relative;
   width: 600px;
   max-width: 100%;
   aspect-ratio: 1 / 1;
-  background: #f4f4f4;
+  background: #fff;
   overflow: hidden;
   cursor: pointer;
 }
 
+/* Absolutely filled so the frame never depends on height:100% resolving
+   against aspect-ratio (older Safari) and never grows to the image's
+   natural height. !important guards against lazy-load/CDN plugins on
+   other environments injecting object-fit or height. */
 .sawerna-single-product__main-image img {
+  position: absolute;
+  inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  max-height: none;
+  object-fit: contain !important;
+  object-position: center;
   transition: opacity 0.28s ease;
 }
 
@@ -655,17 +665,140 @@ body.single-product .site-main {
   transform: translateX(0);
 }
 
-.sawerna-single-product__selector-fabric-banner {
-  padding: 12px 28px;
-  background: #f9f6f2;
-  border-bottom: 1px solid #ecddd0;
-  font-size: 13px;
-  line-height: 1.55;
-  color: #5a4a3a;
+/* Fabric card ("Rohkem kangaid ja värvitoone") under the "Vali kattekangas" row.
+   The row's divider moves below the card so both read as one block. */
+.sawerna-single-product__feature-row--selector.has-fabric-card {
+  border-bottom: 0;
+  padding-bottom: 16px;
 }
 
-.sawerna-single-product__selector-fabric-banner-text {
+.sawerna-single-product__fabric-card-wrap {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.sawerna-single-product__fabric-card-wrap[hidden] {
+  display: none;
+}
+
+.sawerna-single-product__fabric-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px 16px 16px;
+  border-radius: 12px;
+  background: #f2efe9;
+  color: #111;
+}
+
+.sawerna-single-product__fabric-card-media {
+  flex: 0 0 38%;
+  max-width: 240px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e9e4dc;
+}
+
+.sawerna-single-product__fabric-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sawerna-single-product__fabric-card-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sawerna-single-product__fabric-card-title {
   margin: 0;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #111;
+}
+
+.sawerna-single-product__fabric-card-text {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #2b2b2b;
+  overflow-wrap: anywhere;
+}
+
+.sawerna-single-product__fabric-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid currentColor;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: #111;
+  text-decoration: none;
+}
+
+.sawerna-single-product__fabric-card-link:hover,
+.sawerna-single-product__fabric-card-link:focus-visible {
+  color: #111;
+  border-bottom-color: transparent;
+}
+
+.sawerna-single-product__fabric-card-link:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.sawerna-single-product__fabric-card-arrow {
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.sawerna-single-product__fabric-card-link:hover .sawerna-single-product__fabric-card-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 767px) {
+  .sawerna-single-product__fabric-card {
+    gap: 14px;
+    padding: 12px 14px 12px 12px;
+  }
+
+  .sawerna-single-product__fabric-card-media {
+    flex-basis: 40%;
+  }
+
+  .sawerna-single-product__fabric-card-title {
+    font-size: 16px;
+  }
+
+  .sawerna-single-product__fabric-card-text {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+
+  .sawerna-single-product__fabric-card-link {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+}
+
+/* Too narrow for side by side: image on top. */
+@media (max-width: 339px) {
+  .sawerna-single-product__fabric-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sawerna-single-product__fabric-card-media {
+    flex-basis: auto;
+    max-width: none;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .sawerna-single-product__selector-panel-head {
@@ -2609,4 +2742,171 @@ body.single-product .site-main {
 .sawerna-single-product__thwepo-extra textarea:focus {
   outline: none;
   border-color: #111;
+}
+
+/* -------------------------------------------------------------------------
+ * Selector panel: size/label options (no swatch image) as compact chips.
+ * :is() is forgiving, so browsers without :has() still match the
+ * data-swatch-type branch.
+ * ---------------------------------------------------------------------- */
+.sawerna-single-product__selector-options:is(.sawerna-single-product__selector-options--label, .sawerna-single-product__selector-options--select, :has(.sawerna-single-product__selector-option-icon)) {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid #e3ded3;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)):hover,
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)):focus-visible {
+  border-color: #a8a06f;
+  box-shadow: none;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)).is-selected {
+  border-color: #38371b;
+  background: #f2efe9;
+  box-shadow: inset 0 0 0 1px #38371b;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)).is-disabled,
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)):disabled {
+  opacity: 0.4;
+  border-color: #e3ded3;
+  background: #fff;
+  box-shadow: none;
+}
+
+/* Drop the big placeholder ring; keep a small slot for the size glyph. */
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-media {
+  display: none;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-media.has-size-glyph {
+  display: flex;
+  flex: 0 0 40px;
+  width: 40px;
+  max-width: 40px;
+  height: 40px;
+  max-height: 40px;
+  margin: 0;
+  aspect-ratio: auto;
+  background: #f6f4ee;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.sawerna-single-product__selector-option-media.has-size-glyph .sawerna-single-product__selector-option-icon {
+  display: none;
+}
+
+.sawerna-single-product__size-glyph {
+  display: block;
+  width: 40px;
+  height: 40px;
+  color: #8b845f;
+  transition: color 0.2s ease;
+}
+
+.sawerna-single-product__size-glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sawerna-single-product__size-glyph .g-body {
+  fill: #fff;
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.sawerna-single-product__size-glyph .g-solid {
+  fill: currentColor;
+}
+
+.sawerna-single-product__size-glyph .g-soft {
+  fill: currentColor;
+  fill-opacity: 0.22;
+  stroke: currentColor;
+  stroke-width: 0.9;
+}
+
+.sawerna-single-product__size-glyph .g-line {
+  stroke: currentColor;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-opacity: 0.55;
+}
+
+.sawerna-single-product__selector-option:hover .sawerna-single-product__size-glyph {
+  color: #38371b;
+}
+
+.sawerna-single-product__selector-option.is-selected .sawerna-single-product__selector-option-media.has-size-glyph {
+  background: #fff;
+}
+
+.sawerna-single-product__selector-option.is-selected .sawerna-single-product__size-glyph {
+  color: #38371b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sawerna-single-product__size-glyph,
+  .sawerna-single-product__selector-option-media.has-size-glyph {
+    transition: none;
+  }
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-copy {
+  flex: 1 1 auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  text-align: left;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-label {
+  width: auto;
+  color: #38371b;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)).is-selected .sawerna-single-product__selector-option-label {
+  font-weight: 600;
+}
+
+@media (max-width: 420px) {
+  .sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-label {
+    font-size: 14px;
+  }
+}
+
+.sawerna-single-product__selector-option:is([data-swatch-type="label"], [data-swatch-type="select"], :has(> .sawerna-single-product__selector-option-media > .sawerna-single-product__selector-option-icon)) .sawerna-single-product__selector-option-detail {
+  width: auto;
+  font-size: 13px;
+}
+
+/* "Valitud" box: hide the empty preview tile when there is no image/colour. */
+.sawerna-single-product__selector-current:not(:has(img, .sawerna-single-product__selector-preview-color)) {
+  grid-template-columns: minmax(0, 1fr);
+  background: #f2efe9;
+}
+
+.sawerna-single-product__selector-current:not(:has(img, .sawerna-single-product__selector-preview-color)) > .sawerna-single-product__selector-current-preview {
+  display: none;
 }

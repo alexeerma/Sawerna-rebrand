@@ -170,16 +170,61 @@ function sawerna_homepage_narrow_slide_defaults() {
 }
 
 /**
+ * Default (WPML) language code for hero slides.
+ *
+ * @return string
+ */
+function sawerna_homepage_default_slides_lang() {
+	$lang = apply_filters( 'wpml_default_language', null ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
+
+	return ( is_string( $lang ) && '' !== $lang ) ? sanitize_key( $lang ) : 'et';
+}
+
+/**
+ * Language code the hero slides are read from / saved to for the current request.
+ *
+ * WPML admin can be in "all languages" mode, which has no slide set of its own; use the
+ * default language then so the admin form and the save handler always agree.
+ *
+ * @return string
+ */
+function sawerna_homepage_current_slides_lang() {
+	$lang = apply_filters( 'wpml_current_language', null ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
+
+	if ( ! is_string( $lang ) || '' === $lang || 'all' === $lang ) {
+		return sawerna_homepage_default_slides_lang();
+	}
+
+	return sanitize_key( $lang );
+}
+
+/**
  * Get hero slides for a specific language code.
  *
  * @param string $lang Language code (e.g. 'et', 'en').
  * @return array<string, array> Keys 'hero_wide' and 'hero_narrow'.
  */
 function sawerna_get_homepage_slides_for_lang( $lang ) {
-	$lang       = sanitize_key( (string) $lang );
-	$stored     = get_option( 'sawerna_homepage_slides_' . $lang, array() );
-	$wide_raw   = ( is_array( $stored ) && isset( $stored['hero_wide'] ) && is_array( $stored['hero_wide'] ) ) ? $stored['hero_wide'] : array();
-	$narrow_raw = ( is_array( $stored ) && isset( $stored['hero_narrow'] ) && is_array( $stored['hero_narrow'] ) ) ? $stored['hero_narrow'] : array();
+	$lang   = sanitize_key( (string) $lang );
+	$stored = get_option( 'sawerna_homepage_slides_' . $lang, null );
+
+	// No slides saved for this language yet: fall back to the default language, then to the
+	// slides that older theme versions wrote into sawerna_homepage_options (never read back).
+	if ( ! is_array( $stored ) ) {
+		$default_lang = sawerna_homepage_default_slides_lang();
+		$stored       = $default_lang !== $lang ? get_option( 'sawerna_homepage_slides_' . $default_lang, null ) : null;
+	}
+
+	if ( ! is_array( $stored ) ) {
+		$legacy = get_option( 'sawerna_homepage_options', array() );
+		$stored = array(
+			'hero_wide'   => ( is_array( $legacy ) && isset( $legacy['hero_wide_slides'] ) ) ? $legacy['hero_wide_slides'] : array(),
+			'hero_narrow' => ( is_array( $legacy ) && isset( $legacy['hero_narrow_slides'] ) ) ? $legacy['hero_narrow_slides'] : array(),
+		);
+	}
+
+	$wide_raw   = ( isset( $stored['hero_wide'] ) && is_array( $stored['hero_wide'] ) ) ? $stored['hero_wide'] : array();
+	$narrow_raw = ( isset( $stored['hero_narrow'] ) && is_array( $stored['hero_narrow'] ) ) ? $stored['hero_narrow'] : array();
 
 	$wide   = sawerna_sanitize_homepage_wide_slides( $wide_raw );
 	$narrow = sawerna_sanitize_homepage_narrow_slides( $narrow_raw );
@@ -843,6 +888,33 @@ function sawerna_get_homepage_category_terms() {
 		return array();
 	}
 
+	// Manually picked categories (any level), in the order chosen in Page options.
+	$options      = sawerna_get_homepage_options();
+	$selected_ids = ! empty( $options['category_ids'] ) && is_array( $options['category_ids'] ) ? $options['category_ids'] : array();
+
+	if ( ! empty( $selected_ids ) ) {
+		$term_ids = array();
+		foreach ( $selected_ids as $selected_id ) {
+			// Map to the current WPML language; returns the original ID without WPML.
+			$term_ids[] = (int) apply_filters( 'wpml_object_id', (int) $selected_id, 'product_cat', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
+		}
+		$term_ids = array_values( array_unique( array_filter( $term_ids ) ) );
+
+		$selected_terms = get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+				'include'    => $term_ids,
+				'orderby'    => 'include',
+			)
+		);
+
+		// Deleted terms simply drop out; if none are left, use the automatic list below.
+		if ( is_array( $selected_terms ) && ! empty( $selected_terms ) ) {
+			return array_values( $selected_terms );
+		}
+	}
+
 	$uncategorized_id = (int) get_option( 'default_product_cat', 0 );
 
 	$terms = get_terms(
@@ -860,6 +932,153 @@ function sawerna_get_homepage_category_terms() {
 }
 
 /**
+ * Sanitize the ordered list of homepage category IDs.
+ *
+ * Keeps the submitted order, drops duplicates and IDs that are not product_cat terms.
+ *
+ * @param array<int|string, mixed> $raw_ids Raw IDs.
+ * @return array<int, int>
+ */
+function sawerna_homepage_sanitize_category_ids( array $raw_ids ) {
+	$ids = array_values( array_unique( array_filter( array_map( 'absint', $raw_ids ) ) ) );
+
+	if ( empty( $ids ) || ! taxonomy_exists( 'product_cat' ) ) {
+		return array();
+	}
+
+	$existing = get_terms(
+		array(
+			'taxonomy'   => 'product_cat',
+			'hide_empty' => false,
+			'include'    => $ids,
+			'fields'     => 'ids',
+		)
+	);
+	$existing = is_array( $existing ) ? array_map( 'intval', $existing ) : array();
+
+	return array_values( array_intersect( $ids, $existing ) );
+}
+
+/**
+ * Build product_cat choices in tree order with their full path ("Parent › Child").
+ *
+ * @param array<int, WP_Term> $terms All product_cat terms.
+ * @return array<int, array{id:int, label:string, depth:int}>
+ */
+function sawerna_homepage_category_choices( array $terms ) {
+	$by_parent = array();
+	$by_id     = array();
+
+	foreach ( $terms as $term ) {
+		if ( ! $term instanceof WP_Term ) {
+			continue;
+		}
+		$by_id[ (int) $term->term_id ]       = $term;
+		$by_parent[ (int) $term->parent ][] = $term;
+	}
+
+	$choices = array();
+	$walk    = static function ( $parent_id, $depth, $path ) use ( &$walk, &$choices, $by_parent ) {
+		if ( empty( $by_parent[ $parent_id ] ) || $depth > 10 ) {
+			return;
+		}
+
+		foreach ( $by_parent[ $parent_id ] as $term ) {
+			$label     = '' === $path ? $term->name : $path . ' › ' . $term->name;
+			$choices[] = array(
+				'id'    => (int) $term->term_id,
+				'label' => $label,
+				'depth' => $depth,
+			);
+			$walk( (int) $term->term_id, $depth + 1, $label );
+		}
+	};
+
+	$walk( 0, 0, '' );
+
+	// Orphans whose parent is not in the list (e.g. language-filtered) still get listed.
+	$listed = wp_list_pluck( $choices, 'id' );
+	foreach ( $by_id as $term_id => $term ) {
+		if ( ! in_array( $term_id, $listed, true ) ) {
+			$choices[] = array(
+				'id'    => $term_id,
+				'label' => $term->name,
+				'depth' => 0,
+			);
+		}
+	}
+
+	return $choices;
+}
+
+/**
+ * Render the homepage category picker (search + ordered, sortable selection).
+ *
+ * @param array<int, WP_Term> $terms        All product_cat terms.
+ * @param array<int, int>     $selected_ids Selected term IDs in display order.
+ * @return void
+ */
+function sawerna_homepage_render_category_picker( array $terms, array $selected_ids ) {
+	$choices = sawerna_homepage_category_choices( $terms );
+	$labels  = wp_list_pluck( $choices, 'label', 'id' );
+	?>
+	<div class="sawerna-home-catpicker" data-home-catpicker="1">
+		<div class="sawerna-home-catpicker__col">
+			<label for="sawerna-home-catpicker-search"><?php esc_html_e( 'Find categories', 'sawerna' ); ?></label>
+			<input id="sawerna-home-catpicker-search" type="search" class="widefat" placeholder="<?php esc_attr_e( 'Type to filter…', 'sawerna' ); ?>" data-home-catpicker-search="1" autocomplete="off">
+			<ul class="sawerna-home-catpicker__list" data-home-catpicker-available="1">
+				<?php foreach ( $choices as $choice ) : ?>
+					<li class="sawerna-home-catpicker__option" data-term-id="<?php echo esc_attr( (string) $choice['id'] ); ?>" data-label="<?php echo esc_attr( $choice['label'] ); ?>" style="padding-left: <?php echo esc_attr( (string) ( 8 + 18 * (int) $choice['depth'] ) ); ?>px;">
+						<span class="sawerna-home-catpicker__option-label" title="<?php echo esc_attr( $choice['label'] ); ?>"><?php echo esc_html( $choice['label'] ); ?></span>
+						<button type="button" class="button button-small" data-home-catpicker-add="1"<?php disabled( in_array( (int) $choice['id'], $selected_ids, true ) ); ?>><?php esc_html_e( 'Add', 'sawerna' ); ?></button>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<div class="sawerna-home-catpicker__col">
+			<span class="sawerna-home-catpicker__heading"><?php esc_html_e( 'Shown on the homepage (drag or use arrows to reorder)', 'sawerna' ); ?></span>
+			<?php // Empty marker so clearing every category still submits the field. ?>
+			<input type="hidden" name="category_ids[]" value="0">
+			<ol class="sawerna-home-catpicker__selected" data-home-catpicker-selected="1">
+				<?php foreach ( $selected_ids as $selected_id ) : ?>
+					<?php
+					if ( ! isset( $labels[ $selected_id ] ) ) {
+						// Not in the (language-filtered) list: keep it if the term still exists,
+						// drop it if it was deleted (the next save then removes it for good).
+						$other_term = get_term( (int) $selected_id, 'product_cat' );
+						if ( ! $other_term instanceof WP_Term ) {
+							continue;
+						}
+						$labels[ $selected_id ] = $other_term->name;
+					}
+					?>
+					<li class="sawerna-home-catpicker__item" data-term-id="<?php echo esc_attr( (string) $selected_id ); ?>">
+						<span class="sawerna-home-catpicker__handle dashicons dashicons-move" aria-hidden="true"></span>
+						<span class="sawerna-home-catpicker__item-label"><?php echo esc_html( $labels[ $selected_id ] ); ?></span>
+						<input type="hidden" name="category_ids[]" value="<?php echo esc_attr( (string) $selected_id ); ?>">
+						<button type="button" class="button-link" data-home-catpicker-up="1" aria-label="<?php esc_attr_e( 'Move up', 'sawerna' ); ?>">&uarr;</button>
+						<button type="button" class="button-link" data-home-catpicker-down="1" aria-label="<?php esc_attr_e( 'Move down', 'sawerna' ); ?>">&darr;</button>
+						<button type="button" class="button-link-delete" data-home-catpicker-remove="1"><?php esc_html_e( 'Remove', 'sawerna' ); ?></button>
+					</li>
+				<?php endforeach; ?>
+			</ol>
+			<p class="sawerna-home-catpicker__empty" data-home-catpicker-empty="1"<?php echo empty( $selected_ids ) ? '' : ' hidden'; ?>><?php esc_html_e( 'Nothing selected: the homepage shows all top-level categories automatically.', 'sawerna' ); ?></p>
+		</div>
+	</div>
+	<template id="sawerna-home-catpicker-item-template">
+		<li class="sawerna-home-catpicker__item" data-term-id="">
+			<span class="sawerna-home-catpicker__handle dashicons dashicons-move" aria-hidden="true"></span>
+			<span class="sawerna-home-catpicker__item-label"></span>
+			<input type="hidden" name="category_ids[]" value="">
+			<button type="button" class="button-link" data-home-catpicker-up="1" aria-label="<?php esc_attr_e( 'Move up', 'sawerna' ); ?>">&uarr;</button>
+			<button type="button" class="button-link" data-home-catpicker-down="1" aria-label="<?php esc_attr_e( 'Move down', 'sawerna' ); ?>">&darr;</button>
+			<button type="button" class="button-link-delete" data-home-catpicker-remove="1"><?php esc_html_e( 'Remove', 'sawerna' ); ?></button>
+		</li>
+	</template>
+	<?php
+}
+
+/**
  * Get homepage options defaults.
  *
  * @return array<string, mixed>
@@ -869,6 +1088,7 @@ function sawerna_homepage_options_defaults() {
 		'category_heading'            => __( 'Alusta shoppamist oiges kategoorias', 'sawerna' ),
 		'category_more_label'         => __( 'Kuva rohkem kategooriaid', 'sawerna' ),
 		'category_less_label'         => __( 'Peida kategooriad', 'sawerna' ),
+		'category_ids'                => array(),
 		'products_archive_url'        => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
 		'new_products_use_latest'     => 1,
 		'new_products_ids'            => array(),
@@ -910,13 +1130,13 @@ function sawerna_get_homepage_options() {
 	$defaults = sawerna_homepage_options_defaults();
 	$options  = wp_parse_args( is_array( $stored ) ? $stored : array(), $defaults );
 
-	$lang                                   = (string) apply_filters( 'wpml_current_language', 'et' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Third-party WPML hook.
-	$slides                                 = sawerna_get_homepage_slides_for_lang( $lang );
+	$slides                                 = sawerna_get_homepage_slides_for_lang( sawerna_homepage_current_slides_lang() );
 	$options['hero_wide_slides']            = $slides['hero_wide'];
 	$options['hero_narrow_slides']          = $slides['hero_narrow'];
 	$options['category_heading']            = sanitize_text_field( (string) $options['category_heading'] );
 	$options['category_more_label']         = sanitize_text_field( (string) $options['category_more_label'] );
 	$options['category_less_label']         = sanitize_text_field( (string) $options['category_less_label'] );
+	$options['category_ids']                = array_values( array_unique( array_filter( array_map( 'absint', is_array( $options['category_ids'] ) ? $options['category_ids'] : array() ) ) ) );
 	$options['products_archive_url']        = esc_url_raw( (string) $options['products_archive_url'] );
 	$options['new_products_use_latest']     = ! empty( $options['new_products_use_latest'] ) ? 1 : 0;
 	$options['new_products_ids']            = array_values( array_filter( array_map( 'absint', is_array( $options['new_products_ids'] ) ? $options['new_products_ids'] : array() ) ) );
@@ -940,12 +1160,12 @@ function sawerna_get_homepage_options() {
 
 	if ( empty( $options['hero_wide_slides'] ) ) {
 		$legacy_wide                 = sawerna_get_homepage_legacy_wide_slides();
-		$options['hero_wide_slides'] = ! empty( $legacy_wide ) ? $legacy_wide : $defaults['hero_wide_slides'];
+		$options['hero_wide_slides'] = ! empty( $legacy_wide ) ? $legacy_wide : sawerna_homepage_default_wide_slides();
 	}
 
 	if ( empty( $options['hero_narrow_slides'] ) ) {
 		$legacy_narrow                 = sawerna_get_homepage_legacy_narrow_slides();
-		$options['hero_narrow_slides'] = ! empty( $legacy_narrow ) ? $legacy_narrow : $defaults['hero_narrow_slides'];
+		$options['hero_narrow_slides'] = ! empty( $legacy_narrow ) ? $legacy_narrow : sawerna_homepage_default_narrow_slides();
 	}
 
 	if ( '' === trim( $options['category_heading'] ) ) {
@@ -1121,6 +1341,12 @@ function sawerna_homepage_options_admin_assets( $hook_suffix ) {
 		$js_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $slider_js_path ) : $theme_version;
 		wp_enqueue_script( 'sawerna-admin-homepage', get_template_directory_uri() . '/js/admin-homepage.js', array( 'jquery' ), $js_version, true );
 	}
+
+	$catpicker_js_path = get_template_directory() . '/assets/js/homepage-admin-categories.js';
+	if ( file_exists( $catpicker_js_path ) ) {
+		$js_version = defined( 'WP_DEBUG' ) && WP_DEBUG ? filemtime( $catpicker_js_path ) : $theme_version;
+		wp_enqueue_script( 'sawerna-admin-homepage-categories', get_template_directory_uri() . '/assets/js/homepage-admin-categories.js', array( 'jquery', 'jquery-ui-sortable' ), $js_version, true );
+	}
 }
 add_action( 'admin_enqueue_scripts', 'sawerna_homepage_options_admin_assets' );
 
@@ -1135,19 +1361,26 @@ function sawerna_homepage_handle_admin_save() {
 	}
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
+		wp_die( esc_html__( 'You are not allowed to change these options.', 'sawerna' ), 403 );
 	}
 
 	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['sawerna_homepage_options_nonce'] ) ), 'sawerna_homepage_options_save' ) ) {
-		return;
+		wp_die( esc_html__( 'The link has expired. Go back, reload the page and try again.', 'sawerna' ), 403 );
 	}
 
+	// Hero slides live in their own per-language option, which is what
+	// sawerna_get_homepage_slides_for_lang() reads on the front end and in this admin form.
+	$slides = array(
+		'hero_wide'   => isset( $_POST['hero_wide_slides'] ) ? sawerna_sanitize_homepage_wide_slides( wp_unslash( $_POST['hero_wide_slides'] ) ) : array(), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized per field in the callback.
+		'hero_narrow' => isset( $_POST['hero_narrow_slides'] ) ? sawerna_sanitize_homepage_narrow_slides( wp_unslash( $_POST['hero_narrow_slides'] ) ) : array(), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized per field in the callback.
+	);
+	update_option( 'sawerna_homepage_slides_' . sawerna_homepage_current_slides_lang(), $slides );
+
 	$options = array(
-		'hero_wide_slides'            => isset( $_POST['hero_wide_slides'] ) ? sawerna_sanitize_homepage_wide_slides( wp_unslash( $_POST['hero_wide_slides'] ) ) : array(),
-		'hero_narrow_slides'          => isset( $_POST['hero_narrow_slides'] ) ? sawerna_sanitize_homepage_narrow_slides( wp_unslash( $_POST['hero_narrow_slides'] ) ) : array(),
 		'category_heading'            => isset( $_POST['category_heading'] ) ? sanitize_text_field( wp_unslash( $_POST['category_heading'] ) ) : '',
 		'category_more_label'         => isset( $_POST['category_more_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_more_label'] ) ) : '',
 		'category_less_label'         => isset( $_POST['category_less_label'] ) ? sanitize_text_field( wp_unslash( $_POST['category_less_label'] ) ) : '',
+		'category_ids'                => isset( $_POST['category_ids'] ) ? sawerna_homepage_sanitize_category_ids( (array) wp_unslash( $_POST['category_ids'] ) ) : array(), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- absint() in the callback.
 		'products_archive_url'        => isset( $_POST['products_archive_url'] ) ? esc_url_raw( wp_unslash( $_POST['products_archive_url'] ) ) : '',
 		'new_products_use_latest'     => isset( $_POST['new_products_use_latest'] ) ? 1 : 0,
 		'new_products_ids'            => isset( $_POST['new_products_ids'] ) ? array_values( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['new_products_ids'] ) ) ) ) : array(),
@@ -1173,15 +1406,15 @@ function sawerna_homepage_handle_admin_save() {
 	sawerna_homepage_register_wpml_option_strings( $options );
 	update_option( 'sawerna_homepage_options', $options );
 
-	wp_safe_redirect(
-		add_query_arg(
-			array(
-				'page'    => 'sawerna-page-options',
-				'updated' => '1',
-			),
-			admin_url( 'admin.php' )
-		)
+	$redirect_args = array(
+		'page'    => 'sawerna-page-options',
+		'updated' => '1',
 	);
+	if ( isset( $_GET['lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above; only keeps the WPML admin language.
+		$redirect_args['lang'] = sanitize_key( wp_unslash( $_GET['lang'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	}
+
+	wp_safe_redirect( add_query_arg( $redirect_args, admin_url( 'admin.php' ) ) );
 	exit;
 }
 add_action( 'admin_init', 'sawerna_homepage_handle_admin_save' );
@@ -1344,8 +1577,20 @@ function sawerna_homepage_render_admin_page() {
 			.sawerna-home-admin__image-preview img { display: block; width: 100%; max-width: 240px; border-radius: 8px; height: auto; }
 			.sawerna-home-admin__image-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 			.sawerna-home-admin__footer { margin-top: 18px; }
+			.sawerna-home-catpicker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 12px; }
+			.sawerna-home-catpicker__col > label, .sawerna-home-catpicker__heading { display: block; margin: 0 0 8px; font-weight: 600; }
+			.sawerna-home-catpicker__list, .sawerna-home-catpicker__selected { margin: 8px 0 0; padding: 0; list-style: none; max-height: 360px; overflow: auto; border: 1px solid #dcdcde; border-radius: 8px; background: #fff; }
+			.sawerna-home-catpicker__selected { min-height: 48px; }
+			.sawerna-home-catpicker__option, .sawerna-home-catpicker__item { display: flex; align-items: center; gap: 8px; margin: 0; padding: 6px 8px; border-bottom: 1px solid #f0f0f1; }
+			.sawerna-home-catpicker__option-label, .sawerna-home-catpicker__item-label { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+			.sawerna-home-catpicker__option[hidden] { display: none; }
+			.sawerna-home-catpicker__item { background: #fff; }
+			.sawerna-home-catpicker__handle { cursor: move; color: #8c8f94; }
+			.sawerna-home-catpicker__placeholder { height: 34px; background: #f0f6fc; border: 1px dashed #72aee6; }
+			.sawerna-home-catpicker__empty { margin: 8px 0 0; color: #646970; }
 			@media (max-width: 960px) {
-				.sawerna-home-admin__columns { grid-template-columns: 1fr; }
+				.sawerna-home-admin__columns,
+				.sawerna-home-catpicker { grid-template-columns: 1fr; }
 			}
 		</style>
 
@@ -1407,6 +1652,11 @@ function sawerna_homepage_render_admin_page() {
 							<label for="category_less_label"><?php esc_html_e( 'Show less label', 'sawerna' ); ?></label>
 							<input id="category_less_label" class="regular-text widefat" type="text" name="category_less_label" value="<?php echo esc_attr( (string) $options['category_less_label'] ); ?>">
 						</p>
+					</div>
+					<div class="sawerna-home-options__field">
+						<strong><?php esc_html_e( 'Categories to show', 'sawerna' ); ?></strong>
+						<p class="sawerna-home-options__hint"><?php esc_html_e( 'Pick categories from any level and set their order. Leave empty to show all top-level categories automatically.', 'sawerna' ); ?></p>
+						<?php sawerna_homepage_render_category_picker( is_array( $categories ) ? $categories : array(), $options['category_ids'] ); ?>
 					</div>
 				</section>
 

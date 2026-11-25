@@ -7,7 +7,8 @@
 }
 
 .sawerna-search-page__container {
-  max-width: 1160px;
+  /* Content width (1240 - 2x20px gutter) = 1200px, same as .sawerna-header__container (menu). */
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 20px;
 }

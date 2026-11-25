@@ -3,7 +3,9 @@
  * Single product options admin page.
  *
  * Tabs:
- *  - Kangavalik  : global fabric banner text (sawerna_page_options['fabric_banner_text'])
+ *  - Kangavalik  : fabric card under the "Vali kattekangas" row (sawerna_page_options['fabric_banner_*']:
+ *                  title, text, link_label, link_url, image_id). Per-product text override lives in
+ *                  product meta _sawerna_fabric_banner_text (sawerna-core includes/single-product.php).
  *  - Järelmaks   : payment provider list     (sawerna_page_options['jarelmaks_providers'])
  *
  * @package Sawerna
@@ -50,9 +52,20 @@ function sawerna_fabric_handle_admin_save(): void {
 
 	if ( 'kangavalik' === $active_tab ) {
 		// ── Kangavalik tab ────────────────────────────────────────────────────
-		$existing['fabric_banner_text'] = isset( $_POST['fabric_banner_text'] )
+		$existing['fabric_banner_title']      = isset( $_POST['fabric_banner_title'] )
+			? sanitize_text_field( wp_unslash( $_POST['fabric_banner_title'] ) )
+			: '';
+		$existing['fabric_banner_text']       = isset( $_POST['fabric_banner_text'] )
 			? sanitize_textarea_field( wp_unslash( $_POST['fabric_banner_text'] ) )
 			: '';
+		$existing['fabric_banner_link_label'] = isset( $_POST['fabric_banner_link_label'] )
+			? sanitize_text_field( wp_unslash( $_POST['fabric_banner_link_label'] ) )
+			: '';
+		$existing['fabric_banner_link_url']   = isset( $_POST['fabric_banner_link_url'] )
+			? esc_url_raw( trim( (string) wp_unslash( $_POST['fabric_banner_link_url'] ) ) ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- esc_url_raw sanitizes.
+			: '';
+		$image_id                             = isset( $_POST['fabric_banner_image_id'] ) ? absint( $_POST['fabric_banner_image_id'] ) : 0;
+		$existing['fabric_banner_image_id']   = ( $image_id && wp_attachment_is_image( $image_id ) ) ? $image_id : 0;
 	} elseif ( 'jarelmaks' === $active_tab ) {
 		// ── Järelmaks tab ─────────────────────────────────────────────────────
 		$raw_providers = isset( $_POST['jarelmaks_providers'] ) && is_array( $_POST['jarelmaks_providers'] )
@@ -147,6 +160,117 @@ function sawerna_get_jarelmaks_providers(): array {
 }
 
 /**
+ * Default fabric card copy, used when an option has never been saved.
+ *
+ * @return array{title: string, text: string, link_label: string}
+ */
+function sawerna_fabric_banner_defaults(): array {
+	return array(
+		'title'      => __( 'Rohkem kangaid ja värvitoone', 'sawerna' ),
+		'text'       => __( 'Siin näed vaid osa kangavalikust.', 'sawerna' ),
+		'link_label' => __( 'Küsi teisi kangaid', 'sawerna' ),
+	);
+}
+
+/**
+ * Default link target: the contact page (slug "kontakt"), translated via WPML when available.
+ *
+ * @return string Permalink or empty string when no contact page exists.
+ */
+function sawerna_fabric_banner_default_link_url(): string {
+	$page = get_page_by_path( 'kontakt' );
+	if ( ! $page instanceof WP_Post ) {
+		return '';
+	}
+	$page_id = (int) apply_filters( 'wpml_object_id', $page->ID, 'page', true );
+	$url     = get_permalink( $page_id );
+	return $url ? (string) $url : '';
+}
+
+/**
+ * Default card image shipped with the theme.
+ *
+ * @return array{src: string, srcset: string, width: int, height: int}
+ */
+function sawerna_fabric_banner_default_image(): array {
+	$base = get_template_directory_uri() . '/assets/images/';
+	return array(
+		'src'    => $base . 'fabric-samples-600.webp',
+		'srcset' => $base . 'fabric-samples-300.webp 300w, ' . $base . 'fabric-samples-600.webp 600w',
+		'width'  => 600,
+		'height' => 429,
+	);
+}
+
+/**
+ * Resolve everything the fabric card needs for one product.
+ *
+ * Returns null when the card is disabled for the product or has no title and no text.
+ * Option keys that were never saved fall back to defaults; a saved empty link URL or
+ * label hides the link.
+ *
+ * @param int $product_id Product ID.
+ * @return array{title: string, text: string, link_label: string, link_url: string, image_id: int}|null
+ */
+function sawerna_get_fabric_banner_data( int $product_id ): ?array {
+	if ( '1' !== (string) get_post_meta( $product_id, '_sawerna_fabric_banner_enabled', true ) ) {
+		return null;
+	}
+
+	$options  = (array) get_option( 'sawerna_page_options', array() );
+	$defaults = sawerna_fabric_banner_defaults();
+
+	$title      = array_key_exists( 'fabric_banner_title', $options ) ? (string) $options['fabric_banner_title'] : $defaults['title'];
+	$text       = array_key_exists( 'fabric_banner_text', $options ) ? (string) $options['fabric_banner_text'] : $defaults['text'];
+	$link_label = array_key_exists( 'fabric_banner_link_label', $options ) ? (string) $options['fabric_banner_link_label'] : $defaults['link_label'];
+	$link_url   = array_key_exists( 'fabric_banner_link_url', $options ) ? (string) $options['fabric_banner_link_url'] : sawerna_fabric_banner_default_link_url();
+	$image_id   = isset( $options['fabric_banner_image_id'] ) ? absint( $options['fabric_banner_image_id'] ) : 0;
+
+	$product_text = trim( (string) get_post_meta( $product_id, '_sawerna_fabric_banner_text', true ) );
+	if ( '' !== $product_text ) {
+		$text = $product_text;
+	}
+
+	$title = trim( $title );
+	$text  = trim( $text );
+	if ( '' === $title && '' === $text ) {
+		return null;
+	}
+
+	if ( '' === trim( $link_label ) || '' === trim( $link_url ) ) {
+		$link_label = '';
+		$link_url   = '';
+	}
+
+	return array(
+		'title'      => $title,
+		'text'       => $text,
+		'link_label' => trim( $link_label ),
+		'link_url'   => $link_url,
+		'image_id'   => $image_id,
+	);
+}
+
+/**
+ * Load the media picker on the Single product options page.
+ *
+ * @param string $hook_suffix Current admin page hook.
+ */
+function sawerna_fabric_admin_enqueue( string $hook_suffix ): void {
+	if ( false === strpos( $hook_suffix, 'sawerna-fabric-options' ) ) {
+		return;
+	}
+	wp_enqueue_media();
+	wp_register_script( 'sawerna-fabric-options-admin', false, array( 'jquery', 'media-editor' ), '1.0.0', true );
+	wp_enqueue_script( 'sawerna-fabric-options-admin' );
+	wp_add_inline_script(
+		'sawerna-fabric-options-admin',
+		"jQuery(function($){var frame;var \$wrap=$('[data-fabric-image-field]');if(!\$wrap.length){return;}var \$id=\$wrap.find('input[type=hidden]');var \$img=\$wrap.find('img');var \$remove=\$wrap.find('[data-fabric-image-remove]');var def=\$img.attr('data-default-src');\$wrap.on('click','[data-fabric-image-select]',function(e){e.preventDefault();if(!frame){frame=wp.media({title:\$(this).text(),library:{type:'image'},multiple:false});frame.on('select',function(){var a=frame.state().get('selection').first().toJSON();var u=(a.sizes&&a.sizes.medium)?a.sizes.medium.url:a.url;\$id.val(a.id);\$img.attr('src',u);\$remove.prop('hidden',false);});}frame.open();});\$remove.on('click',function(e){e.preventDefault();\$id.val('0');\$img.attr('src',def);\$remove.prop('hidden',true);});});"
+	);
+}
+add_action( 'admin_enqueue_scripts', 'sawerna_fabric_admin_enqueue' );
+
+/**
  * Render the Single product options admin page.
  */
 function sawerna_fabric_render_admin_page(): void {
@@ -154,8 +278,19 @@ function sawerna_fabric_render_admin_page(): void {
 		return;
 	}
 
-	$options            = (array) get_option( 'sawerna_page_options', array() );
-	$fabric_banner_text = isset( $options['fabric_banner_text'] ) ? (string) $options['fabric_banner_text'] : '';
+	$options             = (array) get_option( 'sawerna_page_options', array() );
+	$fabric_defaults     = sawerna_fabric_banner_defaults();
+	$fabric_banner_title = array_key_exists( 'fabric_banner_title', $options ) ? (string) $options['fabric_banner_title'] : $fabric_defaults['title'];
+	$fabric_banner_text  = array_key_exists( 'fabric_banner_text', $options ) ? (string) $options['fabric_banner_text'] : $fabric_defaults['text'];
+	$fabric_link_label   = array_key_exists( 'fabric_banner_link_label', $options ) ? (string) $options['fabric_banner_link_label'] : $fabric_defaults['link_label'];
+	$fabric_link_url     = array_key_exists( 'fabric_banner_link_url', $options ) ? (string) $options['fabric_banner_link_url'] : sawerna_fabric_banner_default_link_url();
+	$fabric_image_id     = isset( $options['fabric_banner_image_id'] ) ? absint( $options['fabric_banner_image_id'] ) : 0;
+	$fabric_default_img  = sawerna_fabric_banner_default_image();
+	$fabric_image_src    = $fabric_image_id ? (string) wp_get_attachment_image_url( $fabric_image_id, 'medium' ) : '';
+	if ( '' === $fabric_image_src ) {
+		$fabric_image_id  = 0;
+		$fabric_image_src = $fabric_default_img['src'];
+	}
 
 	$stored_providers     = isset( $options['jarelmaks_providers'] ) && is_array( $options['jarelmaks_providers'] )
 		? $options['jarelmaks_providers']
@@ -218,21 +353,66 @@ function sawerna_fabric_render_admin_page(): void {
 
 			<?php if ( 'kangavalik' === $active_tab ) : ?>
 
+				<p class="description" style="margin-top:20px;max-width:760px;">
+					<?php esc_html_e( 'Card shown under the "Vali kattekangas" row on products where "Kangavalik banner" is checked (product edit → General). Title and text are required for the card to appear; empty link URL or label hides the link.', 'sawerna' ); ?>
+				</p>
+
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row">
-							<label for="fabric_banner_text"><?php esc_html_e( 'Kangavalik banner text', 'sawerna' ); ?></label>
+							<label for="fabric_banner_title"><?php esc_html_e( 'Title', 'sawerna' ); ?></label>
+						</th>
+						<td>
+							<input type="text" name="fabric_banner_title" id="fabric_banner_title" class="regular-text" value="<?php echo esc_attr( $fabric_banner_title ); ?>">
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="fabric_banner_text"><?php esc_html_e( 'Text', 'sawerna' ); ?></label>
 						</th>
 						<td>
 							<textarea
 								name="fabric_banner_text"
 								id="fabric_banner_text"
-								rows="5"
+								rows="3"
 								class="large-text"
 							><?php echo esc_textarea( $fabric_banner_text ); ?></textarea>
 							<p class="description">
-								<?php esc_html_e( 'Shown inside the Kangas selector drawer on products that have the banner enabled.', 'sawerna' ); ?>
+								<?php esc_html_e( 'Default text. A product can override it with its own "Kangavaliku tekst" (product edit → General).', 'sawerna' ); ?>
 							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="fabric_banner_link_label"><?php esc_html_e( 'Link label', 'sawerna' ); ?></label>
+						</th>
+						<td>
+							<input type="text" name="fabric_banner_link_label" id="fabric_banner_link_label" class="regular-text" value="<?php echo esc_attr( $fabric_link_label ); ?>">
+							<p class="description"><?php esc_html_e( 'An arrow (→) is added automatically.', 'sawerna' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="fabric_banner_link_url"><?php esc_html_e( 'Link URL', 'sawerna' ); ?></label>
+						</th>
+						<td>
+							<input type="url" name="fabric_banner_link_url" id="fabric_banner_link_url" class="regular-text code" value="<?php echo esc_attr( $fabric_link_url ); ?>" placeholder="https://">
+							<p class="description"><?php esc_html_e( 'Defaults to the contact page. Leave empty to hide the link.', 'sawerna' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Image', 'sawerna' ); ?></th>
+						<td data-fabric-image-field="1">
+							<input type="hidden" name="fabric_banner_image_id" value="<?php echo esc_attr( (string) $fabric_image_id ); ?>">
+							<img
+								src="<?php echo esc_url( $fabric_image_src ); ?>"
+								data-default-src="<?php echo esc_url( $fabric_default_img['src'] ); ?>"
+								alt=""
+								style="display:block;width:200px;height:auto;margin-bottom:8px;border-radius:8px;background:#f2efe9;"
+							>
+							<button type="button" class="button" data-fabric-image-select="1"><?php esc_html_e( 'Select image', 'sawerna' ); ?></button>
+							<button type="button" class="button-link button-link-delete" data-fabric-image-remove="1"<?php echo $fabric_image_id ? '' : ' hidden'; ?>><?php esc_html_e( 'Use default image', 'sawerna' ); ?></button>
+							<p class="description"><?php esc_html_e( 'Decorative image on the left of the card. Default: folded fabric samples from the theme.', 'sawerna' ); ?></p>
 						</td>
 					</tr>
 				</table>

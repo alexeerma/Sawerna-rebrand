@@ -373,13 +373,8 @@
     const mobileSelectorQuery = window.matchMedia('(max-width: 767px)');
     const drawer = selectorsRoot.querySelector('[data-selector-drawer="1"]');
     const drawerTitle = drawer ? drawer.querySelector('[data-selector-drawer-title="1"]') : null;
-    const fabricBannerEnabled = selectorsRoot.getAttribute('data-fabric-banner-enabled') === '1';
-    const fabricBannerText = selectorsRoot.getAttribute('data-fabric-banner-text') || '';
-    const fabricBannerEl = drawer ? drawer.querySelector('[data-fabric-banner="1"]') : null;
-    const fabricBannerTextEl = fabricBannerEl ? fabricBannerEl.querySelector('[data-fabric-banner-text-el="1"]') : null;
-    if (fabricBannerEnabled && fabricBannerText && fabricBannerTextEl) {
-      fabricBannerTextEl.textContent = fabricBannerText;
-    }
+    // Fabric card rendered by PHP but not yet placed (no native fabric row): goes after the THWEPO "kangas" row.
+    const pendingFabricCard = selectorsRoot.querySelector('[data-fabric-card-pending="1"]');
 
     // ThemeHigh EPO: build selector rows and panels from the plugin's inline table
     const thwepoTable = document.querySelector('.sawerna-single-product__purchase table.extra-options');
@@ -543,6 +538,12 @@
 
         panel.appendChild(optionsDiv);
         featuresEl.appendChild(rowBtn);
+        if (pendingFabricCard && pendingFabricCard.hidden && (label.toLowerCase().includes('kang') || groupName.toLowerCase().includes('kang'))) {
+          rowBtn.classList.add('has-fabric-card');
+          rowBtn.after(pendingFabricCard);
+          pendingFabricCard.hidden = false;
+          pendingFabricCard.removeAttribute('data-fabric-card-pending');
+        }
         panelsEl.appendChild(panel);
         convertedRows.push(tr);
       });
@@ -971,12 +972,6 @@
 
         if (isActive && drawerTitle) {
           drawerTitle.textContent = group.getAttribute('data-attribute-label') || '';
-        }
-        if (isActive && fabricBannerEl) {
-          const label = (group.getAttribute('data-attribute-label') || '').toLowerCase();
-          const key = (group.getAttribute('data-attribute-name') || '').toLowerCase();
-          const isFabric = label.includes('kang') || key.includes('kang');
-          fabricBannerEl.hidden = !(fabricBannerEnabled && fabricBannerText && isFabric);
         }
       });
 

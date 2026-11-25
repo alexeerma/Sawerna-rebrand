@@ -1277,27 +1277,36 @@
 
 .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu,
 .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Two category columns + HTML block column (same geometry as the old absolute layout:
+     243px + 243px + 534px block at 1200px). The block is an in-flow grid item, so the
+     white panel always grows to contain it (no JS measuring, no fixed min-height).
+     Rows: up to 20 auto rows for categories, then a 1fr row that absorbs any extra
+     block height so category rows are never stretched apart. row-gap is 0 because
+     empty explicit rows would still add gaps; spacing comes from item margins. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 50%;
+  grid-template-rows: repeat(20, auto) 1fr;
   column-gap: 32px;
-  padding-right: calc(50% + 32px);
-  min-height: var(--sawerna-html-block-panel-height, 360px);
+  row-gap: 0;
+  padding-right: 50px;
+  padding-bottom: 10px;
 }
 
 .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li:not(.menu-item-has-html-block):not(.sawerna-mega-menu__html-block-slot),
 .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li:not(.menu-item-has-html-block):not(.sawerna-mega-menu__html-block-slot) {
   width: auto;
+  margin-bottom: 30px;
 }
 
 .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li.menu-item-has-html-block,
 .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li.sawerna-mega-menu__html-block-slot,
 .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li.menu-item-has-html-block,
 .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li.sawerna-mega-menu__html-block-slot {
-  position: absolute;
-  top: 35px;
-  right: 50px;
-  width: calc(50% - 66px);
-  max-width: calc(50% - 66px);
-  margin: 0;
+  position: relative;
+  grid-column: 3;
+  grid-row: 1 / -1;
+  width: auto;
+  max-width: none;
+  margin: 0 0 30px 16px;
 }
 
 .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li.menu-item-has-html-block > a,
@@ -1375,8 +1384,16 @@
 @media (max-width: 1236px) {
   .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu,
   .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    row-gap: 30px;
     padding-right: 50px;
-    min-height: 0;
+    padding-bottom: 40px;
+  }
+
+  .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li:not(.menu-item-has-html-block):not(.sawerna-mega-menu__html-block-slot),
+  .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li:not(.menu-item-has-html-block):not(.sawerna-mega-menu__html-block-slot) {
+    margin-bottom: 0;
   }
 
   .sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu > li.menu-item-has-html-block,
@@ -1384,9 +1401,11 @@
   .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li.menu-item-has-html-block,
   .sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block > li.sawerna-mega-menu__html-block-slot {
     position: static;
+    grid-column: auto;
+    grid-row: auto;
     width: 100%;
     max-width: none;
-    margin-top: 10px;
+    margin: 10px 0 0;
   }
 }
 
@@ -2089,16 +2108,26 @@
     font-weight: 400;
   }
 
+  /* 3rd-level items: small, slim, muted chevron. */
+  .sawerna-mobile-menu__item-icon {
+    color: #9a958f;
+  }
+
   .sawerna-mobile-menu__item-icon svg {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     display: block;
-    margin-left: 5px;
+    margin-left: 6px;
+    margin-right: 2px;
   }
 
   .sawerna-mobile-menu__item-icon svg .cls-1,
-  .sawerna-mobile-menu__item-icon svg polyline {
+  .sawerna-mobile-menu__item-icon svg polyline,
+  .sawerna-mobile-menu__item-icon svg path,
+  .sawerna-mobile-menu__item-icon svg line {
     stroke: currentColor;
+    stroke-width: 1.25px;
+    vector-effect: non-scaling-stroke;
     fill: none;
   }
 

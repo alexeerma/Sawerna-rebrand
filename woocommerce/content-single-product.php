@@ -27,8 +27,66 @@ $summary_badges          = sawerna_get_single_product_summary_badges( $product )
 $location_badge_texts    = array();
 $stock_badge_text        = '';
 $attribute_selector_rows = sawerna_get_single_product_attribute_selector_rows( $product );
-$fabric_banner_enabled   = '1' === (string) get_post_meta( $product->get_id(), '_sawerna_fabric_banner_enabled', true );
-$fabric_banner_text      = function_exists( 'sawerna_get_page_option' ) ? sawerna_get_page_option( 'fabric_banner_text' ) : '';
+$fabric_banner           = function_exists( 'sawerna_get_fabric_banner_data' ) ? sawerna_get_fabric_banner_data( $product->get_id() ) : null;
+$fabric_card_html        = '';
+$fabric_card_placed      = false;
+if ( $fabric_banner ) {
+	ob_start();
+	?>
+	<div class="sawerna-single-product__fabric-card-wrap" data-fabric-card="1">
+		<div class="sawerna-single-product__fabric-card">
+			<div class="sawerna-single-product__fabric-card-media">
+				<?php
+				if ( $fabric_banner['image_id'] && wp_attachment_is_image( $fabric_banner['image_id'] ) ) {
+					echo wp_get_attachment_image(
+						$fabric_banner['image_id'],
+						'medium_large',
+						false,
+						array(
+							'class'    => 'sawerna-single-product__fabric-card-image',
+							'alt'      => '',
+							'loading'  => 'lazy',
+							'decoding' => 'async',
+							'sizes'    => '(max-width: 767px) 40vw, 240px',
+						)
+					);
+				} else {
+					$fabric_default_image = sawerna_fabric_banner_default_image();
+					?>
+					<img
+						class="sawerna-single-product__fabric-card-image"
+						src="<?php echo esc_url( $fabric_default_image['src'] ); ?>"
+						srcset="<?php echo esc_attr( $fabric_default_image['srcset'] ); ?>"
+						sizes="(max-width: 767px) 40vw, 240px"
+						width="<?php echo esc_attr( (string) $fabric_default_image['width'] ); ?>"
+						height="<?php echo esc_attr( (string) $fabric_default_image['height'] ); ?>"
+						alt=""
+						loading="lazy"
+						decoding="async"
+					>
+					<?php
+				}
+				?>
+			</div>
+			<div class="sawerna-single-product__fabric-card-body">
+				<?php if ( '' !== $fabric_banner['title'] ) : ?>
+					<p class="sawerna-single-product__fabric-card-title"><?php echo esc_html( $fabric_banner['title'] ); ?></p>
+				<?php endif; ?>
+				<?php if ( '' !== $fabric_banner['text'] ) : ?>
+					<p class="sawerna-single-product__fabric-card-text"><?php echo esc_html( $fabric_banner['text'] ); ?></p>
+				<?php endif; ?>
+				<?php if ( '' !== $fabric_banner['link_url'] ) : ?>
+					<a class="sawerna-single-product__fabric-card-link" href="<?php echo esc_url( $fabric_banner['link_url'] ); ?>">
+						<span><?php echo esc_html( $fabric_banner['link_label'] ); ?></span>
+						<svg class="sawerna-single-product__fabric-card-arrow" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M3 10h13M11 4.5 16.5 10 11 15.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					</a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+	<?php
+	$fabric_card_html = (string) ob_get_clean();
+}
 $product_tabs            = sawerna_get_single_product_tabs( $product );
 $related_items           = sawerna_get_single_product_related_items( $product );
 $brand_label             = sawerna_get_single_product_brand_label( $product );
@@ -322,17 +380,16 @@ $stock_badge_text     = trim( $stock_badge_text );
 						<div
 							class="sawerna-single-product__selectors"
 							data-product-attribute-selectors="1"
-							<?php if ( $fabric_banner_enabled && $fabric_banner_text ) : ?>
-							data-fabric-banner-enabled="1"
-							data-fabric-banner-text="<?php echo esc_attr( $fabric_banner_text ); ?>"
-							<?php endif; ?>
 						>
 							<div class="sawerna-single-product__features">
 								<?php foreach ( $attribute_selector_rows as $row ) : ?>
-									<?php $has_selection = ! empty( $row['selected']['value'] ); ?>
+									<?php
+									$has_selection  = ! empty( $row['selected']['value'] );
+									$row_has_fabric = $fabric_card_html && ! $fabric_card_placed && 'fabric' === ( $row['icon'] ?? '' );
+									?>
 									<button
 										type="button"
-										class="sawerna-single-product__feature-row sawerna-single-product__feature-row--selector<?php echo $has_selection ? '' : ' is-empty'; ?>"
+										class="sawerna-single-product__feature-row sawerna-single-product__feature-row--selector<?php echo $has_selection ? '' : ' is-empty'; ?><?php echo $row_has_fabric ? ' has-fabric-card' : ''; ?>"
 										data-selector-row="1"
 										data-attribute-key="<?php echo esc_attr( $row['attribute_key'] ); ?>"
 										data-attribute-name="<?php echo esc_attr( $row['attribute_name'] ); ?>"
@@ -364,7 +421,19 @@ $stock_badge_text     = trim( $stock_badge_text );
 											</span>
 										</span>
 									</button>
+									<?php
+									if ( $row_has_fabric ) {
+										echo $fabric_card_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from escaped parts.
+										$fabric_card_placed = true;
+									}
+									?>
 								<?php endforeach; ?>
+								<?php
+								if ( $fabric_card_html && ! $fabric_card_placed ) {
+									// No native fabric row: single-product.js moves this after the THWEPO "kangas" row and unhides it.
+									echo str_replace( 'data-fabric-card="1"', 'data-fabric-card="1" data-fabric-card-pending="1" hidden', $fabric_card_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from escaped parts.
+								}
+								?>
 							</div>
 
 							<div class="sawerna-single-product__selector-drawer" data-selector-drawer="1" hidden>
@@ -373,10 +442,6 @@ $stock_badge_text     = trim( $stock_badge_text );
 									<div class="sawerna-single-product__selector-panel-head">
 										<h2 class="sawerna-single-product__selector-panel-title" id="sawerna-selector-drawer-title" data-selector-drawer-title="1"></h2>
 										<button type="button" class="sawerna-single-product__selector-panel-close" data-selector-close="1" aria-label="<?php esc_attr_e( 'Sulge valikud', 'sawerna' ); ?>">×</button>
-									</div>
-
-									<div class="sawerna-single-product__selector-fabric-banner" data-fabric-banner="1" hidden>
-										<p class="sawerna-single-product__selector-fabric-banner-text" data-fabric-banner-text-el="1"></p>
 									</div>
 
 									<div class="sawerna-single-product__selector-panels">

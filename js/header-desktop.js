@@ -198,35 +198,8 @@
     }
   });
 
-  // Dynamic mega-menu panel height for HTML block slots.
-  // The HTML block slot is absolutely positioned (so its content doesn't
-  // distort the category grid columns), so it no longer contributes to the
-  // panel's auto height. Measure it directly and feed the result back in as
-  // a CSS custom property, so the panel always fits whatever HTML block
-  // content is placed in it instead of relying on a fixed min-height.
-  const htmlBlockSubMenus = header.querySelectorAll(
-    '.sawerna-mega-menu > li.sawerna-mega-menu__item--has-html-block > .sub-menu, ' +
-    '.sawerna-mega-menu > li > .sub-menu.sawerna-mega-menu__sub-menu--has-html-block'
-  );
-
-  htmlBlockSubMenus.forEach(function(subMenu) {
-    const slot = subMenu.querySelector(':scope > li.menu-item-has-html-block, :scope > li.sawerna-mega-menu__html-block-slot');
-    if (!slot) return;
-
-    function syncPanelHeight() {
-      const paddingBottom = parseFloat(window.getComputedStyle(subMenu).paddingBottom) || 0;
-      const requiredHeight = slot.offsetTop + slot.offsetHeight + paddingBottom;
-      subMenu.style.setProperty('--sawerna-html-block-panel-height', requiredHeight + 'px');
-    }
-
-    if (typeof ResizeObserver !== 'undefined') {
-      new ResizeObserver(syncPanelHeight).observe(slot);
-    } else {
-      window.addEventListener('resize', syncPanelHeight);
-    }
-
-    syncPanelHeight();
-  });
+  // Mega-menu HTML block slot is an in-flow grid item (header-desktop.css),
+  // so the panel sizes itself; no JS height sync needed.
 
   // HTML Block Dropdown Functionality
   // Scoped to the two desktop nav menus only: the mobile overlay renders the

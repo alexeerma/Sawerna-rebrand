@@ -423,6 +423,32 @@
   transform: none;
 }
 
+/* Blog band: link sits centered under the heading on every breakpoint. */
+.sawerna-home-products__section-head--stacked {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.sawerna-home-products__section-head--stacked > .sawerna-homepage__section-title {
+  position: static;
+  transform: none;
+}
+
+.sawerna-home-products__section-head--stacked > .sawerna-home-products__more {
+  margin-left: 0;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.sawerna-home-products__section-head--stacked .sawerna-home-products__more-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .sawerna-home-products__more {
   display: inline-flex;
   align-items: center;
@@ -986,6 +1012,15 @@
     min-height: 380px;
   }
 
+  /* Tablet + mobile: only the wide (2/3) slider; the narrow lane is hidden when both exist. */
+  .sawerna-home-hero__grid--dual {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sawerna-home-hero__grid--dual > .sawerna-home-hero__lane--narrow {
+    display: none;
+  }
+
   .sawerna-home-categories__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1093,6 +1128,26 @@
     transform: none;
   }
 
+  /* Mobile: every "Kuva rohkem →" link sits centered under its heading, same as the blog band. */
+  .sawerna-home-products__section-head {
+    gap: 10px;
+  }
+
+  .sawerna-home-products__more,
+  .sawerna-home-products__more-group {
+    margin-left: 0;
+  }
+
+  .sawerna-home-products__more {
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .sawerna-home-products__more-icon {
+    width: 14px;
+    height: 14px;
+  }
+
   .sawerna-home-recommendations__tabs {
     gap: 14px 18px;
   }
@@ -1148,8 +1203,72 @@
     padding: 0 16px;
   }
 
+  /* Two columns on phones: tighter gaps and type so cards stay readable at ~170px wide. */
   .sawerna-home-blog__grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 12px;
+  }
+
+  .sawerna-home-blog__body {
+    padding: 12px 12px 14px;
+  }
+
+  .sawerna-home-blog__date {
+    font-size: 11px;
+  }
+
+  .sawerna-home-blog__title {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .sawerna-home-blog__excerpt {
+    display: -webkit-box;
+    margin-top: 8px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .sawerna-home-blog__more {
+    padding-top: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Very narrow phones (320-379px): keep 2 columns, drop the excerpt so the
+   ~145px cards stay readable (date + title + link only). */
+@media (max-width: 379px) {
+  .sawerna-home-blog__grid {
+    gap: 16px 10px;
+  }
+
+  .sawerna-home-blog__body {
+    padding: 10px 10px 12px;
+  }
+
+  .sawerna-home-blog__date {
+    font-size: 10px;
+  }
+
+  .sawerna-home-blog__title {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .sawerna-home-blog__excerpt {
+    display: none;
+  }
+
+  .sawerna-home-blog__more {
+    gap: 6px;
+    padding-top: 10px;
+    font-size: 13px;
   }
 }

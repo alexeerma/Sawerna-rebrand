@@ -2,6 +2,21 @@
  * Page template styles
  */
 
+/* Elementor pages (page.php "Default" template): no theme container/padding, Elementor controls layout. */
+.sawerna-page.sawerna-page--elementor {
+  padding: 0;
+}
+
+.sawerna-page--elementor .sawerna-page__container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.sawerna-page--elementor .sawerna-page__content {
+  margin: 0;
+}
+
 .sawerna-page {
   padding: 48px 0 80px;
 }

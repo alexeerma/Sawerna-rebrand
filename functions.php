@@ -9,7 +9,7 @@
 
 if ( ! defined( '_S_VERSION' ) ) {
 	// Replace the version number of the theme on each release.
-	define( '_S_VERSION', '1.2.0' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- _s starter constant used across theme; renaming would break references.
+	define( '_S_VERSION', '1.2.2' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- _s starter constant used across theme; renaming would break references.
 }
 
 /**
@@ -552,7 +552,9 @@ function sawerna_preload_fonts() {
 			$slides = ! empty( $options[ $lane ] ) && is_array( $options[ $lane ] ) ? array_values( $options[ $lane ] ) : array();
 			$url    = ! empty( $slides[0]['image_id'] ) ? sawerna_homepage_hero_image_url( (int) $slides[0]['image_id'] ) : '';
 			if ( '' !== $url ) {
-				printf( '<link rel="preload" href="%s" as="image" fetchpriority="high">' . "\n", esc_url( $url ) );
+				// The narrow lane is hidden at <=1024px when the wide lane has slides (homepage.css).
+				$media = ( 'hero_narrow_slides' === $lane && ! empty( $options['hero_wide_slides'] ) ) ? ' media="(min-width: 1025px)"' : '';
+				printf( '<link rel="preload" href="%s" as="image" fetchpriority="high"%s>' . "\n", esc_url( $url ), $media ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $media is a fixed literal.
 			}
 		}
 	}
@@ -663,19 +665,45 @@ function sawerna_disable_emojis() {
 add_action( 'init', 'sawerna_disable_emojis' );
 
 /**
- * Remove unnecessary query strings from static resources.
+ * Cache-bust theme and sawerna-core assets by file modification time.
+ *
+ * Previously ?ver= was stripped in production, so browsers kept serving stale CSS/JS after every
+ * upload. Now any asset that lives in this theme or in sawerna-core gets ver=<filemtime>, so a
+ * changed file always gets a new URL. Other assets (core, plugins, Elementor) are left untouched.
+ *
+ * @param string $src Asset URL.
+ * @return string
  */
-function sawerna_remove_query_strings( $src ) {
-	if ( strpos( $src, '?ver=' ) ) {
-		$src = remove_query_arg( 'ver', $src );
+function sawerna_asset_filemtime_version( $src ) {
+	if ( ! is_string( $src ) || '' === $src ) {
+		return $src;
 	}
+
+	static $roots = null;
+	if ( null === $roots ) {
+		$roots = array(
+			get_template_directory_uri() => get_template_directory(),
+			content_url( 'plugins/sawerna-core' ) => WP_CONTENT_DIR . '/plugins/sawerna-core',
+		);
+	}
+
+	$path_part = strtok( $src, '?' );
+	foreach ( $roots as $url_root => $dir_root ) {
+		$url_root = preg_replace( '#^https?:#', '', $url_root );
+		$rel_pos  = strpos( $path_part, $url_root );
+		if ( false === $rel_pos ) {
+			continue;
+		}
+		$file = $dir_root . substr( $path_part, $rel_pos + strlen( $url_root ) );
+		if ( is_file( $file ) ) {
+			return add_query_arg( 'ver', (string) filemtime( $file ), remove_query_arg( 'ver', $src ) );
+		}
+	}
+
 	return $src;
 }
-// Only remove query strings in production (not in development)
-if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-	add_filter( 'script_loader_src', 'sawerna_remove_query_strings', 15, 1 );
-	add_filter( 'style_loader_src', 'sawerna_remove_query_strings', 15, 1 );
-}
+add_filter( 'script_loader_src', 'sawerna_asset_filemtime_version', 15, 1 );
+add_filter( 'style_loader_src', 'sawerna_asset_filemtime_version', 15, 1 );
 
 /**
  * Security: Disable file editing from WordPress admin.
@@ -878,6 +906,7 @@ require get_template_directory() . '/inc/template-tags.php';
  * Functions which enhance the theme by hooking into WordPress.
  */
 require get_template_directory() . '/inc/template-functions.php';
+require get_template_directory() . '/inc/elementor.php';
 
 /**
  * Customizer additions.

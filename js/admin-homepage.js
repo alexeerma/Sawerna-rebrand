@@ -34,7 +34,18 @@
     });
   };
 
-  const nextIndexForRoot = (root) => root.find('[data-home-slide-item="1"]').length;
+  // Use max existing index + 1, not the slide count: after removing a middle slide the count
+  // equals an index still in use, and the new slide's fields would overwrite that slide on save.
+  const nextIndexForRoot = (root) => {
+    let max = -1;
+    root.find('[name]').each(function () {
+      const match = /\[(\d+)\]/.exec(String($(this).attr('name')));
+      if (match) {
+        max = Math.max(max, Number(match[1]));
+      }
+    });
+    return max + 1;
+  };
 
   $(function () {
     const roots = $('[data-home-slides-root="1"]');

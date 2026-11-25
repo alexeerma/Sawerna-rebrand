@@ -43,7 +43,7 @@ $home_blog_title       = (string) $homepage_options['blog_title'];
 		<section class="sawerna-homepage__hero">
 			<div class="sawerna-homepage__container">
 				<div class="sawerna-home-hero">
-					<div class="sawerna-home-hero__grid">
+					<div class="sawerna-home-hero__grid<?php echo ( ! empty( $wide_slides ) && ! empty( $narrow_slides ) ) ? ' sawerna-home-hero__grid--dual' : ''; ?>">
 						<?php if ( ! empty( $wide_slides ) ) : ?>
 							<div class="sawerna-home-hero__lane sawerna-home-hero__lane--wide" data-home-slider="wide">
 								<div class="sawerna-home-hero__viewport">
@@ -406,7 +406,7 @@ $home_blog_title       = (string) $homepage_options['blog_title'];
 	<?php if ( ! empty( $blog_posts ) ) : ?>
 		<section class="sawerna-homepage__blog-band">
 			<div class="sawerna-homepage__container">
-				<div class="sawerna-home-products__section-head">
+				<div class="sawerna-home-products__section-head sawerna-home-products__section-head--stacked">
 					<h2 class="sawerna-homepage__section-title"><?php echo esc_html( $home_blog_title ); ?></h2>
 					<a class="sawerna-home-products__more" href="<?php echo esc_url( $blog_archive_url ); ?>">
 						<span><?php esc_html_e( 'Kuva kõik artiklid', 'sawerna' ); ?></span>
@@ -425,7 +425,7 @@ $home_blog_title       = (string) $homepage_options['blog_title'];
 								'class'    => 'sawerna-home-blog__image',
 								'loading'  => 'lazy',
 								'decoding' => 'async',
-								'sizes'    => '(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 380px',
+								'sizes'    => '(max-width: 1024px) 50vw, 380px',
 							)
 						);
 						$excerpt        = wp_trim_words(

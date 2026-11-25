@@ -13,9 +13,12 @@
  */
 
 get_header();
+
+// Elementor pages ("Default" template): Elementor owns the full content width between header and footer.
+$sawerna_is_elementor = function_exists( 'sawerna_is_elementor_page' ) && sawerna_is_elementor_page();
 ?>
 
-	<main id="primary" class="site-main sawerna-page">
+	<main id="primary" class="site-main sawerna-page<?php echo $sawerna_is_elementor ? ' sawerna-page--elementor' : ''; ?>">
 		<div class="sawerna-page__container">
 
 		<?php
